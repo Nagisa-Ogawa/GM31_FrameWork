@@ -11,5 +11,5 @@ public:
 	static void Update();
 	static void Draw();
 
-
+	static Scene* GetScene() { return m_Scene; }
 };

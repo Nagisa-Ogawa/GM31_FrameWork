@@ -1,8 +1,10 @@
 
 #include "main.h"
+#include "input.h"
 #include "renderer.h"
 #include "player.h"
 #include "model.h"
+#include "shader.h"
 
 
 void Player::Init()
@@ -12,38 +14,39 @@ void Player::Init()
 	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 
-	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout,
-		"Shader\\vertexLightingVS.cso");
-	Renderer::CreatePixelShader(&m_PixelShader,
-		"Shader\\vertexLightingPS.cso");
-
+	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
 	AddComponent<Model>()->Init("asset\\model\\torus.obj");
 }
 
 void Player::Uninit()
 {
-	m_VertexLayout->Release();
-	m_VertexShader->Release();
-	m_PixelShader->Release();
-
 	GameObject::Uninit();
 }
 
 void Player::Update()
 {
+	if (Input::GetKeyPress('A'))
+	{
+		m_Position.x -= 0.1f;
+	}
+	if (Input::GetKeyPress('D'))
+	{
+		m_Position.x += 0.1f;
+	}
+	if (Input::GetKeyPress('S'))
+	{
+		m_Position.z -= 0.1f;
+	}
+	if (Input::GetKeyPress('W'))
+	{
+		m_Position.z += 0.1f;
+	}
 	GameObject::Update();
 }
 
 
 void Player::Draw()
 {
-	// 入力レイアウト設定
-	Renderer::GetDeviceContext()->IASetInputLayout(m_VertexLayout);
-
-	// シェーダ設定
-	Renderer::GetDeviceContext()->VSSetShader(m_VertexShader, NULL, 0);
-	Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
-
 	// マトリクス設定
 	D3DXMATRIX world, scale, rot, trans;
 	D3DXMatrixScaling(&scale, m_Scale.x, m_Scale.y, m_Scale.z);

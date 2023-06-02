@@ -1,28 +1,30 @@
 #include "main.h"
 #include "renderer.h"
-#include "sprite.h"
+#include "plane.h"
 
-void Sprite::Init(D3DXVECTOR2 pos, D3DXVECTOR2 size, const char* textureName)
+void Plane::Init(D3DXVECTOR3 pos, D3DXVECTOR2 size, const char* fileName)
 {
+	
+
 	VERTEX_3D vertex[4];
 
-	vertex[0].Position = D3DXVECTOR3(pos.x-size.x/2, pos.y-size.y/2, 0.0f);
-	vertex[0].Normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertex[0].Position = D3DXVECTOR3(pos.x - (size.x / 2), pos.y, pos.z + (size.y / 2));
+	vertex[0].Normal = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	vertex[0].Diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[0].TexCoord = D3DXVECTOR2(0.0f, 0.0f);
 
-	vertex[1].Position = D3DXVECTOR3(pos.x+size.x/2, pos.y-size.y/2, 0.0f);
-	vertex[1].Normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertex[1].Position = D3DXVECTOR3(pos.x + (size.x / 2), pos.y, pos.z + (size.y / 2));
+	vertex[1].Normal = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	vertex[1].Diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[1].TexCoord = D3DXVECTOR2(1.0f, 0.0f);
 
-	vertex[2].Position = D3DXVECTOR3(pos.x-size.x/2, pos.y+size.y/2, 0.0f);
-	vertex[2].Normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertex[2].Position = D3DXVECTOR3(pos.x - (size.x / 2), pos.y, pos.z - (size.y / 2));
+	vertex[2].Normal = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	vertex[2].Diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[2].TexCoord = D3DXVECTOR2(0.0f, 1.0f);
 
-	vertex[3].Position = D3DXVECTOR3(pos.x+size.x/2, pos.y+size.y/2, 0.0f);
-	vertex[3].Normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertex[3].Position = D3DXVECTOR3(pos.x + (size.x / 2), pos.y, pos.z - (size.y / 2));
+	vertex[3].Normal = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	vertex[3].Diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[3].TexCoord = D3DXVECTOR2(1.0f, 1.0f);
 
@@ -40,10 +42,10 @@ void Sprite::Init(D3DXVECTOR2 pos, D3DXVECTOR2 size, const char* textureName)
 
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
 
-	// 
+
 	// テクスチャの読み込み
 	D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
-		textureName,
+		fileName,
 		NULL,
 		NULL,
 		&m_Texture,
@@ -51,17 +53,17 @@ void Sprite::Init(D3DXVECTOR2 pos, D3DXVECTOR2 size, const char* textureName)
 	assert(m_Texture);
 }
 
-void Sprite::Uninit()
+void Plane::Uninit()
 {
 	m_VertexBuffer->Release();
 	m_Texture->Release();
 }
 
-void Sprite::Update()
+void Plane::Update()
 {
 }
 
-void Sprite::Draw()
+void Plane::Draw()
 {
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
