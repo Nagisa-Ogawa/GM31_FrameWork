@@ -2,12 +2,10 @@
 #include "renderer.h"
 #include "shader.h"
 
-void Shader::Init(const char * VSFileName, const char * PSFileName)
+void Shader::Init(const char* VSFileName, const char* PSFileName)
 {
-	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout,
-		"Shader\\vertexLightingVS.cso");
-	Renderer::CreatePixelShader(&m_PixelShader,
-		"Shader\\vertexLightingPS.cso");
+	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout,VSFileName);
+	Renderer::CreatePixelShader(&m_PixelShader,PSFileName);
 
 }
 

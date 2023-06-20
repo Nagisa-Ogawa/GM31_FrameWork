@@ -63,6 +63,9 @@ void Sprite::Update()
 
 void Sprite::Draw()
 {
+	// マトリクス設定
+	Renderer::SetWorldViewProjection2D();
+
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;

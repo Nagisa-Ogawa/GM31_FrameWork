@@ -1,19 +1,48 @@
 #pragma once
 
-#include "component.h"
 #include <list>
+
+#include "component.h"
+#include "transform.h"
 
 class GameObject
 {
 protected:
-
-	D3DXVECTOR3 m_Position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-
+	TransForm* m_Transform = nullptr;
 	std::list<Component*> m_Component;
+	bool m_Destroy = false;
 
 public:
+	void SetTransform(TransForm* transform) { m_Transform = transform; }
+	TransForm* GetTransform() { return m_Transform; }
+	void SetDestroy() { m_Destroy = true; }
+
+	bool Destroy()
+	{
+		if (m_Destroy)
+		{
+			Uninit();
+			delete this;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	template <typename T>
+	T* AddComponent()
+	{
+		Component* component = new T();
+		// コンポーネントが付いているゲームオブジェクトを格納
+		m_Component.push_back(component);
+		component->SetGameObject(this);
+		component->Init();
+
+		return (T*)component;
+	}
+
 	virtual void Init() 
 	{
 		for (Component* component : m_Component) {
@@ -41,14 +70,5 @@ public:
 		}
 	}
 
-	template <typename T>
-	T* AddComponent()
-	{
-		Component* component = new T();
-		m_Component.push_back(component);
-		component->Init();
-
-		return (T*)component;
-	}
 
 };

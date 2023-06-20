@@ -1,9 +1,11 @@
 #pragma once
 
-#include "gameObject.h"
 #include <list>
+#include <vector>
+#include <typeinfo>
 
-#include "camera.h"
+#include "gameObject.h"
+#include "cameraObject.h"
 #include "field.h"
 #include "player.h"
 #include "polygon2D.h"
@@ -11,62 +13,98 @@
 class Scene
 {
 protected:
-	std::list<GameObject*> m_GameObject; 
+	std::list<GameObject*> m_GameObject[3]; 
 
 public:
 	void Init()
 	{
-		AddGameObject<Camera>();
-		AddGameObject<Field>();
-		AddGameObject<Player>();
-		AddGameObject<Polygon2D>();
+		AddGameObject<CameraObject>(0);
+		AddGameObject<Field>(1);
+		AddGameObject<Player>(1);
+		AddGameObject<Polygon2D>(2);
 	}
 
 	void Uninit() 
 	{
-		for (GameObject* gameObject : m_GameObject) {
-			gameObject->Uninit();
-			delete gameObject;
+		for (int i = 0; i < 3; i++)
+		{
+			for (GameObject* gameObject : m_GameObject[i])
+			{
+				gameObject->Uninit();
+				delete gameObject;
+			}
+			m_GameObject[i].clear();
+
 		}
-		m_GameObject.clear();
 	}
 
 	void Update()
 	{
-		for (GameObject* gameObject : m_GameObject) {
-			gameObject->Update();
+		for (int i = 0; i < 3; i++)
+		{
+			for (GameObject* gameObject : m_GameObject[i])
+			{
+				gameObject->Update();
+			}
+			m_GameObject[i].remove_if([](GameObject* object)
+			{return object->Destroy(); });	// ƒ‰ƒ€ƒ_Ž®
 		}
 	}
 
 	void Draw()
 	{
-		for (GameObject* gameObject : m_GameObject) {
-			gameObject->Draw();
+		for (int i = 0; i < 3; i++)
+		{
+			for (GameObject* gameObject : m_GameObject[i])
+			{
+				gameObject->Draw();
+			}
 		}
 	}
 
 	template <typename T>
-	T* AddGameObject()
+	T* AddGameObject(int layer)
 	{
-		T* gameObject = new T();
-		m_GameObject.push_back(gameObject);
+		GameObject* gameObject = new T();
+		m_GameObject[layer].push_back(gameObject);
+		// transformƒRƒ“ƒ|[ƒlƒ“ƒg‚Í•K{‚È‚½‚ß‚±‚±‚ÅAddComponent
+		gameObject->SetTransform(gameObject->AddComponent<TransForm>());
 		gameObject->Init();
 
-		return gameObject;
+		return (T*)gameObject;
 	}
-
 
 	template <typename T>
 	T* GetGameObject()
 	{
-		for (GameObject* object : m_GameObject)
+		for (int i = 0; i < 3; i++)
 		{
-			if (typeid(*object) == typeid(T))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
+			for (GameObject* object : m_GameObject[i])
 			{
-				return (T*)object;
+				if (typeid(*object) == typeid(T))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
+				{
+					return (T*)object;
+				}
 			}
 		}
 		return nullptr;
+	}
+
+	template <typename T>
+	std::vector<T*> GetGameObjects()
+	{
+		std::vector<T*> objects;
+		for (int i = 0; i < 3; i++)
+		{
+			for (GameObject* object : m_GameObject[i])
+			{
+				if (typeid(*object) == typeid(T))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
+				{
+					objects.push_back((T*)object);
+				}
+			}
+		}
+		return objects;
 	}
 
 

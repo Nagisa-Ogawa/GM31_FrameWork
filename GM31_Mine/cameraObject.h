@@ -2,14 +2,13 @@
 
 #include "gameObject.h"
 
-class Player:public GameObject
+class CameraObject:public GameObject
 {
-
 private:
-
 public:
 	void Init();
 	void Uninit();
 	void Update();
 	void Draw();
+	
 };
