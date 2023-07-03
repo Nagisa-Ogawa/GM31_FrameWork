@@ -10,6 +10,7 @@
 #include "player.h"
 #include "polygon2D.h"
 
+#include "bullet.h"
 class Scene
 {
 protected:

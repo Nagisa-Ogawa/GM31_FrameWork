@@ -11,37 +11,35 @@ void Player::Init()
 {
 
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
-	AddComponent<Model>()->Init("asset\\model\\torus.obj");
-}
-
-void Player::Uninit()
-{
-	GameObject::Uninit();
+	AddComponent<Model>()->Init("asset\\model\\player.obj");
 }
 
 void Player::Update()
 {
+	// ŽOlÌ—p
 	if (Input::GetKeyPress('A'))
 	{
-		m_Transform->m_Position.x -= 0.1f;
+		m_Transform->m_Position -= m_Transform->GetRight()*0.1f;
 	}
 	if (Input::GetKeyPress('D'))
 	{
-		m_Transform->m_Position.x += 0.1f;
+		m_Transform->m_Position += m_Transform->GetRight()*0.1f;
 	}
 	if (Input::GetKeyPress('S'))
 	{
-		m_Transform->m_Position.z -= 0.1f;
+		m_Transform->m_Position -= m_Transform->GetForward()*0.1f;
 	}
 	if (Input::GetKeyPress('W'))
 	{
-		m_Transform->m_Position.z += 0.1f;
+		m_Transform->m_Position += m_Transform->GetForward()*0.1f;
 	}
-	GameObject::Update();
+	if (Input::GetKeyPress('Q'))
+	{
+		m_Transform->m_Rotation.y -= 0.1f;
+	}
+	if (Input::GetKeyPress('E'))
+	{
+		m_Transform->m_Rotation.y += 0.1f;
+	}
 }
 
-
-void Player::Draw()
-{
-	GameObject::Draw();
-}

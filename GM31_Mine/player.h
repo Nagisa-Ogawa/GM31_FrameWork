@@ -8,8 +8,6 @@ class Player:public GameObject
 private:
 
 public:
-	void Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	void Init() override;
+	void Update() override;
 };

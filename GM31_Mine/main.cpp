@@ -50,8 +50,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	}
 
 
-
-	Manager::Init();
+	Manager* manager = Manager::GetInstance();
 
 
 
@@ -92,8 +91,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			{
 				dwExecLastTime = dwCurrentTime;
 
-				Manager::Update();
-				Manager::Draw();
+				manager->Update();
+				manager->Draw();
 			}
 		}
 	}
@@ -102,7 +101,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	UnregisterClass(CLASS_NAME, wcex.hInstance);
 
-	Manager::Uninit();
+	manager->Uninit();
 
 	return (int)msg.wParam;
 }

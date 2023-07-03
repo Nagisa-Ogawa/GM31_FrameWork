@@ -1,15 +1,31 @@
 #pragma once
 
 class Scene;	// 前方宣言
+
 class Manager
 {
 private:
-	static Scene* m_Scene;
-public:
-	static void Init();
-	static void Uninit();
-	static void Update();
-	static void Draw();
+	// シングルトン用インスタンス
+	static Manager* m_Instance;
+	Scene* m_Scene;
 
-	static Scene* GetScene() { return m_Scene; }
+	// コンストラクタ
+	Manager();
+	// コピーコンストラクタ
+	Manager(const Manager& manager);
+	// 代入演算子
+	Manager& operator=(const Manager& manager);
+
+	// 初期化処理
+	void Init();
+public:
+	// デストラクタ
+	virtual ~Manager();
+
+	void Uninit();
+	void Update();
+	void Draw();
+
+	static Manager* GetInstance();
+	Scene* GetScene() { return m_Scene; }
 };

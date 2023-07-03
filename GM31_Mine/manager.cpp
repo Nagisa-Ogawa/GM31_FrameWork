@@ -3,12 +3,44 @@
 #include "renderer.h"
 #include "scene.h"
 #include "input.h"
-//GameObject* g_Polygon = nullptr;
-//GameObject* g_Camera = nullptr;
-//GameObject* g_Field = nullptr;
-//GameObject* g_Player = nullptr;
 
-Scene* Manager::m_Scene{};
+Manager* Manager::m_Instance = NULL;
+
+Manager::Manager()
+{
+	// なにもしない
+}
+
+Manager::Manager(const Manager& manager)
+{
+	// インスタンスをコピー
+	m_Instance = manager.m_Instance;
+}
+
+Manager& Manager::operator=(const Manager& manager)
+{
+	// インスタンスをコピー
+	m_Instance = manager.m_Instance;
+	return *this;
+}
+
+Manager::~Manager()
+{
+	// インスタンスを解放
+	delete m_Instance;
+}
+
+Manager* Manager::GetInstance()
+{
+	// 初めて使うときにインスタンスを生成
+	// それ以降は生成したインスタンスを渡す
+	if (m_Instance == NULL)
+	{
+		m_Instance = new Manager();
+		m_Instance->Init();
+	}
+	return m_Instance;
+}
 
 void Manager::Init()
 {

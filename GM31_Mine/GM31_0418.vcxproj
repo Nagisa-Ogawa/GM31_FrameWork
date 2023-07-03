@@ -148,6 +148,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="BulletFactory.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraObject.cpp" />
     <ClCompile Include="field.cpp" />
@@ -164,6 +166,8 @@
     <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bullet.h" />
+    <ClInclude Include="BulletFactory.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraObject.h" />
     <ClInclude Include="component.h" />
