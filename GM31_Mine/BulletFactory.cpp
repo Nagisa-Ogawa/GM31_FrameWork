@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "manager.h"
 #include "scene.h"
+#include "model.h"
 #include "BulletFactory.h"
 
 BulletFactory::BulletFactory()
@@ -22,14 +23,16 @@ BulletFactory & BulletFactory::operator=(const BulletFactory & manager)
 	return *m_Instance;
 }
 
-void BulletFactory::Init()
-{
-}
-
 BulletFactory::~BulletFactory()
 {
 	// インスタンスを解放
 	delete m_Instance;
+}
+
+void BulletFactory::Init()
+{
+	Model model;
+	model.LoadObj("asset\\model\\torus.obj", m_pModel);
 }
 
 BulletFactory * BulletFactory::GetInstance()
@@ -45,19 +48,24 @@ BulletFactory * BulletFactory::GetInstance()
 
 }
 
-Bullet * BulletFactory::GetBullet()
+Bullet* BulletFactory::GetBullet()
 {
 	// リストから現在使われていない弾があるか探す
 	auto bullet = std::find_if(m_BulletList.begin(), m_BulletList.end(), 
-								[](Bullet* b) {return b->GetUse() == false; });
+								[](Bullet* b) {return b->GetActive() == false; });
 	if (bullet != m_BulletList.end())
-	{	// 見つかったならそのオブジェクトを渡す
+	{	// 見つかったならそのオブジェクトをアクティブにして渡す
+		(*bullet)->SetActive(true);
 		return *bullet;
 	}
 	else
 	{	// 見つからなかったならオブジェクトを生成
 		Scene* scene = Manager::GetInstance()->GetScene();
 		Bullet* bullet = scene->AddGameObject<Bullet>(1);
-
+		// 弾リストに追加
+		m_BulletList.push_back(bullet);
+		// 使用するモデルデータをセット
+		bullet->SetModel(m_pModel);
 	}
 }
+

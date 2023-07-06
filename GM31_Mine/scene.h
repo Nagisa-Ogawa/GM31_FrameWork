@@ -45,7 +45,9 @@ public:
 		{
 			for (GameObject* gameObject : m_GameObject[i])
 			{
-				gameObject->Update();
+				// アクティブフラグがONなら更新処理をする
+				if (gameObject->GetActive())
+							gameObject->Update();
 			}
 			m_GameObject[i].remove_if([](GameObject* object)
 			{return object->Destroy(); });	// ラムダ式
@@ -58,7 +60,9 @@ public:
 		{
 			for (GameObject* gameObject : m_GameObject[i])
 			{
-				gameObject->Draw();
+				// アクティブフラグがONなら描画する
+				if(gameObject->GetActive())
+							gameObject->Draw();
 			}
 		}
 	}

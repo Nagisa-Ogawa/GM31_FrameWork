@@ -3,6 +3,8 @@
 #include <list>
 #include "bullet.h"
 
+class MODEL;
+
 class BulletFactory
 {
 private:
@@ -17,6 +19,8 @@ private:
 
 	// 生成された弾のリスト
 	std::list<Bullet*> m_BulletList;
+	// 弾オブジェクトに使用するモデル
+	MODEL* m_pModel = nullptr;
 
 	// 初期化処理
 	void Init();

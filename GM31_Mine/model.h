@@ -47,13 +47,15 @@ private:
 	SUBSET*	m_SubsetArray;
 	unsigned int	m_SubsetNum;
 
-	void LoadObj( const char *FileName, MODEL *Model );
 	void LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray, unsigned int *MaterialNum );
 
 public:
 
 	void Init(const char* FileName);
+	void Init(MODEL* pModel);
 	void Uninit();
 	void Update();
 	void Draw();
+
+	void LoadObj( const char *FileName, MODEL *Model );
 };

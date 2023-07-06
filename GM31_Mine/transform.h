@@ -55,6 +55,8 @@ public:
 		return forward;
 	}
 
+
+
 	void Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale);
 	void Uninit();
 	void Update();

@@ -85,6 +85,77 @@ void Model::Init(const char* FileName)
 
 }
 
+// すでにモデルが用意されている場合の初期化処理
+void Model::Init(MODEL* pModel)
+{
+	// 頂点バッファ生成
+	{
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(VERTEX_3D) * pModel->VertexNum;
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.pSysMem =pModel->VertexArray;
+
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
+	}
+
+
+	// インデックスバッファ生成
+	{
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(unsigned int) * pModel->IndexNum;
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.pSysMem = pModel->IndexArray;
+
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_IndexBuffer);
+	}
+
+	// サブセット設定
+	{
+		m_SubsetArray = new SUBSET[pModel->SubsetNum];
+		m_SubsetNum = pModel->SubsetNum;
+
+		for (unsigned int i = 0; i < pModel->SubsetNum; i++)
+		{
+			m_SubsetArray[i].StartIndex = pModel->SubsetArray[i].StartIndex;
+			m_SubsetArray[i].IndexNum = pModel->SubsetArray[i].IndexNum;
+
+			m_SubsetArray[i].Material.Material = pModel->SubsetArray[i].Material.Material;
+
+			m_SubsetArray[i].Material.Texture = NULL;
+
+			D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
+				pModel->SubsetArray[i].Material.TextureName,
+				NULL,
+				NULL,
+				&m_SubsetArray[i].Material.Texture,
+				NULL);
+
+			if (m_SubsetArray[i].Material.Texture)
+				m_SubsetArray[i].Material.Material.TextureEnable = true;
+			else
+				m_SubsetArray[i].Material.Material.TextureEnable = false;
+
+		}
+	}
+
+	delete[] pModel->VertexArray;
+	delete[] pModel->IndexArray;
+	delete[] pModel->SubsetArray;
+
+}
+
 void Model::Uninit()
 {
 	m_VertexBuffer->Release();

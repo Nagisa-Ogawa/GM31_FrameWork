@@ -2,17 +2,19 @@
 
 #include "gameObject.h"
 
+class MODEL;
+
 class Bullet : public GameObject
 {
 
 private:
 	D3DXVECTOR3 m_Direction{};
-	bool m_IsUse = false;
+	MODEL* m_pModel = nullptr;
 public:
-	void SetUse(bool flag) { m_IsUse = flag; }
-	bool GetUse() { return m_IsUse; }
+	void SetModel(MODEL* pModel) { m_pModel = pModel; }
 
-	void Init() override;
+	void Init(D3DXVECTOR3 direction) override;
 	void Update() override;
+
 
 };
