@@ -9,8 +9,9 @@
 #include "field.h"
 #include "player.h"
 #include "polygon2D.h"
+#include "enemy.h"
+#include "enemyFactory.h"
 
-#include "bullet.h"
 class Scene
 {
 protected:
@@ -22,6 +23,12 @@ public:
 		AddGameObject<CameraObject>(0);
 		AddGameObject<Field>(1);
 		AddGameObject<Player>(1);
+		for (int i = 0; i < 10; i++) {
+			Enemy* pEnemy = EnemyFactory::GetInstance()->GetEnemy();
+			pEnemy->GetTransform()->m_Position=D3DXVECTOR3(-15.0f + i * 3.0f, 0.0f, 6.0f);
+			pEnemy->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 3.14f, 0.0f);
+		}
+
 		AddGameObject<Polygon2D>(2);
 	}
 
@@ -73,7 +80,7 @@ public:
 		GameObject* gameObject = new T();
 		m_GameObject[layer].push_back(gameObject);
 		// transformコンポーネントは必須なためここでAddComponent
-		gameObject->SetTransform(gameObject->AddComponent<TransForm>());
+		gameObject->SetTransform(gameObject->AddComponent<Transform>());
 		gameObject->Init();
 
 		return (T*)gameObject;

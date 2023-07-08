@@ -5,6 +5,8 @@
 #include "player.h"
 #include "model.h"
 #include "shader.h"
+#include "bulletFactory.h"
+#include "bullet.h"
 
 
 void Player::Init()
@@ -40,6 +42,13 @@ void Player::Update()
 	if (Input::GetKeyPress('E'))
 	{
 		m_Transform->m_Rotation.y += 0.1f;
+	}
+
+	if (Input::GetKeyTrigger(VK_SPACE)) {
+		Bullet* pBullet = BulletFactory::GetInstance()->GetBullet();
+		pBullet->SetDirection(m_Transform->GetForward());
+		pBullet->GetTransform()->m_Position = m_Transform->m_Position;
+		pBullet->SetStartPos(m_Transform->m_Position);
 	}
 }
 

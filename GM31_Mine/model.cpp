@@ -149,11 +149,6 @@ void Model::Init(MODEL* pModel)
 
 		}
 	}
-
-	delete[] pModel->VertexArray;
-	delete[] pModel->IndexArray;
-	delete[] pModel->SubsetArray;
-
 }
 
 void Model::Uninit()

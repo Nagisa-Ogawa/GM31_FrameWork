@@ -8,14 +8,14 @@
 class GameObject
 {
 protected:
-	TransForm* m_Transform = nullptr;
+	Transform* m_Transform = nullptr;
 	std::list<Component*> m_Component;
 	bool m_Destroy = false;
 	bool m_Active = true;
 
 public:
-	void SetTransform(TransForm* transform) { m_Transform = transform; }
-	TransForm* GetTransform() { return m_Transform; }
+	void SetTransform(Transform* transform) { m_Transform = transform; }
+	Transform* GetTransform() { return m_Transform; }
 	void SetDestroy() { m_Destroy = true; }
 	bool GetActive() { return m_Active; }
 	void SetActive(bool active) { m_Active = active; }

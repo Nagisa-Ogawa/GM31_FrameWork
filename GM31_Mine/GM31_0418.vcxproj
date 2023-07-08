@@ -23,7 +23,7 @@
     <ProjectGuid>{8884ADBC-98AD-4BDD-B6FA-855096788110}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GM310418</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>GM31_Mine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -43,7 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -149,9 +149,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cpp" />
-    <ClCompile Include="BulletFactory.cpp" />
+    <ClCompile Include="bulletFactory.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraObject.cpp" />
+    <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemyFactory.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -167,10 +169,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
-    <ClInclude Include="BulletFactory.h" />
+    <ClInclude Include="bulletFactory.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraObject.h" />
     <ClInclude Include="component.h" />
+    <ClInclude Include="enemy.h" />
+    <ClInclude Include="enemyFactory.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="input.h" />

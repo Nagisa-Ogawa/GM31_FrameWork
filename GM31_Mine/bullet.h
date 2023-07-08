@@ -2,19 +2,22 @@
 
 #include "gameObject.h"
 
-class MODEL;
+struct MODEL;
 
 class Bullet : public GameObject
 {
 
 private:
-	D3DXVECTOR3 m_Direction{};
 	MODEL* m_pModel = nullptr;
+	D3DXVECTOR3 m_StartPos{};
+	D3DXVECTOR3 m_Direction{};
+	float m_Speed = 0.0f;
 public:
-	void SetModel(MODEL* pModel) { m_pModel = pModel; }
+	void SetStartPos(D3DXVECTOR3 pos) { m_StartPos = pos; }
 
-	void Init(D3DXVECTOR3 direction) override;
+	void Init(MODEL* pModel);
 	void Update() override;
 
+	void SetDirection(D3DXVECTOR3 direction) { m_Direction = direction; }
 
 };
