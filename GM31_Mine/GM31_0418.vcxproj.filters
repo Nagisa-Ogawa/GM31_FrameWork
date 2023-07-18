@@ -96,6 +96,12 @@
     <ClCompile Include="enemyFactory.cpp">
       <Filter>ソース ファイル\Factory</Filter>
     </ClCompile>
+    <ClCompile Include="boxCollision.cpp">
+      <Filter>ソース ファイル\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>ソース ファイル\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="field.h">
@@ -160,6 +166,12 @@
     </ClInclude>
     <ClInclude Include="bulletFactory.h">
       <Filter>ヘッダー ファイル\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="boxCollision.h">
+      <Filter>ヘッダー ファイル\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>ヘッダー ファイル\Other</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

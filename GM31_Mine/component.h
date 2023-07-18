@@ -13,4 +13,5 @@ public:
 	virtual void Draw() {}
 
 	void SetGameObject(GameObject* gameObject) { m_GameObject = gameObject; }
+	GameObject* GetGameObject() { return m_GameObject; }
 };

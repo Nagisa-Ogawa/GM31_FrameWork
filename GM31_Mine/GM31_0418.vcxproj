@@ -23,7 +23,7 @@
     <ProjectGuid>{8884ADBC-98AD-4BDD-B6FA-855096788110}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GM310418</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <ProjectName>GM31_Mine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -43,7 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -148,10 +148,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="boxCollision.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="bulletFactory.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraObject.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyFactory.cpp" />
     <ClCompile Include="field.cpp" />
@@ -172,6 +174,8 @@
     <ClInclude Include="bulletFactory.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraObject.h" />
+    <ClInclude Include="boxCollision.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyFactory.h" />

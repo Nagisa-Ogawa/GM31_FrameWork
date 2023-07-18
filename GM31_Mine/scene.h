@@ -16,7 +16,6 @@ class Scene
 {
 protected:
 	std::list<GameObject*> m_GameObject[3]; 
-
 public:
 	void Init()
 	{

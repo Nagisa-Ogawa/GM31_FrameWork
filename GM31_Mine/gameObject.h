@@ -46,6 +46,18 @@ public:
 		return (T*)component;
 	}
 
+	template <typename T>
+	T* GetComponent() 
+	{
+		for (Component* pComp : m_Component)
+		{
+			if (typeid(*pComp) == typeid(T))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
+			{
+				return (T*)pComp;
+			}
+		}
+	}
+
 	virtual void Init() 
 	{
 		for (Component* component : m_Component) {
@@ -72,6 +84,4 @@ public:
 			component->Draw();
 		}
 	}
-
-
 };
