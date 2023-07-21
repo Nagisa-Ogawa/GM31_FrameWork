@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include "main.h"
 #include "manager.h"
@@ -8,24 +7,8 @@
 #include "bullet.h"
 #include "model.h"
 
-BulletFactory* BulletFactory::m_Instance = NULL;
-
-BulletFactory::BulletFactory()
+BulletFactory::~BulletFactory()
 {
-	// なにもしない
-}
-
-BulletFactory::BulletFactory(const BulletFactory& manager)
-{
-	// インスタンスをコピー
-	m_Instance = manager.m_Instance;
-}
-
-BulletFactory& BulletFactory::operator=(const BulletFactory& manager)
-{
-	// インスタンスをコピー
-	m_Instance = manager.m_Instance;
-	return *m_Instance;
 }
 
 void BulletFactory::Init()
@@ -35,36 +18,20 @@ void BulletFactory::Init()
 	model.LoadObj("asset\\model\\torus.obj", m_pModel);
 }
 
-BulletFactory::~BulletFactory()
+void BulletFactory::Uninit()
 {
 	delete[] m_pModel->VertexArray;
 	delete[] m_pModel->IndexArray;
 	delete[] m_pModel->SubsetArray;
 	delete m_pModel;
-	// インスタンスを解放
-	delete m_Instance;
 }
 
-
-BulletFactory* BulletFactory::GetInstance()
-{
-	// 初めて使うときにインスタンスを生成
-	// それ以降は生成したインスタンスを渡す
-	if (m_Instance == NULL)
-	{
-		m_Instance = new BulletFactory();
-		m_Instance->Init();
-	}
-	return m_Instance;
-
-}
-
-Bullet* BulletFactory::GetBullet()
+Bullet* BulletFactory::ActiveObject()
 {
 	// リストから現在使われていない弾があるか探す
-	auto iBullet = std::find_if(m_BulletList.begin(), m_BulletList.end(),
+	auto iBullet = std::find_if(m_ObjectList.begin(), m_ObjectList.end(),
 		[](Bullet* pb) {return pb->GetActive() == false; });
-	if (iBullet != m_BulletList.end())
+	if (iBullet != m_ObjectList.end())
 	{	// 見つかったならそのオブジェクトをアクティブにして渡す
 		(*iBullet)->SetActive(true);
 		return *iBullet;
@@ -74,16 +41,15 @@ Bullet* BulletFactory::GetBullet()
 		Scene* scene = Manager::GetInstance()->GetScene();
 		Bullet* pBullet = scene->AddGameObject<Bullet>(1);
 		// 弾リストに追加
-		m_BulletList.push_back(pBullet);
+		m_ObjectList.push_back(pBullet);
 		// 使用するモデルデータをセット
 		pBullet->Init(m_pModel);
 		return pBullet;
 	}
 }
 
-void BulletFactory::HideBullet(Bullet* pBullet)
+void BulletFactory::HideObject(Bullet* bullet)
 {
 	// 弾のアクティブフラグをOFF
-	pBullet->SetActive(false);
+   	bullet->SetActive(false);
 }
-

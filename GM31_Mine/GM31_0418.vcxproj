@@ -181,6 +181,7 @@
     <ClInclude Include="enemyFactory.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameObject.h" />
+    <ClInclude Include="IFactory.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />

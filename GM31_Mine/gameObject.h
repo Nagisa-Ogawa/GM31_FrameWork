@@ -34,16 +34,16 @@ public:
 		}
 	}
 
-	template <typename T>
-	T* AddComponent()
+	template <typename TFactory>
+	TFactory* AddComponent()
 	{
-		Component* component = new T();
+		Component* component = new TFactory();
 		// コンポーネントが付いているゲームオブジェクトを格納
 		m_Component.push_back(component);
 		component->SetGameObject(this);
 		component->Init();
 
-		return (T*)component;
+		return (TFactory*)component;
 	}
 
 	template <typename T>

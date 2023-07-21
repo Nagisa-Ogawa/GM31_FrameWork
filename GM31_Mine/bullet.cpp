@@ -25,6 +25,6 @@ void Bullet::Update()
 	D3DXVECTOR3 vec = m_StartPos - m_Transform->m_Position;
 	float len = D3DXVec3Length(&vec);
 	if (len >= 20.0f) {
-		BulletFactory::GetInstance()->HideBullet(this);
+		BulletFactory::GetInstance()->HideObject(this);
 	}
 }

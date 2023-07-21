@@ -73,45 +73,45 @@ public:
 		}
 	}
 
-	template <typename T>
-	T* AddGameObject(int layer)
+	template <typename TFactory>
+	TFactory* AddGameObject(int layer)
 	{
-		GameObject* gameObject = new T();
+		GameObject* gameObject = new TFactory();
 		m_GameObject[layer].push_back(gameObject);
 		// transformƒRƒ“ƒ|[ƒlƒ“ƒg‚Í•K{‚È‚½‚ß‚±‚±‚ÅAddComponent
 		gameObject->SetTransform(gameObject->AddComponent<Transform>());
 		gameObject->Init();
 
-		return (T*)gameObject;
+		return (TFactory*)gameObject;
 	}
 
-	template <typename T>
-	T* GetGameObject()
+	template <typename TFactory>
+	TFactory* GetGameObject()
 	{
 		for (int i = 0; i < 3; i++)
 		{
 			for (GameObject* object : m_GameObject[i])
 			{
-				if (typeid(*object) == typeid(T))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
+				if (typeid(*object) == typeid(TFactory))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
 				{
-					return (T*)object;
+					return (TFactory*)object;
 				}
 			}
 		}
 		return nullptr;
 	}
 
-	template <typename T>
-	std::vector<T*> GetGameObjects()
+	template <typename TFactory>
+	std::vector<TFactory*> GetGameObjects()
 	{
-		std::vector<T*> objects;
+		std::vector<TFactory*> objects;
 		for (int i = 0; i < 3; i++)
 		{
 			for (GameObject* object : m_GameObject[i])
 			{
-				if (typeid(*object) == typeid(T))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
+				if (typeid(*object) == typeid(TFactory))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
 				{
-					objects.push_back((T*)object);
+					objects.push_back((TFactory*)object);
 				}
 			}
 		}
