@@ -161,6 +161,9 @@
     <ClInclude Include="bulletFactory.h">
       <Filter>ヘッダー ファイル\Factory</Filter>
     </ClInclude>
+    <ClInclude Include="IFactory.h">
+      <Filter>ヘッダー ファイル\Factory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\common.hlsl">
