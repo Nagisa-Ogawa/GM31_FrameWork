@@ -12,11 +12,13 @@
 #include "enemy.h"
 #include "CollisionManager.h"
 #include "boxCollision.h"
+#include "quadCollision.h"
 
 
 void Player::Init()
 {
 	m_Transform->m_Scale = D3DXVECTOR3(2.0f, 1.0f, 1.0f);
+	// m_Transform->m_Position = D3DXVECTOR3(0.0f, 2.0f, 0.0f);
 	AddComponent<BoxCollision>()->Init(m_Transform->m_Scale, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
 	AddComponent<Model>()->Init("asset\\model\\box.obj");
@@ -52,7 +54,7 @@ void Player::Update()
 	}
 
 	if (Input::GetKeyTrigger(VK_SPACE)) {
-		Bullet* pBullet = BulletFactory::GetInstance()->GetBullet();
+		Bullet* pBullet = BulletFactory::GetInstance()->ActiveObject();
 		pBullet->SetDirection(m_Transform->GetForward());
 		pBullet->GetTransform()->m_Position = m_Transform->m_Position;
 		pBullet->SetStartPos(m_Transform->m_Position);
@@ -67,9 +69,29 @@ void Player::Update()
 			isHit = true;
 		}
 	}
-
 	if (isHit) {
 		m_Transform->m_Position = beforPos;
 	}
+
+	isHit = false;
+
+	QuadCollision* qColl = Manager::GetInstance()->GetScene()->GetGameObject<Wall>()->GetComponent<QuadCollision>();
+	float l = 0.0f;
+	D3DXVECTOR3 dir{};
+	if (CollisionManager::GetInstance()->Collision_BoxToQuad(pPCollision, qColl,&l,&dir)) {
+		isHit = true;
+	}
+	if (isHit) {
+		m_Transform->m_Position += dir * l;
+		// m_IsGround = true;
+	}
+
+	//if (m_IsGround) {
+
+	//}
+	//else {
+	//	m_Transform->m_Position += D3DXVECTOR3(0.0f, -0.02f, 0.0f);
+	//}
+
 }
 

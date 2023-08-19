@@ -4,46 +4,50 @@
 
 // ファクトリーのインターフェース
 template<class TFactory,class TObject>
-class IFactory
+class Factory
 {
 protected:
 	// 生成されたオブジェクトのリスト
 	std::list<TObject*> m_ObjectList;
 
 	// コンストラクタの外部での使用を禁止
-	IFactory(){}
+	Factory(){}
 	// デストラクタの使用を禁止
-	vrtual ~IFactory() { std::atexit(Uninit); }
+	virtual ~Factory() 
+	{
+		delete m_Instance;
+		m_Instance = nullptr;
+	}
 
 	// 初期化処理
 	virtual void Init() = 0;
-	// 終了時処理
-	virtual void Uninit() 
-	{
-		// インスタンスを解放
-		delete m_Instance;
-	}
 private:
 	// コピーコンストラクタの使用を禁止
-	IFactory(const IFactory& singleton) = delete;
-	IFactory& operator= (const IFactory& singleton) = delete;
+	Factory(const Factory& singleton) = delete;
+	Factory& operator= (const Factory& singleton) = delete;
 public:
-	static IFactory* GetInstance()
+	static Factory* GetInstance()
 	{
 		if (m_Instance == nullptr) {
 			m_Instance = new TFactory();
 			m_Instance->Init();
 		}
+		return m_Instance;
 	}
 
 	// 生成されたオブジェクトを入手する関数
-	TObject* ActiveObject() = 0;
+	virtual TObject* ActiveObject() = 0;
 	// オブジェクトを非表示にする（deleteはしない)関数
-	void HideObject(TObject* t) = 0;
+	virtual void HideObject(TObject* t) = 0;
+
+	// 終了時処理
+	virtual void Uninit()
+	{
+	}
 private:
 	static TFactory* m_Instance;
 };
 
 template<class TFactory,class TObjcet>
-TFactory* IFactory<TFactory, TObjcet>::m_Instance = NULL;
+TFactory* Factory<TFactory, TObjcet>::m_Instance = NULL;
 

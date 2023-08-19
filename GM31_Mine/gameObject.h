@@ -56,6 +56,7 @@ public:
 				return (T*)pComp;
 			}
 		}
+		return nullptr;
 	}
 
 	virtual void Init() 

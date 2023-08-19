@@ -7,8 +7,13 @@
 #include "bullet.h"
 #include "model.h"
 
+BulletFactory::BulletFactory()
+{
+}
+
 BulletFactory::~BulletFactory()
 {
+	Uninit();
 }
 
 void BulletFactory::Init()
@@ -18,13 +23,6 @@ void BulletFactory::Init()
 	model.LoadObj("asset\\model\\torus.obj", m_pModel);
 }
 
-void BulletFactory::Uninit()
-{
-	delete[] m_pModel->VertexArray;
-	delete[] m_pModel->IndexArray;
-	delete[] m_pModel->SubsetArray;
-	delete m_pModel;
-}
 
 Bullet* BulletFactory::ActiveObject()
 {
@@ -52,4 +50,13 @@ void BulletFactory::HideObject(Bullet* bullet)
 {
 	// 弾のアクティブフラグをOFF
    	bullet->SetActive(false);
+}
+
+void BulletFactory::Uninit()
+{
+	delete[] m_pModel->VertexArray;
+	delete[] m_pModel->IndexArray;
+	delete[] m_pModel->SubsetArray;
+	delete m_pModel;
+	Factory::Uninit();
 }

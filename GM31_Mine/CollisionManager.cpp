@@ -4,6 +4,7 @@
 #include "manager.h"
 #include "scene.h"
 #include "boxCollision.h"
+#include "quadCollision.h"
 #include "CollisionManager.h"
 
 CollisionManager* CollisionManager::m_Instance = NULL;
@@ -47,6 +48,30 @@ CollisionManager * CollisionManager::GetInstance()
 		m_Instance->Init();
 	}
 	return m_Instance;
+}
+
+void CollisionManager::AddBoxCollision(BoxCollision * coll)
+{
+	if (coll == nullptr)
+		return;
+	if (coll->GetIsTrigger()) {
+		m_BoxTriList.push_back(coll);
+	}
+	else {
+		m_BoxCollList.push_back(coll);
+	}
+}
+
+void CollisionManager::AddQuadCollision(QuadCollision * coll)
+{
+	if (coll == nullptr)
+		return;
+	if (coll->GetIsTrigger()) {
+		m_QuadTriList.push_back(coll);
+	}
+	else {
+		m_QuadCollList.push_back(coll);
+	}
 }
 
 bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b)
@@ -215,3 +240,40 @@ float CollisionManager::CreateHalfProjectionLine(D3DXVECTOR3* sAxis, D3DXVECTOR3
 
 	return r1 + r2 + r3;
 }
+
+
+bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, float* l, D3DXVECTOR3* dir)
+{
+	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_Position;
+	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight()   * (a->GetSize().x);
+	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp()      * (a->GetSize().y);
+	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize().z);
+
+	D3DXVECTOR3 n{};
+	D3DXVec3Normalize(&n, b->GetNormal());
+	D3DXVECTOR3 bPos = b->GetGameObject()->GetTransform()->m_Position;
+
+	// ボックスの各軸の中点から各頂点までの距離を分離軸（平面の法線）上に投影した時の長さを算出
+	float r = 0.0f;
+	r += fabs(D3DXVec3Dot(&aVecX, &n));
+	r += fabs(D3DXVec3Dot(&aVecY, &n));
+	r += fabs(D3DXVec3Dot(&aVecZ, &n));
+
+	//　ボックスの中点から平面までの距離を分離軸（平面の法線）上に投影した時の長さを算出
+	float s = fabs(D3DXVec3Dot(&(aPos - bPos), &n));
+	// 戻す距離を計算
+	if (l != nullptr) {
+		if (s > 0)
+			*l = r - fabs(s);
+		else
+			*l = r + fabs(s);
+		*dir = n;
+	}
+	// 衝突判定
+	// ボックスの中点から各頂点までの長さ(r)がボックスと平面までの長さ(s)よりも大きいなら当たっている
+	if (fabs(s)-r < 0.0f) {
+		return true;
+	}
+	return false;
+}
+

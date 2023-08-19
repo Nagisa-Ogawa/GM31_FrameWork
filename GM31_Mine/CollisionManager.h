@@ -3,6 +3,7 @@
 #include <list>
 
 class BoxCollision;
+class QuadCollision;
 
 class CollisionManager
 {
@@ -17,9 +18,11 @@ private:
 	CollisionManager& operator=(const CollisionManager& manager);
 
 	// 当たり判定あり用リスト
-	std::list<CollisionManager*> m_CollisionList;
+	std::list<BoxCollision*> m_BoxCollList;
+	std::list<QuadCollision*> m_QuadCollList;
 	// トリガー用リスト
-	std::list<CollisionManager*> m_TriggerList;
+	std::list<BoxCollision*> m_BoxTriList;
+	std::list<QuadCollision*> m_QuadTriList;
 
 
 	// 初期化処理
@@ -31,6 +34,9 @@ public:
 	virtual ~CollisionManager();
 	static CollisionManager* GetInstance();
 
+	void AddBoxCollision(BoxCollision* coll);
+	void AddQuadCollision(QuadCollision* coll);
 	bool Collision_BoxToBox(BoxCollision* a, BoxCollision* b);
+	bool Collision_BoxToQuad(BoxCollision* a, QuadCollision* b, float* l,D3DXVECTOR3* dir);
 
 };

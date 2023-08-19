@@ -1,14 +1,14 @@
 #pragma once
 
 #include <list>
-#include "IFactory.h"
+#include "factory.h"
 
 struct MODEL;
 class  Bullet;
 
-class BulletFactory :public IFactory<BulletFactory, Bullet>
+class BulletFactory : public Factory<BulletFactory, Bullet>
 {
-	friend class IFactory<BulletFactory, Bullet>;
+	friend class Factory<BulletFactory, Bullet>;
 private:
 	MODEL* m_pModel = nullptr;
 
@@ -16,40 +16,10 @@ private:
 	~BulletFactory();
 
 	void Init();
-	void Uninit() override;
 public:
-	Bullet* ActiveObject();
-	void HideObject(Bullet* bullet);
+	Bullet* ActiveObject() override;
+	void HideObject(Bullet* bullet) override;
+	void Uninit() override;
 };
 
-//class BulletFactory
-//{
-//private:
-//	// シングルトン用インスタンス
-//	static BulletFactory* m_Instance;
-//	// コンストラクタ
-//	BulletFactory();
-//	// コピーコンストラクタ
-//	BulletFactory(const BulletFactory& manager);
-//	// 代入演算子
-//	BulletFactory& operator=(const BulletFactory& manager);
-//
-//	// 生成された弾のリスト
-//	std::list<Bullet*> m_BulletList;
-//	// 弾オブジェクトに使用するモデル
-//	MODEL* m_pModel = nullptr;
-//
-//	// 初期化処理
-//	void Init();
-//public:
-//	// デストラクタ
-//	virtual ~BulletFactory();
-//	static BulletFactory* GetInstance();
-//
-//	// 弾を取得する関数
-//	Bullet* GetBullet();
-//	// 弾を削除する関数
-//	void HideBullet(Bullet* pBullet);
-//
-//};
 

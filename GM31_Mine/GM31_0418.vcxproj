@@ -164,10 +164,12 @@
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon2D.cpp" />
+    <ClCompile Include="quadCollision.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="transform.cpp" />
+    <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
@@ -181,7 +183,7 @@
     <ClInclude Include="enemyFactory.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameObject.h" />
-    <ClInclude Include="IFactory.h" />
+    <ClInclude Include="factory.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
@@ -189,11 +191,13 @@
     <ClInclude Include="plane.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="polygon2D.h" />
+    <ClInclude Include="quadCollision.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="transform.h" />
+    <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\common.hlsl">

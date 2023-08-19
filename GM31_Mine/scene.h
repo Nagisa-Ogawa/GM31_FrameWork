@@ -10,7 +10,9 @@
 #include "player.h"
 #include "polygon2D.h"
 #include "enemy.h"
+#include "bulletFactory.h"
 #include "enemyFactory.h"
+#include "wall.h"
 
 class Scene
 {
@@ -22,8 +24,9 @@ public:
 		AddGameObject<CameraObject>(0);
 		AddGameObject<Field>(1);
 		AddGameObject<Player>(1);
+		AddGameObject<Wall>(1);
 		for (int i = 0; i < 10; i++) {
-			Enemy* pEnemy = EnemyFactory::GetInstance()->GetEnemy();
+			Enemy* pEnemy = EnemyFactory::GetInstance()->ActiveObject();
 			pEnemy->GetTransform()->m_Position=D3DXVECTOR3(-15.0f + i * 3.0f, 0.0f, 6.0f);
 			pEnemy->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 3.14f, 0.0f);
 		}
@@ -41,9 +44,11 @@ public:
 				delete gameObject;
 			}
 			m_GameObject[i].clear();
-
 		}
+		BulletFactory::GetInstance()->Uninit();
+		EnemyFactory::GetInstance()->Uninit();
 	}
+
 
 	void Update()
 	{
@@ -73,45 +78,45 @@ public:
 		}
 	}
 
-	template <typename TFactory>
-	TFactory* AddGameObject(int layer)
+	template <typename T>
+	T* AddGameObject(int layer)
 	{
-		GameObject* gameObject = new TFactory();
+		GameObject* gameObject = new T();
 		m_GameObject[layer].push_back(gameObject);
 		// transformƒRƒ“ƒ|[ƒlƒ“ƒg‚Í•K{‚È‚½‚ß‚±‚±‚ÅAddComponent
 		gameObject->SetTransform(gameObject->AddComponent<Transform>());
 		gameObject->Init();
 
-		return (TFactory*)gameObject;
+		return (T*)gameObject;
 	}
 
-	template <typename TFactory>
-	TFactory* GetGameObject()
+	template <typename T>
+	T* GetGameObject()
 	{
 		for (int i = 0; i < 3; i++)
 		{
 			for (GameObject* object : m_GameObject[i])
 			{
-				if (typeid(*object) == typeid(TFactory))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
+				if (typeid(*object) == typeid(T))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
 				{
-					return (TFactory*)object;
+					return (T*)object;
 				}
 			}
 		}
 		return nullptr;
 	}
 
-	template <typename TFactory>
-	std::vector<TFactory*> GetGameObjects()
+	template <typename T>
+	std::vector<T*> GetGameObjects()
 	{
-		std::vector<TFactory*> objects;
+		std::vector<T*> objects;
 		for (int i = 0; i < 3; i++)
 		{
 			for (GameObject* object : m_GameObject[i])
 			{
-				if (typeid(*object) == typeid(TFactory))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
+				if (typeid(*object) == typeid(T))// Œ^‚ð’²‚×‚é(RTTI“®“IŒ^î•ñ)
 				{
-					objects.push_back((TFactory*)object);
+					objects.push_back((T*)object);
 				}
 			}
 		}

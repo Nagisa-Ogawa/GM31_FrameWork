@@ -30,8 +30,8 @@ void Camera::Update()
 	m_GameObject->GetTransform()->m_Position = m_Target - player->GetTransform()->GetForward()*5.0f + D3DXVECTOR3(0.0f, 4.0f, 0.0f);
 
 	// 一人称視点
-	//m_Target = m_Position+ player->GetForward();
-	//m_Position = player->GetPosition() + D3DXVECTOR3(0.0f, 1.5f, 0.0f);
+	//m_Target = m_GameObject->GetTransform()->m_Position+ player->GetTransform()->GetForward();
+	//m_GameObject->GetTransform()->m_Position = player->GetTransform()->m_Position + D3DXVECTOR3(0.0f, 1.5f, 0.0f);
 
 	// ハクスラ風
 	//m_Position = player->GetPosition() + D3DXVECTOR3(0.0f, 15.0f, 0.0f);
