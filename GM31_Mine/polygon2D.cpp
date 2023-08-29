@@ -9,7 +9,7 @@ void Polygon2D::Init()
 {
 
 	AddComponent<Shader>()->Init("Shader/unlitTextureVS.cso", "Shader/unlitTexturePS.cso");
-	AddComponent<Sprite>()->Init(D3DXVECTOR2(200.0f,200.0f), D3DXVECTOR2(200.0f, 200.0f), "asset/texture/Image20230424112827.jpg");
+	AddComponent<Sprite>()->Init(D3DXVECTOR2(121.0f,SCREEN_HEIGHT-54.0f), D3DXVECTOR2(242.0f, 108.0f), "asset/texture/gr32logo.jpg");
 }
 
 void Polygon2D::Uninit() 

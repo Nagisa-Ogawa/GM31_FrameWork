@@ -27,7 +27,7 @@ void Camera::Update()
 
 	//// 三人称視点
 	m_Target = player->GetTransform()->m_Position + player->GetTransform()->GetRight()*1.0f + D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	m_GameObject->GetTransform()->m_Position = m_Target - player->GetTransform()->GetForward()*5.0f + D3DXVECTOR3(0.0f, 4.0f, 0.0f);
+	m_GameObject->GetTransform()->m_Position = m_Target - player->GetTransform()->GetForward()*8.0f + D3DXVECTOR3(0.0f, 4.0f, 0.0f);
 
 	// 一人称視点
 	//m_Target = m_GameObject->GetTransform()->m_Position+ player->GetTransform()->GetForward();

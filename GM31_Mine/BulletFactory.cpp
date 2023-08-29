@@ -31,6 +31,7 @@ Bullet* BulletFactory::ActiveObject()
 		[](Bullet* pb) {return pb->GetActive() == false; });
 	if (iBullet != m_ObjectList.end())
 	{	// 見つかったならそのオブジェクトをアクティブにして渡す
+		(*iBullet)->Init(m_pModel);
 		(*iBullet)->SetActive(true);
 		return *iBullet;
 	}

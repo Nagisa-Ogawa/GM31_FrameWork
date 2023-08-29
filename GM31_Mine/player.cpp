@@ -17,8 +17,8 @@
 
 void Player::Init()
 {
-	m_Transform->m_Scale = D3DXVECTOR3(2.0f, 1.0f, 1.0f);
-	// m_Transform->m_Position = D3DXVECTOR3(0.0f, 2.0f, 0.0f);
+	m_Transform->m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	m_Transform->m_Position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	AddComponent<BoxCollision>()->Init(m_Transform->m_Scale, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
 	AddComponent<Model>()->Init("asset\\model\\box.obj");
@@ -46,18 +46,20 @@ void Player::Update()
 	}
 	if (Input::GetKeyPress('Q'))
 	{
-		m_Transform->m_Rotation.y -= 0.1f;
+		m_Transform->m_Rotation.y -= 0.05f;
 	}
 	if (Input::GetKeyPress('E'))
 	{
-		m_Transform->m_Rotation.y += 0.1f;
+		m_Transform->m_Rotation.y += 0.05f;
 	}
 
 	if (Input::GetKeyTrigger(VK_SPACE)) {
 		Bullet* pBullet = BulletFactory::GetInstance()->ActiveObject();
 		pBullet->SetDirection(m_Transform->GetForward());
 		pBullet->GetTransform()->m_Position = m_Transform->m_Position;
-		pBullet->SetStartPos(m_Transform->m_Position);
+		pBullet->GetTransform()->m_Position.y += 0.5f;
+		pBullet->SetPlayerVec(m_Transform->GetForward());
+		pBullet->Set();
 	}
 
 	bool isHit = false;

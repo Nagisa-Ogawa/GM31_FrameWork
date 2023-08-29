@@ -15,5 +15,5 @@ public:
 	void Draw();
 
 	bool GetIsTrigger() { return m_IsTrigger; }
-	D3DXVECTOR3 GetSize() { return m_Size; }
+	D3DXVECTOR3* GetSize() { return &m_Size; }
 };

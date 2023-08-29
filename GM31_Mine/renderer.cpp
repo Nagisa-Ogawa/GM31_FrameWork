@@ -3,6 +3,7 @@
 #include "renderer.h"
 #include <io.h>
 
+//#define _CRT_SECURE_NO_WARNINGS
 
 D3D_FEATURE_LEVEL       Renderer::m_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
 
@@ -243,9 +244,6 @@ void Renderer::Init()
 	material.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	material.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	SetMaterial(material);
-
-
-
 
 }
 

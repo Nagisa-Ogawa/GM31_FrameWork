@@ -77,12 +77,12 @@ void CollisionManager::AddQuadCollision(QuadCollision * coll)
 bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b)
 {
 	// 2オブジェクトの各軸を定義
-	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight() *   (a->GetSize().x /*/ 2.0f*/);
-	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp() *      (a->GetSize().y /*/ 2.0f*/);
-	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize().z /*/ 2.0f*/);
-	D3DXVECTOR3 bVecX = b->GetGameObject()->GetTransform()->GetRight() *   (b->GetSize().x /*/ 2.0f*/);
-	D3DXVECTOR3 bVecY = b->GetGameObject()->GetTransform()->GetUp() *      (b->GetSize().y /*/ 2.0f*/);
-	D3DXVECTOR3 bVecZ = b->GetGameObject()->GetTransform()->GetForward() * (b->GetSize().z /*/ 2.0f*/);
+	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight() *   (a->GetSize()->x /*/ 2.0f*/);
+	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp() *      (a->GetSize()->y /*/ 2.0f*/);
+	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize()->z /*/ 2.0f*/);
+	D3DXVECTOR3 bVecX = b->GetGameObject()->GetTransform()->GetRight() *   (b->GetSize()->x /*/ 2.0f*/);
+	D3DXVECTOR3 bVecY = b->GetGameObject()->GetTransform()->GetUp() *      (b->GetSize()->y /*/ 2.0f*/);
+	D3DXVECTOR3 bVecZ = b->GetGameObject()->GetTransform()->GetForward() * (b->GetSize()->z /*/ 2.0f*/);
 	// 2オブジェクト間の距離
 	D3DXVECTOR3 distance = (b->GetGameObject()->GetTransform()->m_Position -
 								a->GetGameObject()->GetTransform()->m_Position);
@@ -245,13 +245,49 @@ float CollisionManager::CreateHalfProjectionLine(D3DXVECTOR3* sAxis, D3DXVECTOR3
 bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, float* l, D3DXVECTOR3* dir)
 {
 	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_Position;
-	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight()   * (a->GetSize().x);
-	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp()      * (a->GetSize().y);
-	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize().z);
+	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight()   * (a->GetSize()->x);
+	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp()      * (a->GetSize()->y);
+	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize()->z);
+
+	D3DXVECTOR3 bPos = b->GetGameObject()->GetTransform()->m_Position;
+	D3DXVECTOR3 bVecX = b->GetGameObject()->GetTransform()->GetRight() * (b->GetSize()->x);
+	D3DXVECTOR3 bVecZ = b->GetGameObject()->GetTransform()->GetForward() * (b->GetSize()->y);
+
 
 	D3DXVECTOR3 n{};
 	D3DXVec3Normalize(&n, b->GetNormal());
-	D3DXVECTOR3 bPos = b->GetGameObject()->GetTransform()->m_Position;
+
+	// 2オブジェクト間の距離
+	D3DXVECTOR3 distance = (b->GetGameObject()->GetTransform()->m_Position -
+		a->GetGameObject()->GetTransform()->m_Position);
+
+	// ボックスがz方向以外で当たっているかをチェック
+	D3DXVECTOR3 nBVecX;
+	D3DXVec3Normalize(&nBVecX, &bVecX);
+	// オブジェクトの投影線分の半分
+	float hpVecA = CreateHalfProjectionLine(&nBVecX, &aVecX, &aVecY, &aVecZ);
+	// オブジェクトBの投影線分の半分
+	float hpVecB = D3DXVec3Length(&bVecX);
+	// 2つのオブジェクトの中心点間の距離を分離軸上に投影
+	float dDistance = fabs(D3DXVec3Dot(&distance, &nBVecX));
+	if (hpVecA + hpVecB < dDistance) {
+		// 衝突していない
+		return false;
+	}
+
+
+	D3DXVECTOR3 nBVecZ;
+	D3DXVec3Normalize(&nBVecZ, &bVecZ);
+	// オブジェクトの投影線分の半分
+	hpVecA = CreateHalfProjectionLine(&nBVecZ, &aVecX, &aVecY, &aVecZ);
+	// オブジェクトBの投影線分の半分
+	hpVecB = D3DXVec3Length(&bVecZ);
+	// 2つのオブジェクトの中心点間の距離を分離軸上に投影
+	dDistance = fabs(D3DXVec3Dot(&distance, &nBVecZ));
+	if (hpVecA + hpVecB < dDistance) {
+		// 衝突していない
+		return false;
+	}
 
 	// ボックスの各軸の中点から各頂点までの距離を分離軸（平面の法線）上に投影した時の長さを算出
 	float r = 0.0f;
@@ -260,7 +296,8 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 	r += fabs(D3DXVec3Dot(&aVecZ, &n));
 
 	//　ボックスの中点から平面までの距離を分離軸（平面の法線）上に投影した時の長さを算出
-	float s = fabs(D3DXVec3Dot(&(aPos - bPos), &n));
+	D3DXVECTOR3 dis = aPos - bPos;
+	float s = fabs(D3DXVec3Dot(&dis, &n));
 	// 戻す距離を計算
 	if (l != nullptr) {
 		if (s > 0)
