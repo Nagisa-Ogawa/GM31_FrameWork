@@ -1,5 +1,10 @@
 #pragma once
 
+#include "ImGui/imgui.h"
+#include "ImGui/imgui_impl_win32.h"
+#include "ImGui/imgui_impl_dx11.h"
+#include <tchar.h>
+
 class MyImGuiManager
 {
 private:
@@ -13,12 +18,11 @@ private:
 	// 代入演算子
 	MyImGuiManager& operator=(const MyImGuiManager& manager);
 
-	// 初期化処理
-	void Init();
 public:
 	// デストラクタ
 	virtual ~MyImGuiManager();
-
+	// 初期化処理
+	void Init(HWND hwnd);
 	void Uninit();
 	void Update();
 	void Draw();

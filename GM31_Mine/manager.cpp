@@ -1,8 +1,11 @@
 #include "main.h"
 #include "manager.h"
+#include "MyImGuiManager.h"
 #include "renderer.h"
 #include "scene.h"
 #include "input.h"
+#include "title.h"
+#include "game.h"
 
 Manager* Manager::m_Instance = NULL;
 
@@ -45,14 +48,12 @@ Manager* Manager::GetInstance()
 void Manager::Init()
 {
 	Renderer::Init();
-	m_Scene = new Scene();
-	m_Scene->Init();
+	SetScene<Title>();
 	Input::Init();
 }
 
 void Manager::Uninit()
 {
-	Input::Uninit();
 	m_Scene->Uninit();
 	delete m_Scene;
 	Renderer::Uninit();
@@ -61,6 +62,18 @@ void Manager::Uninit()
 void Manager::Update()
 {
 	Input::Update();
+
+	if (m_NextScene) 
+	{
+		if (m_Scene)
+		{
+			m_Scene->Uninit();
+			delete m_Scene;
+		}
+		m_Scene = m_NextScene;
+		m_Scene->Init();
+		m_NextScene = nullptr;
+	}
 	m_Scene->Update();
 }
 
@@ -69,6 +82,7 @@ void Manager::Draw()
 	Renderer::Begin();
 
 	m_Scene->Draw();
+	MyImGuiManager::GetInstance()->Draw();
 
 	Renderer::End();
 }

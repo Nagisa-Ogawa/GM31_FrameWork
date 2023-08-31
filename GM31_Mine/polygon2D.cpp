@@ -5,11 +5,10 @@
 #include "sprite.h"
 
 
-void Polygon2D::Init()
+void Polygon2D::Init(D3DXVECTOR2 pos, D3DXVECTOR2 size, const char* textureName)
 {
-
 	AddComponent<Shader>()->Init("Shader/unlitTextureVS.cso", "Shader/unlitTexturePS.cso");
-	AddComponent<Sprite>()->Init(D3DXVECTOR2(121.0f,SCREEN_HEIGHT-54.0f), D3DXVECTOR2(242.0f, 108.0f), "asset/texture/gr32logo.jpg");
+	AddComponent<Sprite>()->Init(pos, size, textureName);
 }
 
 void Polygon2D::Uninit() 

@@ -10,6 +10,7 @@
 #include "bulletFactory.h"
 #include "bullet.h"
 #include "enemy.h"
+#include "wall.h"
 #include "CollisionManager.h"
 #include "boxCollision.h"
 #include "quadCollision.h"

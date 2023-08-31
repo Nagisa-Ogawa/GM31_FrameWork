@@ -43,6 +43,12 @@
     <Filter Include="ImGui">
       <UniqueIdentifier>{d7c43cc3-d2f5-4177-99dc-1bb0d83794e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Scene">
+      <UniqueIdentifier>{c2471485-b765-467a-9776-2e1e78c1f23a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Scene">
+      <UniqueIdentifier>{3dd65dfd-2765-4d7d-925f-53bb557b36bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="field.cpp">
@@ -135,6 +141,15 @@
     <ClCompile Include="MyImGuiManager.cpp">
       <Filter>ソース ファイル\Other</Filter>
     </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="sky.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="field.h">
@@ -188,9 +203,6 @@
     <ClInclude Include="renderer.h">
       <Filter>ヘッダー ファイル\Other</Filter>
     </ClInclude>
-    <ClInclude Include="scene.h">
-      <Filter>ヘッダー ファイル\Other</Filter>
-    </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
@@ -241,6 +253,18 @@
     </ClInclude>
     <ClInclude Include="MyImGuiManager.h">
       <Filter>ヘッダー ファイル\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="sky.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@ private:
 	// シングルトン用インスタンス
 	static Manager* m_Instance;
 	Scene* m_Scene;
+	Scene* m_NextScene;
 
 	// コンストラクタ
 	Manager();
@@ -28,4 +29,9 @@ public:
 
 	static Manager* GetInstance();
 	Scene* GetScene() { return m_Scene; }
+	template <typename T>
+	void SetScene()
+	{
+		m_NextScene = new T();
+	}
 };

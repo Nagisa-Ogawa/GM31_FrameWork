@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include "factory.h"
 
 struct MODEL;
 class  Enemy;

@@ -1,39 +1,18 @@
 #pragma once
 
+#include "gameObject.h"
 #include <list>
 #include <vector>
 #include <typeinfo>
-
-#include "gameObject.h"
-#include "cameraObject.h"
-#include "field.h"
-#include "player.h"
-#include "polygon2D.h"
-#include "enemy.h"
-#include "bulletFactory.h"
-#include "enemyFactory.h"
-#include "wall.h"
 
 class Scene
 {
 protected:
 	std::list<GameObject*> m_GameObject[3]; 
 public:
-	void Init()
-	{
-		AddGameObject<CameraObject>(0);
-		AddGameObject<Field>(1);
-		AddGameObject<Player>(1);
-		AddGameObject<Wall>(1);
-		//for (int i = 0; i < 10; i++) {
-		//	Enemy* pEnemy = EnemyFactory::GetInstance()->ActiveObject();
-		//	pEnemy->GetTransform()->m_Position=D3DXVECTOR3(-15.0f + i * 3.0f, 0.0f, 6.0f);
-		//	pEnemy->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 3.14f, 0.0f);
-		//}
+	virtual void Init(){}
 
-		// AddGameObject<Polygon2D>(2);
-	}
-	void Uninit() 
+	virtual void Uninit() 
 	{
 		for (int i = 0; i < 3; i++)
 		{
@@ -44,12 +23,10 @@ public:
 			}
 			m_GameObject[i].clear();
 		}
-		BulletFactory::GetInstance()->Uninit();
-		EnemyFactory::GetInstance()->Uninit();
 	}
 
 
-	void Update()
+	virtual void Update()
 	{
 		for (int i = 0; i < 3; i++)
 		{
@@ -64,7 +41,7 @@ public:
 		}
 	}
 
-	void Draw()
+	virtual void Draw()
 	{
 		for (int i = 0; i < 3; i++)
 		{
