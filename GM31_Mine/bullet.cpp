@@ -1,9 +1,16 @@
 #include "main.h"
+#include "manager.h"
+#include "scene.h"
 #include "renderer.h"
 #include "shader.h"
 #include "model.h"
 #include "bulletFactory.h"
 #include "bullet.h"
+#include "CollisionManager.h"
+#include "boxCollision.h"
+#include "Explosion.h"
+#include "enemy.h"
+#include "score.h"
 
 
 void Bullet::Init(MODEL* pModel)
@@ -14,6 +21,7 @@ void Bullet::Init(MODEL* pModel)
 	if(m_pModel)
 		AddComponent<Model>()->Init(m_pModel);
 	m_Transform->m_Scale=D3DXVECTOR3(0.3f, 0.3f, 0.3f);
+	AddComponent<BoxCollision>()->Init(D3DXVECTOR3(0.6f,0.6f,0.6f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 }
 
 
@@ -25,13 +33,25 @@ void Bullet::Update()
 		m_NowFrame++;
 	}
 
-	// m_Transform->m_Position +=m_Direction * m_Speed;
-	// —£‚ê‚½‚çÁ‹Ž
-	//D3DXVECTOR3 vec = m_StartPos - m_Transform->m_Position;
-	//float len = D3DXVec3Length(&vec);
-	//if (len >= 20.0f) {
-	//	BulletFactory::GetInstance()->HideObject(this);
-	//}
+	// ’e‚Æ“G‚Ì“–‚½‚è”»’è
+	BoxCollision* pPCollision = GetComponent<BoxCollision>();
+	auto pEnemies = Manager::GetInstance()->GetScene()->GetGameObjects<Enemy>();
+	for (Enemy* pEnemy : pEnemies) {
+		bool isHit = false;
+		BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
+		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision)) {
+			isHit = true;
+		}
+		if (isHit) {
+			Manager::GetInstance()->GetScene()->AddGameObject<Explosion>(1)->SetTransform(pEnemy->GetTransform());
+			SetActive(false);
+			pEnemy->SetDestroy();
+			Manager::GetInstance()->GetScene()->GetGameObject<Score>()->AddCount(1);
+
+		}
+	}
+
+
 }
 
 D3DXVECTOR3 Bullet::Throw() {

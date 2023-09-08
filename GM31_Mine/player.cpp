@@ -54,7 +54,7 @@ void Player::Update()
 		m_Transform->m_Rotation.y += 0.05f;
 	}
 
-	if (Input::GetKeyTrigger(VK_SPACE)) {
+	if (Input::GetKeyTrigger('J')) {
 		Bullet* pBullet = BulletFactory::GetInstance()->ActiveObject();
 		pBullet->SetDirection(m_Transform->GetForward());
 		pBullet->GetTransform()->m_Position = m_Transform->m_Position;
@@ -63,38 +63,32 @@ void Player::Update()
 		pBullet->Set();
 	}
 
-	bool isHit = false;
+	m_IsHitEnemy = false;
 	BoxCollision* pPCollision = GetComponent<BoxCollision>();
 	auto pEnemies = Manager::GetInstance()->GetScene()->GetGameObjects<Enemy>();
 	for (Enemy* pEnemy : pEnemies) {
 		BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
 		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision)) {
-			isHit = true;
+			m_IsHitEnemy = true;
 		}
 	}
-	if (isHit) {
+	if (m_IsHitEnemy) {
 		m_Transform->m_Position = beforPos;
 	}
 
-	isHit = false;
+	m_IsHitWall = false;
 
-	QuadCollision* qColl = Manager::GetInstance()->GetScene()->GetGameObject<Wall>()->GetComponent<QuadCollision>();
-	float l = 0.0f;
-	D3DXVECTOR3 dir{};
-	if (CollisionManager::GetInstance()->Collision_BoxToQuad(pPCollision, qColl,&l,&dir)) {
-		isHit = true;
+	auto pWalls = Manager::GetInstance()->GetScene()->GetGameObjects<Wall>();
+	for (Wall* pWall : pWalls) {
+		float l = 0.0f;
+		D3DXVECTOR3 dir{};
+		if (CollisionManager::GetInstance()->Collision_BoxToQuad(pPCollision, pWall->GetComponent<QuadCollision>(), &l, &dir)) {
+			m_IsHitWall = true;
+		}
+		if (m_IsHitWall) {
+			m_Transform->m_Position += dir * l;
+		}
 	}
-	if (isHit) {
-		m_Transform->m_Position += dir * l;
-		// m_IsGround = true;
-	}
-
-	//if (m_IsGround) {
-
-	//}
-	//else {
-	//	m_Transform->m_Position += D3DXVECTOR3(0.0f, -0.02f, 0.0f);
-	//}
 
 }
 

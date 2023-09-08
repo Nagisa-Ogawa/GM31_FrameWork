@@ -12,7 +12,7 @@ void Input::Init()
 
 	memset( m_OldKeyState, 0, 256 );
 	memset( m_KeyState, 0, 256 );
-
+	SetKeyboardState(m_KeyState);
 }
 
 void Input::Uninit()

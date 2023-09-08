@@ -7,8 +7,8 @@ class Manager
 private:
 	// シングルトン用インスタンス
 	static Manager* m_Instance;
-	Scene* m_Scene;
-	Scene* m_NextScene;
+	Scene* m_Scene = nullptr;
+	Scene* m_NextScene = nullptr;
 
 	// コンストラクタ
 	Manager();

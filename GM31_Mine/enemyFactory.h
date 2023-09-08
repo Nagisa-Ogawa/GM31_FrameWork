@@ -20,6 +20,7 @@ public:
 	Enemy* ActiveObject() override;
 	void HideObject(Enemy* enemy) override;
 	void Uninit() override;
+	void Clear() override;
 };
 
 

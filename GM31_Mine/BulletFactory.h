@@ -20,6 +20,7 @@ public:
 	Bullet* ActiveObject() override;
 	void HideObject(Bullet* bullet) override;
 	void Uninit() override;
+	void Clear() override;
 };
 
 

@@ -17,5 +17,6 @@ public:
 	void Draw();
 
 	void SetTarget(D3DXVECTOR3 target) { m_Target = target; }
+	D3DXMATRIX GetViewMatrix() { return m_ViewMatrix; }
 };
 

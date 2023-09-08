@@ -20,7 +20,7 @@ void BulletFactory::Init()
 {
 	Model model;
 	m_pModel = new MODEL();
-	model.LoadObj("asset\\model\\torus.obj", m_pModel);
+	model.LoadObj("asset\\model\\bulletBox.obj", m_pModel);
 }
 
 
@@ -60,4 +60,9 @@ void BulletFactory::Uninit()
 	delete[] m_pModel->SubsetArray;
 	delete m_pModel;
 	Factory::Uninit();
+}
+
+void BulletFactory::Clear()
+{
+	m_ObjectList.clear();
 }

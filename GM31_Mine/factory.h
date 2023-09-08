@@ -44,6 +44,11 @@ public:
 	virtual void Uninit()
 	{
 	}
+
+	virtual void Clear() 
+	{
+
+	}
 private:
 	static TFactory* m_Instance;
 };

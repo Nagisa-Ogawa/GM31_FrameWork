@@ -1,7 +1,10 @@
 #include "main.h"
 #include "scene.h"
+#include "manager.h"
+#include "game.h"
 #include "MyImGuiManager.h"
 #include "renderer.h"
+#include "player.h"
 
 MyImGuiManager* MyImGuiManager::m_Instance = NULL;
 
@@ -63,14 +66,30 @@ void MyImGuiManager::Uninit()
 
 void MyImGuiManager::Update()
 {
-	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
-	{
-		static float f = 0.0f;
-		static int counter = 0;
+	static float f = 0.0f;
+	static int counter = 0;
 
-		ImGui::Begin("Debug Window");                          // Create a window called "Hello, world!" and append into it.
+	ImGui::Begin("GameInfo");                          // Create a window called "Hello, world!" and append into it.
 
-		ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
+	ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
+	ImGui::End();
+	auto nowScene = Manager::GetInstance()->GetScene();
+	if (typeid(*nowScene) == typeid(Game)) {
+		ImGui::Begin("PlayerInfo");
+
+		auto player = Manager::GetInstance()->GetScene()->GetGameObject<Player>();
+		if (ImGui::TreeNode("Position")) {
+			ImGui::Text("x:%.3f y:%.3f z:%.3f", 
+				player->GetTransform()->m_Position.x, player->GetTransform()->m_Position.y, player->GetTransform()->m_Position.z);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Rotation")) {
+			ImGui::Text("x:%.3f y:%.3f z:%.3f",
+				player->GetTransform()->m_Rotation.x, player->GetTransform()->m_Rotation.y, player->GetTransform()->m_Rotation.z);
+			ImGui::TreePop();
+		}
+		ImGui::Checkbox("HitEnemy", player->GetIsHitEnemy());
+		ImGui::Checkbox("HitWall", player->GetIsHitWall());
 		ImGui::End();
 	}
 }

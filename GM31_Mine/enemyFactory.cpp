@@ -21,7 +21,7 @@ void EnemyFactory::Init()
 {
 	Model model;
 	m_pModel = new MODEL();
-	model.LoadObj("asset\\model\\box.obj", m_pModel);
+	model.LoadObj("asset\\model\\enemyBox.obj", m_pModel);
 }
 
 Enemy * EnemyFactory::ActiveObject()
@@ -59,4 +59,9 @@ void EnemyFactory::Uninit()
 	delete[] m_pModel->SubsetArray;
 	delete m_pModel;
 	Factory::Uninit();
+}
+
+void EnemyFactory::Clear()
+{
+    m_ObjectList.clear();
 }
