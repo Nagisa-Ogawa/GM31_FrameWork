@@ -2,10 +2,13 @@
 #include <algorithm>
 #include "main.h"
 #include "manager.h"
+#include "renderer.h"
 #include "scene.h"
+#include "CollisionManager.h"
 #include "boxCollision.h"
 #include "quadCollision.h"
-#include "CollisionManager.h"
+#include "sphereCollision.h"
+#include "Ray.h"
 
 CollisionManager* CollisionManager::m_Instance = NULL;
 
@@ -54,38 +57,45 @@ void CollisionManager::AddBoxCollision(BoxCollision * coll)
 {
 	if (coll == nullptr)
 		return;
-	if (coll->GetIsTrigger()) {
-		m_BoxTriList.push_back(coll);
-	}
-	else {
-		m_BoxCollList.push_back(coll);
-	}
+	m_BoxCollList.push_back(coll);
 }
 
 void CollisionManager::AddQuadCollision(QuadCollision * coll)
 {
 	if (coll == nullptr)
 		return;
-	if (coll->GetIsTrigger()) {
-		m_QuadTriList.push_back(coll);
-	}
-	else {
-		m_QuadCollList.push_back(coll);
-	}
+	m_QuadCollList.push_back(coll);
 }
+
+void CollisionManager::AddSphereCollision(SphereCollision* coll)
+{
+	if (coll == nullptr)
+		return;
+	m_SphereCollList.push_back(coll);
+}
+
+//-------------------------------------
+// OBBとOBBの当たり判定
+//-------------------------------------
+// 戻り値 : 当たったかどうか
+//-------------------------------------
+// 
+// a   : OBB用コリジョンその1
+// b   : OBB用コリジョンその2
+//-------------------------------------
 
 bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b)
 {
 	// 2オブジェクトの各軸を定義
-	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight() *   (a->GetSize()->x /*/ 2.0f*/);
-	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp() *      (a->GetSize()->y /*/ 2.0f*/);
-	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize()->z /*/ 2.0f*/);
-	D3DXVECTOR3 bVecX = b->GetGameObject()->GetTransform()->GetRight() *   (b->GetSize()->x /*/ 2.0f*/);
-	D3DXVECTOR3 bVecY = b->GetGameObject()->GetTransform()->GetUp() *      (b->GetSize()->y /*/ 2.0f*/);
-	D3DXVECTOR3 bVecZ = b->GetGameObject()->GetTransform()->GetForward() * (b->GetSize()->z /*/ 2.0f*/);
+	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight() *   (a->GetSize().x /*/ 2.0f*/);
+	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp() *      (a->GetSize().y /*/ 2.0f*/);
+	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize().z /*/ 2.0f*/);
+	D3DXVECTOR3 bVecX = b->GetGameObject()->GetTransform()->GetRight() *   (b->GetSize().x /*/ 2.0f*/);
+	D3DXVECTOR3 bVecY = b->GetGameObject()->GetTransform()->GetUp() *      (b->GetSize().y /*/ 2.0f*/);
+	D3DXVECTOR3 bVecZ = b->GetGameObject()->GetTransform()->GetForward() * (b->GetSize().z /*/ 2.0f*/);
 	// 2オブジェクト間の距離
-	D3DXVECTOR3 distance = (b->GetGameObject()->GetTransform()->m_Position -
-								a->GetGameObject()->GetTransform()->m_Position);
+	D3DXVECTOR3 distance = ((b->GetGameObject()->GetTransform()->m_Position + b->GetOffset()) -
+									(a->GetGameObject()->GetTransform()->m_Position + a->GetOffset()));
 
 	// オブジェクトAのX軸が分離軸の場合
 	D3DXVECTOR3 nAVecX;
@@ -229,6 +239,16 @@ bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b)
 	return true;
 }
 
+//---------------------------------------------------------
+// 分離軸からもう片方のOBBの投影線分の半分を求める関数
+//---------------------------------------------------------
+// 戻り値 : もう片方のOBBの投影線分の半分
+//---------------------------------------------------------
+// ssAxis : 分離軸
+// vecX   : オブジェクトのX軸
+// vecY   : オブジェクトのY軸
+// vecZ   : オブジェクトのZ軸
+//---------------------------------------------------------
 float CollisionManager::CreateHalfProjectionLine(D3DXVECTOR3* sAxis, D3DXVECTOR3* vecX, D3DXVECTOR3* vecY, D3DXVECTOR3* vecZ)
 {
 	float r1 = fabs(D3DXVec3Dot(sAxis, vecX));
@@ -242,12 +262,22 @@ float CollisionManager::CreateHalfProjectionLine(D3DXVECTOR3* sAxis, D3DXVECTOR3
 }
 
 
+//-------------------------------------
+// OBBと板ポリゴンの当たり判定
+// //----------------------------------
+// 戻り値 : 当たったかどうか
+//-------------------------------------
+// a   : OBB用コリジョン
+// b   : 板ポリゴン用コリジョン
+// l   : めり込んだOBBを戻す距離
+// dir : めり込んだOBBを戻す方向
+//-------------------------------------
 bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, float* l, D3DXVECTOR3* dir)
 {
 	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_Position;
-	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight()   * (a->GetSize()->x);
-	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp()      * (a->GetSize()->y);
-	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize()->z);
+	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight()   * (a->GetSize().x);
+	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp()      * (a->GetSize().y);
+	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize().z);
 
 	D3DXVECTOR3 bPos = b->GetGameObject()->GetTransform()->m_Position;
 	D3DXVECTOR3 bVecX = b->GetGameObject()->GetTransform()->GetRight() * (b->GetSize()->x);
@@ -312,5 +342,161 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 		return true;
 	}
 	return false;
+}
+
+
+#define PREVENT_ERROR 0.00001f		// 誤差用定数
+//------------------------------------------------------------------
+// レイと球体コリジョンの当たり判定
+//------------------------------------------------------------------
+// 戻り値 : 当たったかどうか
+//------------------------------------------------------------------
+// ray        : レイ用クラス
+// sphereColl : 球体用コリジョン
+// out_T      : 接触した際のレイの時間
+// out_HitPos : 接触した際の座標
+// 注意! 当たり判定は球体コリジョンのローカル座標で判定しているため
+// 接触した座標を使用する場合はワールド座標へ座標変換する必要がある
+//-------------------------------------------------------------------
+bool CollisionManager::Collision_RayToSphere(Ray* ray, SphereCollision* sphereColl, float* out_T, D3DXVECTOR3* out_HitPos)
+{
+	// D3DXVECTOR3 distance = *(ray->GetStartPos()) - (sphereColl->GetGameObject()->GetTransform()->m_Position + sphereColl->GetOffset());
+	double a = D3DXVec3Dot(ray->GetVec(), ray->GetVec());
+	double b = D3DXVec3Dot(ray->GetStartPos() ,ray->GetVec());
+	double c = D3DXVec3Dot(ray->GetStartPos(), ray->GetStartPos()) - (sphereColl->GetRadius() * sphereColl->GetRadius());
+
+	// 誤差
+	// aは単位ベクトルの内積のため誤差以外では必ず1になる
+	if (a - PREVENT_ERROR <= 0.0f) {
+		return false;
+	}
+
+	// isCollがマイナスになる場合はtは実根を持たないためレイと球は当たっていない
+	float isColl = b * b - (a * c);
+	if (isColl < 0.0f) {
+		return false;
+	}
+
+	// 解の公式から
+	float t = ( -b - sqrt(b * b - a * c)) / a;
+
+	if (out_T) {
+		*out_T = t;
+	}
+	if (out_HitPos) {
+		*out_HitPos = ray->GetRayPos(t);
+	}
+
+	return true;
+}
+
+//-----------------------------------------------------------------------
+// レイとボックスコリジョンの当たり判定
+//-----------------------------------------------------------------------
+// 戻り値 : 当たったかどうか
+//-----------------------------------------------------------------------
+// ray			: レイ用クラス
+// boxColl		: ボックス用コリジョン
+// out_T		: 接触した際のレイの時間
+// out_HitPos	: 接触した際の座標
+// 注意! 当たり判定はボックスコリジョンのローカル座標で判定しているため
+// 接触した座標を使用する場合はワールド座標へ座標変換する必要があります
+//------------------------------------------------------------------------
+bool CollisionManager::Collision_RayToBox(Ray* ray, BoxCollision* boxColl, float* out_T, D3DXVECTOR3* out_HitPos)
+{
+	D3DXVECTOR3 h = boxColl->GetSize();
+	D3DXVECTOR3 p = *(ray->GetStartPos());
+	D3DXVECTOR3 d = *(ray->GetVec());
+	float tx1, tx2, ty1, ty2, tz1, tz2 = 0.0f;
+	// X軸方向
+	if (d.x == 0.0f) {
+		// -h.x<=p.x<=h.xでないなら当たっていない
+		if (-h.x > p.x || p.x > h.x)
+			return false;
+	}
+	else {
+		// tx1 = min{(h.x-p.x)/d.x , (-h.x-p.x)/d.x}
+		// tx2 = max{(h.x-p.x)/d.x , (-h.x-p.x)/d.x}
+		tx1 = std::min((h.x - p.x) / d.x, ( -h.x - p.x) / d.x);
+		tx2 = std::min((h.x - p.x) / d.x, (-h.x - p.x) / d.x);
+	}
+	if (d.y == 0.0f) {
+		// Y軸方向
+		if (-h.y > p.y || p.y > h.y) {
+			return false;
+		}
+	}
+	else {
+		ty1 = std::min((h.y - p.y) / d.y, (-h.y - p.y) / d.y);
+		ty2 = std::min((h.y - p.y) / d.y, (-h.y - p.y) / d.y);
+	}
+	// Z軸方向
+	if (d.z == 0.0f) {
+		if (-h.z > p.z || p.z > h.z)
+			return false;
+	}
+	else {
+		tz1 = std::min((h.z - p.z) / d.z, (-h.z - p.z) / d.z);
+		tz2 = std::min((h.z - p.z) / d.z, (-h.z - p.z) / d.z);
+	}
+
+
+	return false;
+}
+
+
+//------------------------------------------------------------------
+// スクリーン座標の座標をローカル座標へ変換する関数
+//------------------------------------------------------------------
+// 戻り値 : なし
+//------------------------------------------------------------------
+// worldMatrix		: ワールド変換行列
+// viewMatrix		: ビュー変換行列
+// projectionMatrix	: プロジェクション変換行列
+// mousePos			: 変換するスクリーン座標
+// mouseZ			: スクリーン座標に付け加えるz成分(0.0～1.0)
+// out_Pos			: 変換後の座標
+//-------------------------------------------------------------------
+void CollisionManager::ScreenToLocalPosition(D3DXMATRIX* worldMatrix, D3DXMATRIX* viewMatrix, 
+						D3DXMATRIX* projectionMatrix, POINT mousePos, float mouseZ, D3DXVECTOR3* out_Pos)
+{
+	// ビューポート行列を作成
+	D3DXMATRIX vpMatrix;
+	D3DXMatrixIdentity(&vpMatrix);
+	D3D11_VIEWPORT vp;
+	UINT numViewports = 1;
+	Renderer::GetDeviceContext()->RSGetViewports(&numViewports, &vp);
+
+	vpMatrix._11 = (float)vp.Width / 2;
+	vpMatrix._22 = -1.0f * (float)(vp.Height / 2);
+	vpMatrix._33 = (float)vp.MaxDepth - vp.MinDepth;
+	vpMatrix._41 = (float)(vp.TopLeftX + vp.Width / 2);
+	vpMatrix._42 = (float)(vp.TopLeftY + vp.Height / 2);
+	vpMatrix._43 = vp.MinDepth;
+
+	D3DXVECTOR3 world;
+	world.x = (float)mousePos.x;
+	world.y = (float)mousePos.y;
+	world.z = mouseZ;
+
+
+	D3DXMATRIX invMatrix, invViewport, invPorjection, invView, invWorld;
+	// ビューポート行列の逆行列を作成
+	D3DXMatrixInverse(&invViewport, 0, &vpMatrix);
+	// プロジェクション行列の逆行列を作成
+	D3DXMatrixInverse(&invPorjection, 0, projectionMatrix);
+	// ビュー行列の逆行列
+	D3DXMatrixInverse(&invView, 0, viewMatrix);
+	// ワールド行列の逆行列
+	D3DXMatrixInverse(&invWorld, 0, worldMatrix);
+	// 全ての逆行列をかけてローカル座標系へ
+	invMatrix = invViewport * invPorjection * invView * invWorld;
+	// スクリーン座標をローカル座標へ
+	D3DXVec3TransformCoord(&world, &world, &invMatrix);
+
+	if (out_Pos) {
+		*out_Pos = world;
+	}
+
 }
 

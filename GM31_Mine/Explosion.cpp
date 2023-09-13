@@ -127,11 +127,11 @@ void Explosion::Draw()
 
 	// カメラのビューマトリックス取得
 	Camera* camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
-	D3DXMATRIX view = camera->GetViewMatrix();
+	D3DXMATRIX* view = camera->GetViewMatrix();
 
 	// ビューの逆行列
 	D3DXMATRIX invView;
-	D3DXMatrixInverse(&invView, NULL, &view);	// 逆行列
+	D3DXMatrixInverse(&invView, NULL, view);	// 逆行列
 	invView._41 = 0.0f;
 	invView._42 = 0.0f;
 	invView._43 = 0.0f;

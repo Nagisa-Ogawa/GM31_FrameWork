@@ -10,6 +10,8 @@ public:
 	D3DXVECTOR3 m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
+	D3DXMATRIX  m_WorldMatrix{};
+
 	// 右方向ベクトル取得
 	D3DXVECTOR3 GetRight()
 	{
@@ -52,6 +54,7 @@ public:
 		return forward;
 	}
 
+	D3DXMATRIX* GetWorldMatrix() { return &m_WorldMatrix; }
 
 
 	void Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale);

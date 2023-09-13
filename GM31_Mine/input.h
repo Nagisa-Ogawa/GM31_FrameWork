@@ -13,5 +13,6 @@ public:
 
 	static bool GetKeyPress( BYTE KeyCode );
 	static bool GetKeyTrigger( BYTE KeyCode );
+	static POINT GetClientMousePos();
 
 };

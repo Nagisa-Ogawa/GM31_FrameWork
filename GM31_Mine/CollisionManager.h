@@ -4,6 +4,8 @@
 
 class BoxCollision;
 class QuadCollision;
+class SphereCollision;
+class Ray;
 
 class CollisionManager
 {
@@ -17,13 +19,10 @@ private:
 	// 代入演算子
 	CollisionManager& operator=(const CollisionManager& manager);
 
-	// 当たり判定あり用リスト
+	// 各コリジョン用リスト
 	std::list<BoxCollision*> m_BoxCollList;
 	std::list<QuadCollision*> m_QuadCollList;
-	// トリガー用リスト
-	std::list<BoxCollision*> m_BoxTriList;
-	std::list<QuadCollision*> m_QuadTriList;
-
+	std::list<SphereCollision*> m_SphereCollList;
 
 	// 初期化処理
 	void Init();
@@ -34,9 +33,28 @@ public:
 	virtual ~CollisionManager();
 	static CollisionManager* GetInstance();
 
+	// コリジョンコンポーネントを取得する関数
 	void AddBoxCollision(BoxCollision* coll);
 	void AddQuadCollision(QuadCollision* coll);
+	void AddSphereCollision(SphereCollision* coll);
+
+	//----------------------------
+	// 当たり判定関係
+	//----------------------------
+	// OBBとOBBの当たり判定
 	bool Collision_BoxToBox(BoxCollision* a, BoxCollision* b);
+	// OBBと板ポリゴンの当たり判定
 	bool Collision_BoxToQuad(BoxCollision* a, QuadCollision* b, float* l,D3DXVECTOR3* dir);
+	// レイと球体の当たり判定
+	bool Collision_RayToSphere(Ray* ray, SphereCollision* sphereColl, float* out_T, D3DXVECTOR3* out_HitPos);
+	// レイと立方体の当たり判定
+	bool Collision_RayToBox(Ray* ray, BoxCollision* boxColl, float* out_T, D3DXVECTOR3* out_HitPos);
+	// スクリーン座標（クライアント座標）からローカル座標系への座標変換
+	void ScreenToLocalPosition(D3DXMATRIX* worldMatrix, D3DXMATRIX* viewMatrix,
+				D3DXMATRIX* projectionMatrix, POINT mousePos, float mouseZ, D3DXVECTOR3* out_Pos);
+
+	std::list<BoxCollision*> GetBoxCollList() { return m_BoxCollList; }
+	std::list<QuadCollision*> GetQuadCollList() { return m_QuadCollList; }
+	std::list<SphereCollision*> GetSphereCollList() { return m_SphereCollList; }
 
 };

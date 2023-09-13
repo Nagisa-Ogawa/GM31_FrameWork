@@ -5,6 +5,8 @@
 #include "MyImGuiManager.h"
 #include "renderer.h"
 #include "player.h"
+#include "CollisionManager.h"
+#include "boxCollision.h"
 
 MyImGuiManager* MyImGuiManager::m_Instance = NULL;
 
@@ -68,13 +70,22 @@ void MyImGuiManager::Update()
 {
 	static float f = 0.0f;
 	static int counter = 0;
+	auto nowScene = Manager::GetInstance()->GetScene();
 
 	ImGui::Begin("GameInfo");                          // Create a window called "Hello, world!" and append into it.
 
 	ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
-	ImGui::End();
-	auto nowScene = Manager::GetInstance()->GetScene();
 	if (typeid(*nowScene) == typeid(Game)) {
+		if (ImGui::Checkbox("Show Collision", &m_IsShowColl)) {
+			auto colls = CollisionManager::GetInstance()->GetBoxCollList();
+			for (auto coll : colls) {
+				coll->SetIsShowFrame(m_IsShowColl);
+			}
+		}
+	}
+	ImGui::End();
+	if (typeid(*nowScene) == typeid(Game)) {
+
 		ImGui::Begin("PlayerInfo");
 
 		auto player = Manager::GetInstance()->GetScene()->GetGameObject<Player>();

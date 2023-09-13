@@ -152,7 +152,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="animationModel.cpp" />
     <ClCompile Include="boxCollision.cpp" />
+    <ClCompile Include="boxCollisionFrame.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="bulletFactory.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -184,12 +186,16 @@
     <ClCompile Include="score.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sky.cpp" />
+    <ClCompile Include="sphereCollision.cpp" />
+    <ClCompile Include="sphereCollisionFrame.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="transform.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="animationModel.h" />
+    <ClInclude Include="boxCollisionFrame.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="bulletFactory.h" />
     <ClInclude Include="camera.h" />
@@ -221,12 +227,15 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="polygon2D.h" />
     <ClInclude Include="quadCollision.h" />
+    <ClInclude Include="Ray.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sky.h" />
+    <ClInclude Include="sphereCollision.h" />
+    <ClInclude Include="sphereCollisionFrame.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="transform.h" />

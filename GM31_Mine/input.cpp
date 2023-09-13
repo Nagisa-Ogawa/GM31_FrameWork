@@ -39,3 +39,11 @@ bool Input::GetKeyTrigger(BYTE KeyCode)
 {
 	return ((m_KeyState[KeyCode] & 0x80) && !(m_OldKeyState[KeyCode] & 0x80));
 }
+
+POINT Input::GetClientMousePos()
+{
+	POINT mousePos;
+	GetCursorPos(&mousePos);
+	ScreenToClient(GetWindow(), &mousePos);
+	return mousePos;
+}

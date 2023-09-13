@@ -11,6 +11,8 @@ private:
 	// シングルトン用インスタンス
 	static MyImGuiManager* m_Instance;
 
+	bool m_IsShowColl{};
+
 	// コンストラクタ
 	MyImGuiManager();
 	// コピーコンストラクタ

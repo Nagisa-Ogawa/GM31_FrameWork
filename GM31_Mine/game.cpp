@@ -14,12 +14,14 @@
 #include "wall.h"
 #include "sky.h"
 #include "score.h"
+#include "boxCollisionFrame.h"
+#include "sphereCollisionFrame.h"
 
 void Game::Init()
 {
 	AddGameObject<CameraObject>(0);
 	AddGameObject<Field>(1);
-	AddGameObject<Player>(1);
+	auto player=AddGameObject<Player>(1);
 	AddGameObject<Wall>(1)->Init(D3DXVECTOR3(-20.0f,2.5f,5.0f), D3DXVECTOR3(0.0f, 0.0f, -3.14f / 2.0f));
 	AddGameObject<Wall>(1)->Init(D3DXVECTOR3(-25.0f, 2.5f, 0.0f), D3DXVECTOR3(0.0f, 3.14f / 2.0f, -3.14f / 2.0f));
 
@@ -36,7 +38,6 @@ void Game::Init()
 	Enemy* pEnemy3 = EnemyFactory::GetInstance()->ActiveObject();
 	pEnemy3->GetTransform()->m_Position = D3DXVECTOR3(-3.0f, 0.0f, 16.0f);
 	pEnemy3->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
 
 	AddGameObject<Score>(2);
 
