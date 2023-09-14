@@ -82,34 +82,6 @@ void Player::Update()
 		m_Transform->m_Rotation.y += 0.05f;
 	}
 
-	// 仮-----------------------------
-	if (Input::GetKeyPress(VK_LBUTTON)) {
-		// スクリーン座標をクライアント座標へ
-		auto mousePos = Input::GetClientMousePos();
-		D3DXVECTOR3 world1, world2;
-		auto worldMatrix = Manager::GetInstance()->GetScene()->GetGameObject<Player>()->
-						GetComponent<BoxCollision>()->GetFrame()->GetTransform()->GetWorldMatrix();
-		auto camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
-		CollisionManager::GetInstance()->ScreenToLocalPosition(worldMatrix, 
-			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 0.0f, &world1);
-		CollisionManager::GetInstance()->ScreenToLocalPosition(worldMatrix, 
-			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 1.0f, &world2);
-		// レイを作成
-		D3DXVECTOR3 vec = world2 - world1;
-		D3DXVec3Normalize(&vec, &vec);
-		Ray ray(world1, vec);
-		auto box = this->GetComponent<BoxCollision>();
-		// レイと球体で当たり判定
-		if (CollisionManager::GetInstance()->Collision_RayToBox(&ray, box, NULL, NULL)) {
-			Bullet* pBullet = BulletFactory::GetInstance()->ActiveObject();
-			pBullet->SetDirection(m_Transform->GetForward());
-			pBullet->GetTransform()->m_Position = m_Transform->m_Position;
-			pBullet->GetTransform()->m_Position.y += 0.5f;
-			pBullet->SetPlayerVec(m_Transform->GetForward());
-			pBullet->Set();
-		}
-	}
-	//--------------------------------
 	if (Input::GetKeyTrigger('J')) {
 		Bullet* pBullet = BulletFactory::GetInstance()->ActiveObject();
 		pBullet->SetDirection(m_Transform->GetForward());

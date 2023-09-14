@@ -12,15 +12,13 @@ void BoxCollision::Init(D3DXVECTOR3 size, D3DXVECTOR3 offset,bool isTrigger)
 	m_Offset = offset;
 	m_IsTrigger = isTrigger;
 
-	m_CollFrame = Manager::GetInstance()->GetScene()->AddGameObject<BoxCollisionFrame>(1);
+	auto m_CollFrame = Manager::GetInstance()->GetScene()->AddGameObject<BoxCollisionFrame>(1);
 	m_CollFrame->Init(size,offset);
 	m_CollFrame->SetCollTransform(m_GameObject->GetTransform());
-	if (!m_IsShowFrame) {
-		m_CollFrame->SetActive(false);
-	}
-
+	m_CollFrame->SetActive(false);
 
 	CollisionManager::GetInstance()->AddBoxCollision(this);
+	m_Transform = m_GameObject->GetTransform();
 }
 
 void BoxCollision::Uninit()
@@ -35,8 +33,18 @@ void BoxCollision::Draw()
 {
 }
 
-void BoxCollision::SetIsShowFrame(bool flag)
+D3DXMATRIX BoxCollision::GetWorldMatrix()
 {
-	m_IsShowFrame = flag;
-	m_CollFrame->SetActive(flag);
+	// マトリクス設定
+	D3DXVECTOR3 m_Scale = m_Size;
+	D3DXVECTOR3 m_Rot = m_Transform->m_Rotation;
+	D3DXVECTOR3 m_Pos = m_Transform->m_Position + m_Offset;
+	D3DXMATRIX scale, rot, trans, world;
+	D3DXMatrixScaling(&scale, m_Scale.x, m_Scale.y, m_Scale.z);
+	D3DXMatrixRotationYawPitchRoll(&rot, m_Rot.y, m_Rot.x, m_Rot.z);
+	D3DXMatrixTranslation(&trans, m_Pos.x, m_Pos.y, m_Pos.z);
+	world = scale * rot * trans;
+
+	return world;
 }
+

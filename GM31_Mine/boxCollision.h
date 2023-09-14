@@ -9,9 +9,8 @@ private:
 	D3DXVECTOR3 m_Size{};
 	D3DXVECTOR3 m_Offset{};
 	bool		m_IsTrigger{};
-	bool		m_IsShowFrame{};
 
-	BoxCollisionFrame* m_CollFrame{};
+	Transform* m_Transform{};
 
 public:
 	void Init(D3DXVECTOR3 size,D3DXVECTOR3 offset, bool isTrigger);
@@ -20,9 +19,7 @@ public:
 	void Draw();
 
 	bool GetIsTrigger() { return m_IsTrigger; }
-	bool GetIsShowFrame() { return m_IsShowFrame; }
-	void SetIsShowFrame(bool flag);
 	D3DXVECTOR3 GetSize() { return m_Size; }
 	D3DXVECTOR3 GetOffset() { return m_Offset; }
-	BoxCollisionFrame* GetFrame() { return m_CollFrame; }
+	D3DXMATRIX GetWorldMatrix();
 };

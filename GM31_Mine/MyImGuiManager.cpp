@@ -2,11 +2,16 @@
 #include "scene.h"
 #include "manager.h"
 #include "game.h"
-#include "MyImGuiManager.h"
 #include "renderer.h"
+#include "input.h"
+#include "MyImGuiManager.h"
 #include "player.h"
 #include "CollisionManager.h"
 #include "boxCollision.h"
+#include "boxCollisionFrame.h"
+#include "camera.h"
+#include "cameraObject.h"
+#include "Ray.h"
 
 MyImGuiManager* MyImGuiManager::m_Instance = NULL;
 
@@ -77,31 +82,34 @@ void MyImGuiManager::Update()
 	ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
 	if (typeid(*nowScene) == typeid(Game)) {
 		if (ImGui::Checkbox("Show Collision", &m_IsShowColl)) {
-			auto colls = CollisionManager::GetInstance()->GetBoxCollList();
+			auto colls = Manager::GetInstance()->GetScene()->GetGameObjects<BoxCollisionFrame>();
 			for (auto coll : colls) {
-				coll->SetIsShowFrame(m_IsShowColl);
+				coll->SetActive(m_IsShowColl);
 			}
 		}
 	}
 	ImGui::End();
+
 	if (typeid(*nowScene) == typeid(Game)) {
-
-		ImGui::Begin("PlayerInfo");
-
-		auto player = Manager::GetInstance()->GetScene()->GetGameObject<Player>();
-		if (ImGui::TreeNode("Position")) {
-			ImGui::Text("x:%.3f y:%.3f z:%.3f", 
-				player->GetTransform()->m_Position.x, player->GetTransform()->m_Position.y, player->GetTransform()->m_Position.z);
-			ImGui::TreePop();
+		if (Input::GetKeyPress(VK_LBUTTON)) {
+			GetMousePosObject(m_InfoObj);
 		}
-		if (ImGui::TreeNode("Rotation")) {
-			ImGui::Text("x:%.3f y:%.3f z:%.3f",
-				player->GetTransform()->m_Rotation.x, player->GetTransform()->m_Rotation.y, player->GetTransform()->m_Rotation.z);
-			ImGui::TreePop();
+		if (m_InfoObj) {
+			ImGui::Begin("ObjectInfo");
+
+			auto player = Manager::GetInstance()->GetScene()->GetGameObject<Player>();
+			if (ImGui::TreeNode("Position")) {
+				ImGui::Text("x:%.3f y:%.3f z:%.3f",
+					m_InfoObj->GetTransform()->m_Position.x, m_InfoObj->GetTransform()->m_Position.y, m_InfoObj->GetTransform()->m_Position.z);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Rotation")) {
+				ImGui::Text("x:%.3f y:%.3f z:%.3f",
+					m_InfoObj->GetTransform()->m_Rotation.x, m_InfoObj->GetTransform()->m_Rotation.y, m_InfoObj->GetTransform()->m_Rotation.z);
+				ImGui::TreePop();
+			}
+			ImGui::End();
 		}
-		ImGui::Checkbox("HitEnemy", player->GetIsHitEnemy());
-		ImGui::Checkbox("HitWall", player->GetIsHitWall());
-		ImGui::End();
 	}
 }
 
@@ -111,6 +119,50 @@ void MyImGuiManager::Draw()
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
+
+
+// マウス座標にオブジェクトがあるかを調べそのオブジェクトを返す関数
+void MyImGuiManager::GetMousePosObject(GameObject* out_Obj)
+{
+	GameObject* obj = nullptr;
+	float minT = -10.0f;
+	auto colls = CollisionManager::GetInstance()->GetBoxCollList();
+	auto mousePos = Input::GetClientMousePos();
+	for (auto coll : colls) {
+		D3DXVECTOR3 world1, world2;
+		auto worldMatrix = coll->GetWorldMatrix();
+		auto camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
+		CollisionManager::GetInstance()->ScreenToLocalPosition(&worldMatrix,
+			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 0.0f, &world1);
+		CollisionManager::GetInstance()->ScreenToLocalPosition(&worldMatrix,
+			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 1.0f, &world2);
+		// レイを作成
+		D3DXVECTOR3 vec = world2 - world1;
+		D3DXVec3Normalize(&vec, &vec);
+		Ray ray(world1, vec);
+		auto box = coll;
+		float t = -1.0f;
+		// レイと球体で当たり判定
+		if (CollisionManager::GetInstance()->Collision_RayToBox(&ray, box, &t, NULL)) {
+			if (t >= 0.0f) {
+				if (minT < 0.0f) {
+					obj = coll->GetGameObject();
+					minT = t;
+				}
+				else if(t<minT){
+					obj = coll->GetGameObject();
+					minT = t;
+				}
+			}
+		}
+	}
+	if (obj) {
+		out_Obj = obj;
+	}
+}
+
+
+
 
 MyImGuiManager* MyImGuiManager::GetInstance()
 {

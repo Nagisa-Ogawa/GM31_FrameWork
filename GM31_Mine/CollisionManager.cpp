@@ -361,9 +361,10 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 bool CollisionManager::Collision_RayToSphere(Ray* ray, SphereCollision* sphereColl, float* out_T, D3DXVECTOR3* out_HitPos)
 {
 	// D3DXVECTOR3 distance = *(ray->GetStartPos()) - (sphereColl->GetGameObject()->GetTransform()->m_Position + sphereColl->GetOffset());
+	float r = 1.0f;
 	double a = D3DXVec3Dot(ray->GetVec(), ray->GetVec());
 	double b = D3DXVec3Dot(ray->GetStartPos() ,ray->GetVec());
-	double c = D3DXVec3Dot(ray->GetStartPos(), ray->GetStartPos()) - (sphereColl->GetRadius() * sphereColl->GetRadius());
+	double c = D3DXVec3Dot(ray->GetStartPos(), ray->GetStartPos()) - (r * r);
 
 	// 誤差
 	// aは単位ベクトルの内積のため誤差以外では必ず1になる

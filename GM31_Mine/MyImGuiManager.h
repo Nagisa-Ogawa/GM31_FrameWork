@@ -5,6 +5,8 @@
 #include "ImGui/imgui_impl_dx11.h"
 #include <tchar.h>
 
+class GameObject;
+
 class MyImGuiManager
 {
 private:
@@ -12,6 +14,7 @@ private:
 	static MyImGuiManager* m_Instance;
 
 	bool m_IsShowColl{};
+	GameObject* m_InfoObj{};
 
 	// コンストラクタ
 	MyImGuiManager();
@@ -28,6 +31,8 @@ public:
 	void Uninit();
 	void Update();
 	void Draw();
+
+	void GetMousePosObject(GameObject* out_Obj);
 
 	static MyImGuiManager* GetInstance();
 };

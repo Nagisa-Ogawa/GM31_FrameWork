@@ -9,17 +9,14 @@ void SphereCollision::Init(float radius, D3DXVECTOR3 offset, bool isTrigger)
 {
 	m_Radius = radius;
 	m_Offset = offset;
-	m_IsShowFrame = true;
-	m_CollFrame = Manager::GetInstance()->GetScene()->AddGameObject<SphereCollisionFrame>(1);
-	m_CollFrame->Init(radius,offset);
-	m_CollFrame->SetCollTransform(m_GameObject->GetTransform());
-	if (!m_IsShowFrame) {
-		m_CollFrame->SetActive(false);
-	}
 
+	auto m_CollFrame = Manager::GetInstance()->GetScene()->AddGameObject<SphereCollisionFrame>(1);
+	m_CollFrame->Init(m_Radius, offset);
+	m_CollFrame->SetCollTransform(m_GameObject->GetTransform());
+	m_CollFrame->SetActive(false);
 
 	CollisionManager::GetInstance()->AddSphereCollision(this);
-
+	m_Transform = m_GameObject->GetTransform();
 }
 
 void SphereCollision::Uninit()
@@ -34,8 +31,17 @@ void SphereCollision::Draw()
 {
 }
 
-void SphereCollision::SetIsShowFrame(bool flag)
+D3DXMATRIX SphereCollision::GetWorldMatrix()
 {
-	m_IsShowFrame = flag;
-	m_CollFrame->SetActive(flag);
+	// マトリクス設定
+	D3DXVECTOR3 m_Scale = D3DXVECTOR3(m_Radius, m_Radius, m_Radius);
+	D3DXVECTOR3 m_Rot = m_Transform->m_Rotation;
+	D3DXVECTOR3 m_Pos = m_Transform->m_Position + m_Offset;
+	D3DXMATRIX scale, rot, trans, world;
+	D3DXMatrixScaling(&scale, m_Radius, m_Radius, m_Radius);
+	D3DXMatrixRotationYawPitchRoll(&rot, m_Rot.y, m_Rot.x, m_Rot.z);
+	D3DXMatrixTranslation(&trans, m_Pos.x, m_Pos.y, m_Pos.z);
+	world = scale * rot * trans;
+
+	return world;
 }
