@@ -1,6 +1,7 @@
 #pragma once
 #include "component.h"
 
+class SphereCollisionFrame;
 
 class SphereCollision : public Component
 {
@@ -9,7 +10,7 @@ private:
 	D3DXVECTOR3 m_Offset{};
 	bool		m_IsShowFrame{};
 
-	class SphereCollisionFrame* m_CollFrame{};
+	SphereCollisionFrame* m_CollFrame{};
 
 public:
 	void Init(float radius, D3DXVECTOR3 offset, bool isTrigger);
@@ -21,4 +22,5 @@ public:
 	void SetIsShowFrame(bool flag);
 	float GetRadius() { return m_Radius; }
 	D3DXVECTOR3 GetOffset() { return m_Offset; }
+	SphereCollisionFrame* GetFrame() { return m_CollFrame; }
 };

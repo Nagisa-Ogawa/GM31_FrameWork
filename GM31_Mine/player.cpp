@@ -20,14 +20,14 @@
 #include "Ray.h"
 #include "sphereCollision.h"
 #include "sphereCollisionFrame.h"
-
+#include "boxCollisionFrame.h"
 
 void Player::Init()
 {
 	m_Transform->m_Scale = D3DXVECTOR3(0.01f, 0.01f, 0.01f);
 	m_Transform->m_Position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	AddComponent<BoxCollision>()->Init(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
-	AddComponent<SphereCollision>()->Init(1.0f, D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
+	AddComponent<BoxCollision>()->Init(D3DXVECTOR3(0.5f, 1.0f, 0.5f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
+	// AddComponent<SphereCollision>()->Init(1.0f, D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
 	m_Model = AddComponent<AnimationModel>();
 	m_Model->Init("asset\\model\\Bot.fbx");
@@ -87,7 +87,8 @@ void Player::Update()
 		// スクリーン座標をクライアント座標へ
 		auto mousePos = Input::GetClientMousePos();
 		D3DXVECTOR3 world1, world2;
-		auto worldMatrix = Manager::GetInstance()->GetScene()->GetGameObject<SphereCollisionFrame>()->GetTransform()->GetWorldMatrix();
+		auto worldMatrix = Manager::GetInstance()->GetScene()->GetGameObject<Player>()->
+						GetComponent<BoxCollision>()->GetFrame()->GetTransform()->GetWorldMatrix();
 		auto camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
 		CollisionManager::GetInstance()->ScreenToLocalPosition(worldMatrix, 
 			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 0.0f, &world1);
@@ -97,9 +98,9 @@ void Player::Update()
 		D3DXVECTOR3 vec = world2 - world1;
 		D3DXVec3Normalize(&vec, &vec);
 		Ray ray(world1, vec);
-		auto sphere = this->GetComponent<SphereCollision>();
+		auto box = this->GetComponent<BoxCollision>();
 		// レイと球体で当たり判定
-		if (CollisionManager::GetInstance()->Collision_RayToSphere(&ray, sphere, NULL, NULL)) {
+		if (CollisionManager::GetInstance()->Collision_RayToBox(&ray, box, NULL, NULL)) {
 			Bullet* pBullet = BulletFactory::GetInstance()->ActiveObject();
 			pBullet->SetDirection(m_Transform->GetForward());
 			pBullet->GetTransform()->m_Position = m_Transform->m_Position;

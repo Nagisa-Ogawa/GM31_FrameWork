@@ -1,6 +1,7 @@
 #pragma once
 #include "component.h"
 
+class BoxCollisionFrame;
 
 class BoxCollision :public Component
 {
@@ -10,7 +11,7 @@ private:
 	bool		m_IsTrigger{};
 	bool		m_IsShowFrame{};
 
-	class BoxCollisionFrame* m_CollFrame{};
+	BoxCollisionFrame* m_CollFrame{};
 
 public:
 	void Init(D3DXVECTOR3 size,D3DXVECTOR3 offset, bool isTrigger);
@@ -23,4 +24,5 @@ public:
 	void SetIsShowFrame(bool flag);
 	D3DXVECTOR3 GetSize() { return m_Size; }
 	D3DXVECTOR3 GetOffset() { return m_Offset; }
+	BoxCollisionFrame* GetFrame() { return m_CollFrame; }
 };

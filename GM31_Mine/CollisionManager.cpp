@@ -396,7 +396,7 @@ bool CollisionManager::Collision_RayToSphere(Ray* ray, SphereCollision* sphereCo
 // 戻り値 : 当たったかどうか
 //-----------------------------------------------------------------------
 // ray			: レイ用クラス
-// boxColl		: ボックス用コリジョン
+// boxColl		: ボックス用コリジョンのサイズ(boxCollision.objのサイズ)
 // out_T		: 接触した際のレイの時間
 // out_HitPos	: 接触した際の座標
 // 注意! 当たり判定はボックスコリジョンのローカル座標で判定しているため
@@ -404,44 +404,93 @@ bool CollisionManager::Collision_RayToSphere(Ray* ray, SphereCollision* sphereCo
 //------------------------------------------------------------------------
 bool CollisionManager::Collision_RayToBox(Ray* ray, BoxCollision* boxColl, float* out_T, D3DXVECTOR3* out_HitPos)
 {
-	D3DXVECTOR3 h = boxColl->GetSize();
+	D3DXVECTOR3 h = D3DXVECTOR3(1.0f,1.0f,1.0f);
 	D3DXVECTOR3 p = *(ray->GetStartPos());
 	D3DXVECTOR3 d = *(ray->GetVec());
-	float tx1, tx2, ty1, ty2, tz1, tz2 = 0.0f;
+	bool xFlag = false, yFlag = false, zFlag = false;
+	float tx1, tx2, ty1, ty2, tz1, tz2;
 	// X軸方向
 	if (d.x == 0.0f) {
 		// -h.x<=p.x<=h.xでないなら当たっていない
 		if (-h.x > p.x || p.x > h.x)
 			return false;
+		xFlag = true;
 	}
 	else {
 		// tx1 = min{(h.x-p.x)/d.x , (-h.x-p.x)/d.x}
 		// tx2 = max{(h.x-p.x)/d.x , (-h.x-p.x)/d.x}
 		tx1 = std::min((h.x - p.x) / d.x, ( -h.x - p.x) / d.x);
-		tx2 = std::min((h.x - p.x) / d.x, (-h.x - p.x) / d.x);
+		tx2 = std::max((h.x - p.x) / d.x, (-h.x - p.x) / d.x);
 	}
 	if (d.y == 0.0f) {
 		// Y軸方向
-		if (-h.y > p.y || p.y > h.y) {
+		if (-h.y > p.y || p.y > h.y)
 			return false;
-		}
+		yFlag = true;
 	}
 	else {
 		ty1 = std::min((h.y - p.y) / d.y, (-h.y - p.y) / d.y);
-		ty2 = std::min((h.y - p.y) / d.y, (-h.y - p.y) / d.y);
+		ty2 = std::max((h.y - p.y) / d.y, (-h.y - p.y) / d.y);
 	}
 	// Z軸方向
 	if (d.z == 0.0f) {
 		if (-h.z > p.z || p.z > h.z)
 			return false;
+		zFlag = true;
 	}
 	else {
 		tz1 = std::min((h.z - p.z) / d.z, (-h.z - p.z) / d.z);
-		tz2 = std::min((h.z - p.z) / d.z, (-h.z - p.z) / d.z);
+		tz2 = std::max((h.z - p.z) / d.z, (-h.z - p.z) / d.z);
+	}
+
+	// 各軸のt1,t2からtを算出
+	float t = -99999.0f;
+
+	if (!xFlag) {
+		if (tx1 >= 0.0f) {
+			if (tx1 <= ty2 && tx1 <= tz2 &&
+					tx1 >= ty1 && tx1 >= tz1) {
+				if (t >= tx1 || t < 0.0f) {
+					t = tx1;
+				}
+			}
+		}
+	}
+	if (!yFlag) {
+		if (ty1 >= 0.0f) {
+			if (ty1 <= tx2 && ty1 <= tz2 &&
+					ty1 >= tx1 && ty1 >= tz1) {
+				if (t >= ty1 || t < 0.0f) {
+					t = ty1;
+				}
+			}
+		}
+	}
+	if (!zFlag) {
+		if (tz1 >= 0.0f) {
+			if (tz1 <= tx2 && tz1 <= ty2 &&
+					tz1 >= tx1 && tz1 >= ty1) {
+				if (t >= tz1 || t < 0.0f) {
+					t = tz1;
+				}
+			}
+		}
 	}
 
 
-	return false;
+
+	if (t >= 0.0f) {
+		if (out_T) {
+			*out_T = t;
+		}
+		if (out_HitPos) {
+			*out_HitPos = ray->GetRayPos(t);
+		}
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 
