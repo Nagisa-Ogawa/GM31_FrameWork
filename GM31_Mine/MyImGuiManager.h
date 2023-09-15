@@ -32,7 +32,7 @@ public:
 	void Update();
 	void Draw();
 
-	void GetMousePosObject(GameObject* out_Obj);
+	GameObject* GetMousePosObject();
 
 	static MyImGuiManager* GetInstance();
 };

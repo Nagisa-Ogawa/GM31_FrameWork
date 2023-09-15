@@ -45,7 +45,7 @@ void Bullet::Update()
 		if (isHit) {
 			Manager::GetInstance()->GetScene()->AddGameObject<Explosion>(1)->SetTransform(pEnemy->GetTransform());
 			SetActive(false);
-			pEnemy->SetDestroy();
+			pEnemy->SetActive(false);
 			Manager::GetInstance()->GetScene()->GetGameObject<Score>()->AddCount(1);
 
 		}

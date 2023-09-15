@@ -19,5 +19,8 @@ void BoxCollisionFrame::Update()
 {
 	m_Transform->m_Position = m_collTransform->m_Position + m_Offset;
 	m_Transform->m_Rotation = m_collTransform->m_Rotation;
-
+	if (m_collTransform->GetGameObject()->GetActive() == false&&GetActive()==true) {
+		SetActive(false);
+	}
+	
 }

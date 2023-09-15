@@ -80,8 +80,10 @@ void MyImGuiManager::Update()
 	ImGui::Begin("GameInfo");                          // Create a window called "Hello, world!" and append into it.
 
 	ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
+	ImGui::Text(" ObjectCount : %d", Manager::GetInstance()->GetScene()->GetGameObjectCount());
+	ImGui::Text(" ActiveObjectCount : %d", Manager::GetInstance()->GetScene()->GetActiveGameObjectCount());
 	if (typeid(*nowScene) == typeid(Game)) {
-		if (ImGui::Checkbox("Show Collision", &m_IsShowColl)) {
+		if (ImGui::Checkbox(" Show Collision", &m_IsShowColl)) {
 			auto colls = Manager::GetInstance()->GetScene()->GetGameObjects<BoxCollisionFrame>();
 			for (auto coll : colls) {
 				coll->SetActive(m_IsShowColl);
@@ -92,12 +94,13 @@ void MyImGuiManager::Update()
 
 	if (typeid(*nowScene) == typeid(Game)) {
 		if (Input::GetKeyPress(VK_LBUTTON)) {
-			GetMousePosObject(m_InfoObj);
+			auto obj = GetMousePosObject();
+			if (obj)
+				m_InfoObj = obj;
 		}
 		if (m_InfoObj) {
 			ImGui::Begin("ObjectInfo");
-
-			auto player = Manager::GetInstance()->GetScene()->GetGameObject<Player>();
+			ImGui::Text("ObjectType : %s", typeid(*m_InfoObj).name());
 			if (ImGui::TreeNode("Position")) {
 				ImGui::Text("x:%.3f y:%.3f z:%.3f",
 					m_InfoObj->GetTransform()->m_Position.x, m_InfoObj->GetTransform()->m_Position.y, m_InfoObj->GetTransform()->m_Position.z);
@@ -122,16 +125,16 @@ void MyImGuiManager::Draw()
 
 
 // マウス座標にオブジェクトがあるかを調べそのオブジェクトを返す関数
-void MyImGuiManager::GetMousePosObject(GameObject* out_Obj)
+GameObject* MyImGuiManager::GetMousePosObject()
 {
 	GameObject* obj = nullptr;
 	float minT = -10.0f;
 	auto colls = CollisionManager::GetInstance()->GetBoxCollList();
 	auto mousePos = Input::GetClientMousePos();
+	auto camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
 	for (auto coll : colls) {
 		D3DXVECTOR3 world1, world2;
 		auto worldMatrix = coll->GetWorldMatrix();
-		auto camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
 		CollisionManager::GetInstance()->ScreenToLocalPosition(&worldMatrix,
 			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 0.0f, &world1);
 		CollisionManager::GetInstance()->ScreenToLocalPosition(&worldMatrix,
@@ -157,8 +160,9 @@ void MyImGuiManager::GetMousePosObject(GameObject* out_Obj)
 		}
 	}
 	if (obj) {
-		out_Obj = obj;
+		return obj;
 	}
+	return nullptr;
 }
 
 

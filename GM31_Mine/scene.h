@@ -83,6 +83,26 @@ public:
 	}
 
 	template <typename T>
+	T* GetActiveGameObject()
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			for (GameObject* object : m_GameObject[i])
+			{
+				if (object->GetActive() == false) {
+					continue;
+				}
+				if (typeid(*object) == typeid(T))// Œ^‚ğ’²‚×‚é(RTTI“®“IŒ^î•ñ)
+				{
+					return (T*)object;
+				}
+			}
+		}
+		return nullptr;
+	}
+
+
+	template <typename T>
 	std::vector<T*> GetGameObjects()
 	{
 		std::vector<T*> objects;
@@ -99,5 +119,52 @@ public:
 		return objects;
 	}
 
+
+	template <typename T>
+	std::vector<T*> GetActiveGameObjects()
+	{
+		std::vector<T*> objects;
+		for (int i = 0; i < 3; i++)
+		{
+			for (GameObject* object : m_GameObject[i])
+			{
+				if (object->GetActive() == false) {
+					continue;
+				}
+				if (typeid(*object) == typeid(T))// Œ^‚ğ’²‚×‚é(RTTI“®“IŒ^î•ñ)
+				{
+					objects.push_back((T*)object);
+				}
+			}
+		}
+		return objects;
+	}
+
+	size_t GetGameObjectCount() 
+	{ 
+		size_t count = 0;
+		for (int i = 0; i < 3; i++) {
+			count += m_GameObject[i].size();
+		}
+		return count;
+	}
+
+	int GetActiveGameObjectCount()
+	{
+		int count = 0;
+		for (int i = 0; i < 3; i++) {
+			auto it = m_GameObject[i].begin();
+			// ‚·‚×‚Ä‚Ì—v‘f‚ğŒŸõ‚µI‚í‚é‚Ü‚Åƒ‹[ƒv
+			while (true) {
+				it = std::find_if(it, m_GameObject[i].end(), [](GameObject* obj) {return obj->GetActive(); }); 
+				if (it == m_GameObject[i].end()) {
+					break;
+				}
+				count++;
+				it++;
+			}
+		}
+		return count;
+	}
 
 };

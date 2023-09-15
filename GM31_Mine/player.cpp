@@ -98,7 +98,7 @@ void Player::Update()
 
 	m_IsHitEnemy = false;
 	BoxCollision* pPCollision = GetComponent<BoxCollision>();
-	auto pEnemies = Manager::GetInstance()->GetScene()->GetGameObjects<Enemy>();
+	auto pEnemies = Manager::GetInstance()->GetScene()->GetActiveGameObjects<Enemy>();
 	for (Enemy* pEnemy : pEnemies) {
 		BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
 		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision)) {
@@ -124,5 +124,13 @@ void Player::Update()
 	}
 
 
+}
+
+void Player::UpdateGround()
+{
+}
+
+void Player::UpdateJump()
+{
 }
 
