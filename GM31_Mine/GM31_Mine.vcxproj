@@ -175,6 +175,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
+    <ClCompile Include="meshField.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="MyImGuiManager.cpp" />
     <ClCompile Include="plane.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
+    <ClInclude Include="meshField.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="MyImGuiManager.h" />
     <ClInclude Include="plane.h" />

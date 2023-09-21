@@ -16,11 +16,14 @@
 #include "score.h"
 #include "boxCollisionFrame.h"
 #include "sphereCollisionFrame.h"
+#include "meshField.h"
+
 
 void Game::Init()
 {
 	AddGameObject<CameraObject>(0);
-	AddGameObject<Field>(1);
+	// AddGameObject<Field>(1);
+	AddGameObject<MeshField>(1);
 	auto player=AddGameObject<Player>(1);
 	AddGameObject<Wall>(1)->Init(D3DXVECTOR3(-20.0f,2.5f,5.0f), D3DXVECTOR3(0.0f, 0.0f, -3.14f / 2.0f));
 	AddGameObject<Wall>(1)->Init(D3DXVECTOR3(-25.0f, 2.5f, 0.0f), D3DXVECTOR3(0.0f, 3.14f / 2.0f, -3.14f / 2.0f));
