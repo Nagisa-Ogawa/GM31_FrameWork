@@ -39,7 +39,7 @@ void Bullet::Update()
 	for (Enemy* pEnemy : pEnemies) {
 		bool isHit = false;
 		BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
-		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision)) {
+		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision,NULL,NULL)) {
 			isHit = true;
 		}
 		if (isHit) {

@@ -21,6 +21,7 @@
 #include "sphereCollision.h"
 #include "sphereCollisionFrame.h"
 #include "boxCollisionFrame.h"
+#include "meshField.h"
 
 void Player::Init()
 {
@@ -101,7 +102,7 @@ void Player::Update()
 	auto pEnemies = Manager::GetInstance()->GetScene()->GetActiveGameObjects<Enemy>();
 	for (Enemy* pEnemy : pEnemies) {
 		BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
-		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision)) {
+		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision,NULL,NULL)) {
 			m_IsHitEnemy = true;
 		}
 	}
@@ -122,8 +123,11 @@ void Player::Update()
 			m_Transform->m_Position += dir * l;
 		}
 	}
+	float groundHeight;
+	auto meshField = Manager::GetInstance()->GetScene()->GetGameObject<MeshField>();
+	groundHeight = meshField->GetHeight(m_Transform->m_Position);
 
-
+	m_Transform->m_Position.y = groundHeight;
 }
 
 void Player::UpdateGround()

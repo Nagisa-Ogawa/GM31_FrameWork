@@ -28,6 +28,9 @@ private:
 	void Init();
 	// 投影線分の半分の長さを取得する関数
 	float CreateHalfProjectionLine(D3DXVECTOR3* sAxis, D3DXVECTOR3* vecX, D3DXVECTOR3* vecY, D3DXVECTOR3* vecZ = 0);
+	// OBBとOBBが衝突した際のOBBがもう一方のOBBのどの面と衝突しているかを検知し
+	// めり込んだ部分を戻す長さと方向を算出する関数
+	void GetHitBoxSurface(BoxCollision* a, BoxCollision* b, float* l, D3DXVECTOR3* dir);
 public:
 	// デストラクタ
 	virtual ~CollisionManager();
@@ -42,9 +45,12 @@ public:
 	// 当たり判定関係
 	//----------------------------
 	// OBBとOBBの当たり判定
-	bool Collision_BoxToBox(BoxCollision* a, BoxCollision* b);
+	bool Collision_BoxToBox(BoxCollision* a, BoxCollision* b, float* l, D3DXVECTOR3* dir);
 	// OBBと板ポリゴンの当たり判定
 	bool Collision_BoxToQuad(BoxCollision* a, QuadCollision* b, float* l,D3DXVECTOR3* dir);
+	// OBBと平面の当たり判定
+	bool Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos,D3DXVECTOR3 bSize,
+						D3DXVECTOR3 bVec[2], D3DXVECTOR3 bNormal, float* l, D3DXVECTOR3* dir);
 	// レイと球体の当たり判定
 	bool Collision_RayToSphere(Ray* ray, SphereCollision* sphereColl, float* out_T, D3DXVECTOR3* out_HitPos);
 	// レイと立方体の当たり判定

@@ -202,3 +202,46 @@ void MeshField::Draw()
 
 }
 
+float MeshField::GetHeight(D3DXVECTOR3 pos)
+{
+	int x, z;
+
+	// ブロック番号算出
+	x = pos.x / 5.0f + 10.0f;
+	z = pos.z / -5.0f + 10.0f;
+
+	D3DXVECTOR3 pos0, pos1, pos2, pos3;
+
+	pos0 = m_Vertex[x][z].Position;
+	pos1 = m_Vertex[x + 1][z].Position;
+	pos2 = m_Vertex[x][z + 1].Position;
+	pos3 = m_Vertex[x + 1][z + 1].Position;
+
+	D3DXVECTOR3 v12, v1p, c;
+	v12 = pos2 - pos1;
+	v1p = pos - pos1;
+
+	D3DXVec3Cross(&c, &v12, &v1p);
+	
+	float py;
+	D3DXVECTOR3 n;
+	if (c.y > 0.0f) {
+		// 左上ポリゴン
+		D3DXVECTOR3 v10;
+		v10 = pos0 - pos1;
+		D3DXVec3Cross(&n, &v10, &v12);
+	}
+	else {
+		// 右下ポリゴン
+		D3DXVECTOR3 v13;
+		v13 = pos3 - pos1;
+		D3DXVec3Cross(&n, &v12, &v13);
+	}
+
+	// 高さ取得
+	py = -((pos.x - pos1.x) * n.x
+		+ (pos.z - pos1.z) * n.z) / n.y + pos1.y;
+
+	return py;
+}
+

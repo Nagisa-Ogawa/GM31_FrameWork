@@ -82,9 +82,11 @@ void CollisionManager::AddSphereCollision(SphereCollision* coll)
 // 
 // a   : OBB用コリジョンその1
 // b   : OBB用コリジョンその2
+// l   : めり込んだOBBを戻す距離
+// dir : めり込んだOBBを戻す方向
 //-------------------------------------
 
-bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b)
+bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b, float* l, D3DXVECTOR3* dir)
 {
 	// 2オブジェクトの各軸を定義
 	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight() *   (a->GetSize().x /*/ 2.0f*/);
@@ -261,6 +263,25 @@ float CollisionManager::CreateHalfProjectionLine(D3DXVECTOR3* sAxis, D3DXVECTOR3
 	return r1 + r2 + r3;
 }
 
+//-------------------------------------
+// OBBとOBBが衝突した際のOBBがもう一方のOBBのどの面と衝突しているかを検知し
+// めり込んだ部分を戻す長さと方向を算出する関数
+// //----------------------------------
+// 戻り値 : void
+//-------------------------------------
+// a   : OBB用コリジョン
+// b   : 板ポリゴン用コリジョン
+// l   : めり込んだOBBを戻す距離
+// dir : めり込んだOBBを戻す方向
+//-------------------------------------
+void CollisionManager::GetHitBoxSurface(BoxCollision* a, BoxCollision* b, float* l, D3DXVECTOR3* dir)
+{
+	// bを6個の平面として分解
+	
+	// どの平面とaが衝突しているかをチェック
+	// 戻す方向を算出
+	// 戻す長さを算出
+}
 
 //-------------------------------------
 // OBBと板ポリゴンの当たり判定
@@ -342,6 +363,93 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 		return true;
 	}
 	return false;
+}
+
+//-------------------------------------
+// OBBと平面の当たり判定(オーバーロード)
+// //----------------------------------
+// 戻り値 : 当たったかどうか
+//-------------------------------------
+// a       : OBB用コリジョン
+// bPos    : 平面の中心座標
+// bSize   : 平面のサイズ
+// bVec[2] : 平面のワールド座標での向き(縦と横)
+// bNormal : 平面の法線ベクトル
+// l       : めり込んだOBBを戻す距離
+// dir     : めり込んだOBBを戻す方向
+//-------------------------------------
+
+bool CollisionManager::Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos, 
+		D3DXVECTOR3 bSize, D3DXVECTOR3 bVec[2], D3DXVECTOR3 bNormal, float* l, D3DXVECTOR3* dir)
+{
+	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_Position;
+	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight() * (a->GetSize().x);
+	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp() * (a->GetSize().y);
+	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize().z);
+
+	D3DXVECTOR3 bVecX = bVec[0] * bSize.x;
+	D3DXVECTOR3 bVecZ = bVec[1] * bSize.y;
+
+
+	D3DXVECTOR3 n{};
+	D3DXVec3Normalize(&n, &bNormal);
+
+	// 2オブジェクト間の距離
+	D3DXVECTOR3 distance = (bPos -
+		a->GetGameObject()->GetTransform()->m_Position);
+
+	// ボックスがz方向以外で当たっているかをチェック
+	D3DXVECTOR3 nBVecX;
+	D3DXVec3Normalize(&nBVecX, &bVecX);
+	// オブジェクトの投影線分の半分
+	float hpVecA = CreateHalfProjectionLine(&nBVecX, &aVecX, &aVecY, &aVecZ);
+	// オブジェクトBの投影線分の半分
+	float hpVecB = D3DXVec3Length(&bVecX);
+	// 2つのオブジェクトの中心点間の距離を分離軸上に投影
+	float dDistance = fabs(D3DXVec3Dot(&distance, &nBVecX));
+	if (hpVecA + hpVecB < dDistance) {
+		// 衝突していない
+		return false;
+	}
+
+
+	D3DXVECTOR3 nBVecZ;
+	D3DXVec3Normalize(&nBVecZ, &bVecZ);
+	// オブジェクトの投影線分の半分
+	hpVecA = CreateHalfProjectionLine(&nBVecZ, &aVecX, &aVecY, &aVecZ);
+	// オブジェクトBの投影線分の半分
+	hpVecB = D3DXVec3Length(&bVecZ);
+	// 2つのオブジェクトの中心点間の距離を分離軸上に投影
+	dDistance = fabs(D3DXVec3Dot(&distance, &nBVecZ));
+	if (hpVecA + hpVecB < dDistance) {
+		// 衝突していない
+		return false;
+	}
+
+	// ボックスの各軸の中点から各頂点までの距離を分離軸（平面の法線）上に投影した時の長さを算出
+	float r = 0.0f;
+	r += fabs(D3DXVec3Dot(&aVecX, &n));
+	r += fabs(D3DXVec3Dot(&aVecY, &n));
+	r += fabs(D3DXVec3Dot(&aVecZ, &n));
+
+	//　ボックスの中点から平面までの距離を分離軸（平面の法線）上に投影した時の長さを算出
+	D3DXVECTOR3 dis = aPos - bPos;
+	float s = fabs(D3DXVec3Dot(&dis, &n));
+	// 戻す距離を計算
+	if (l != nullptr) {
+		if (s > 0)
+			*l = r - fabs(s);
+		else
+			*l = r + fabs(s);
+		*dir = n;
+	}
+	// 衝突判定
+	// ボックスの中点から各頂点までの長さ(r)がボックスと平面までの長さ(s)よりも大きいなら当たっている
+	if (fabs(s) - r < 0.0f) {
+		return true;
+	}
+	return false;
+
 }
 
 

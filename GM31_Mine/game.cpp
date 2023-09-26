@@ -17,13 +17,12 @@
 #include "boxCollisionFrame.h"
 #include "sphereCollisionFrame.h"
 #include "meshField.h"
-
+#include "rock.h"
 
 void Game::Init()
 {
 	AddGameObject<CameraObject>(0);
 	// AddGameObject<Field>(1);
-	AddGameObject<MeshField>(1);
 	auto player=AddGameObject<Player>(1);
 	AddGameObject<Wall>(1)->Init(D3DXVECTOR3(-20.0f,2.5f,5.0f), D3DXVECTOR3(0.0f, 0.0f, -3.14f / 2.0f));
 	AddGameObject<Wall>(1)->Init(D3DXVECTOR3(-25.0f, 2.5f, 0.0f), D3DXVECTOR3(0.0f, 3.14f / 2.0f, -3.14f / 2.0f));
@@ -41,7 +40,17 @@ void Game::Init()
 	Enemy* pEnemy3 = EnemyFactory::GetInstance()->ActiveObject();
 	pEnemy3->GetTransform()->m_Position = D3DXVECTOR3(-3.0f, 0.0f, 16.0f);
 	pEnemy3->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	auto meshField = AddGameObject<MeshField>(1);
 
+	//for (int i = 0; i < 20; i++) {
+	//	Rock* rock = AddGameObject<Rock>(1);
+
+	//	D3DXVECTOR3 pos;
+	//	pos.x = (float)rand() / RAND_MAX * 100.0f - 50.0f;
+	//	pos.z = (float)rand() / RAND_MAX * 100.0f - 50.0f;
+	//	pos.y = meshField->GetHeight(pos);
+	//	rock->GetTransform()->m_Position = pos;
+	//}
 	AddGameObject<Score>(2);
 
 	// AddGameObject<Polygon2D>(2);
