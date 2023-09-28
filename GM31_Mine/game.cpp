@@ -18,6 +18,7 @@
 #include "sphereCollisionFrame.h"
 #include "meshField.h"
 #include "rock.h"
+#include "tree.h"
 
 void Game::Init()
 {
@@ -42,6 +43,16 @@ void Game::Init()
 	pEnemy3->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	auto meshField = AddGameObject<MeshField>(1);
 
+	for (int i = 0; i < 20; i++) {
+		Tree* tree = AddGameObject<Tree>(1);
+		tree->Init(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR2(4.0f, 8.0f));
+
+		D3DXVECTOR3 pos;
+		pos.x = (float)rand() / RAND_MAX * 100.0f - 50.0f;
+		pos.z = (float)rand() / RAND_MAX * 100.0f - 50.0f;
+		pos.y = meshField->GetHeight(pos);
+		tree->GetTransform()->m_Position = pos;
+	}
 	//for (int i = 0; i < 20; i++) {
 	//	Rock* rock = AddGameObject<Rock>(1);
 
@@ -52,7 +63,6 @@ void Game::Init()
 	//	rock->GetTransform()->m_Position = pos;
 	//}
 	AddGameObject<Score>(2);
-
 	// AddGameObject<Polygon2D>(2);
 }
 

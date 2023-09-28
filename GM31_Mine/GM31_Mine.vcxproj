@@ -193,6 +193,7 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="transform.cpp" />
+    <ClCompile Include="tree.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +244,7 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="transform.h" />
+    <ClInclude Include="tree.h" />
     <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>

@@ -12,4 +12,9 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
 	outDiffuse = g_Texture.Sample(g_SamplerState, In.TexCoord);	
     outDiffuse *= In.Diffuse;
 
+    // ƒ¿ƒNƒŠƒbƒv
+    if (outDiffuse.a <= 0.0f)
+    {
+        discard;
+    }
 }
