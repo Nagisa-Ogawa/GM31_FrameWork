@@ -97,17 +97,25 @@ void Player::Update()
 	if(m_BlendRate<1.0f)
 		m_BlendRate += 0.1f;
 
+	float groundHeight;
+	auto meshField = Manager::GetInstance()->GetScene()->GetGameObject<MeshField>();
+	groundHeight = meshField->GetHeight(m_Transform->m_Position);
+
+	m_Transform->m_Position.y = groundHeight;
+
 	m_IsHitEnemy = false;
 	BoxCollision* pPCollision = GetComponent<BoxCollision>();
 	auto pEnemies = Manager::GetInstance()->GetScene()->GetActiveGameObjects<Enemy>();
 	for (Enemy* pEnemy : pEnemies) {
 		BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
-		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision,NULL,NULL)) {
+		float l = 0.0f;
+		D3DXVECTOR3 dir{};
+		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision,&l,&dir)) {
 			m_IsHitEnemy = true;
 		}
-	}
-	if (m_IsHitEnemy) {
-		m_Transform->m_Position = beforPos;
+		if (m_IsHitEnemy) {
+			m_Transform->m_Position += dir * l;
+		}
 	}
 
 	m_IsHitWall = false;
@@ -123,11 +131,6 @@ void Player::Update()
 			m_Transform->m_Position += dir * l;
 		}
 	}
-	float groundHeight;
-	auto meshField = Manager::GetInstance()->GetScene()->GetGameObject<MeshField>();
-	groundHeight = meshField->GetHeight(m_Transform->m_Position);
-
-	m_Transform->m_Position.y = groundHeight;
 }
 
 void Player::UpdateGround()

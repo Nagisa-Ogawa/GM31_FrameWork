@@ -194,6 +194,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="transform.cpp" />
     <ClCompile Include="tree.cpp" />
+    <ClCompile Include="treeFactory.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +246,7 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="tree.h" />
+    <ClInclude Include="treeFactory.h" />
     <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>

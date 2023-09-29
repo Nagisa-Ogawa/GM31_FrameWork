@@ -45,12 +45,12 @@ public:
 	// “–‚½‚è”»’èŠÖŒW
 	//----------------------------
 	// OBB‚ÆOBB‚Ì“–‚½‚è”»’è
-	bool Collision_BoxToBox(BoxCollision* a, BoxCollision* b, float* l, D3DXVECTOR3* dir);
+	bool Collision_BoxToBox(BoxCollision* a, BoxCollision* b, float* out_L, D3DXVECTOR3* out_Dir);
 	// OBB‚Æ”Âƒ|ƒŠƒSƒ“‚Ì“–‚½‚è”»’è
-	bool Collision_BoxToQuad(BoxCollision* a, QuadCollision* b, float* l,D3DXVECTOR3* dir);
+	bool Collision_BoxToQuad(BoxCollision* a, QuadCollision* b, float* out_L,D3DXVECTOR3* out_Dir);
 	// OBB‚Æ•½–Ê‚Ì“–‚½‚è”»’è
-	bool Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos,D3DXVECTOR3 bSize,
-						D3DXVECTOR3 bVec[2], D3DXVECTOR3 bNormal, float* l, D3DXVECTOR3* dir);
+	bool Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos,D3DXVECTOR2 bSize,
+						D3DXVECTOR3 bVec[2], D3DXVECTOR3 bNormal, float* out_L, D3DXVECTOR3* out_Dir);
 	// ƒŒƒC‚Æ‹…‘Ì‚Ì“–‚½‚è”»’è
 	bool Collision_RayToSphere(Ray* ray, SphereCollision* sphereColl, float* out_T, D3DXVECTOR3* out_HitPos);
 	// ƒŒƒC‚Æ—§•û‘Ì‚Ì“–‚½‚è”»’è

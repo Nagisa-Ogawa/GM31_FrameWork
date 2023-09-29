@@ -15,7 +15,7 @@ private:
 	ID3D11InputLayout* m_VertexLayout = nullptr;
 
 public:
-	void Init(D3DXVECTOR3 pos, D3DXVECTOR2 size);
+	void Init(ID3D11ShaderResourceView* texture);
 	void Uninit();
 	void Update();
 	void Draw();

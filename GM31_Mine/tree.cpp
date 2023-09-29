@@ -6,26 +6,28 @@
 #include "cameraObject.h"
 #include "camera.h"
 
-void Tree::Init(D3DXVECTOR3 pos,D3DXVECTOR2 size)
+void Tree::Init(ID3D11ShaderResourceView* texture)
 {
+	m_Texture = texture;
+	D3DXVECTOR2 size = D3DXVECTOR2(4.0f, 8.0f);
 	VERTEX_3D vertex[4];
 
-	vertex[0].Position = D3DXVECTOR3(pos.x - size.x / 2.0f, pos.y + size.y, pos.z);
+	vertex[0].Position = D3DXVECTOR3( - size.x / 2.0f, size.y, 0.0f);
 	vertex[0].Normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 	vertex[0].Diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[0].TexCoord = D3DXVECTOR2(0.0f, 0.0f);
 
-	vertex[1].Position = D3DXVECTOR3(pos.x + size.x / 2.0f, pos.y + size.y, pos.z);
+	vertex[1].Position = D3DXVECTOR3(size.x / 2.0f, size.y,0.0f);
 	vertex[1].Normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 	vertex[1].Diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[1].TexCoord = D3DXVECTOR2(1.0f, 0.0f);
 
-	vertex[2].Position = D3DXVECTOR3(pos.x - size.x / 2.0f, pos.y, pos.z);
+	vertex[2].Position = D3DXVECTOR3(- size.x / 2.0f, 0.0f, 0.0f);
 	vertex[2].Normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 	vertex[2].Diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[2].TexCoord = D3DXVECTOR2(0.0f, 1.0f);
 
-	vertex[3].Position = D3DXVECTOR3(pos.x + size.x / 2.0f, pos.y, pos.z);
+	vertex[3].Position = D3DXVECTOR3(size.x / 2.0f, 0.0f, 0.0f);
 	vertex[3].Normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 	vertex[3].Diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[3].TexCoord = D3DXVECTOR2(1.0f, 1.0f);
@@ -33,28 +35,16 @@ void Tree::Init(D3DXVECTOR3 pos,D3DXVECTOR2 size)
 	// 頂点バッファの作成
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DYNAMIC;
+	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(VERTEX_3D) * 4;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bd.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA sd;
 	ZeroMemory(&sd, sizeof(sd));
 	sd.pSysMem = vertex;
 
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
-
-
-	// テクスチャの読み込み
-	D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
-		"asset/texture/tree.png",
-		NULL,
-		NULL,
-		&m_Texture,
-		NULL);
-	assert(m_Texture);
-
-
 
 	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout,
 		"Shader/unlitTextureVS.cso");
@@ -65,7 +55,6 @@ void Tree::Init(D3DXVECTOR3 pos,D3DXVECTOR2 size)
 void Tree::Uninit()
 {
 	m_VertexBuffer->Release();
-	m_Texture->Release();
 
 	m_VertexLayout->Release();
 	m_VertexShader->Release();
@@ -122,6 +111,9 @@ void Tree::Draw()
 	// プリミティブトポロジ設定
 	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
+	Renderer::SetATCEnable(true);
 	// ポリゴン描画
 	Renderer::GetDeviceContext()->Draw(4, 0);
+	
+	Renderer::SetATCEnable(false);
 }

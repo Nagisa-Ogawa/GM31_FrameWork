@@ -80,13 +80,13 @@ void CollisionManager::AddSphereCollision(SphereCollision* coll)
 // 戻り値 : 当たったかどうか
 //-------------------------------------
 // 
-// a   : OBB用コリジョンその1
-// b   : OBB用コリジョンその2
-// l   : めり込んだOBBを戻す距離
-// dir : めり込んだOBBを戻す方向
+// a       : OBB用コリジョンその1
+// b       : OBB用コリジョンその2
+// out_L   : めり込んだOBBを戻す距離
+// out_Dir : めり込んだOBBを戻す方向
 //-------------------------------------
 
-bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b, float* l, D3DXVECTOR3* dir)
+bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b, float* out_L, D3DXVECTOR3* out_Dir)
 {
 	// 2オブジェクトの各軸を定義
 	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight() *   (a->GetSize().x /*/ 2.0f*/);
@@ -238,6 +238,9 @@ bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b, floa
 	}
 
 	// すべてに当てはまらなかったら衝突している
+	// 当たった際の引き戻す方向と長さを取得
+	GetHitBoxSurface(a, b, out_L, out_Dir);
+
 	return true;
 }
 
@@ -264,23 +267,87 @@ float CollisionManager::CreateHalfProjectionLine(D3DXVECTOR3* sAxis, D3DXVECTOR3
 }
 
 //-------------------------------------
-// OBBとOBBが衝突した際のOBBがもう一方のOBBのどの面と衝突しているかを検知し
+// OBBとOBBが衝突した際に基準とするOBBがもう一方のOBBのどの面と衝突しているかを検知し
 // めり込んだ部分を戻す長さと方向を算出する関数
 // //----------------------------------
 // 戻り値 : void
 //-------------------------------------
-// a   : OBB用コリジョン
-// b   : 板ポリゴン用コリジョン
-// l   : めり込んだOBBを戻す距離
-// dir : めり込んだOBBを戻す方向
+// a       : 基準となるOBB用コリジョン
+// b       : もう一方のOBB用コリジョン
+// out_L   : めり込んだOBBを戻す距離
+// out_Dir : めり込んだOBBを戻す方向
 //-------------------------------------
-void CollisionManager::GetHitBoxSurface(BoxCollision* a, BoxCollision* b, float* l, D3DXVECTOR3* dir)
+void CollisionManager::GetHitBoxSurface(BoxCollision* a, BoxCollision* b, float* out_L, D3DXVECTOR3* out_Dir)
 {
 	// bを6個の平面として分解
-	
+	// 各要素の変数を6個ずつ用意
+	D3DXVECTOR3 bPos = b->GetGameObject()->GetTransform()->m_Position + b->GetOffset();
+	D3DXVECTOR3 bPoss[6] = { bPos,bPos,bPos,bPos,bPos,bPos };
+	D3DXVECTOR2 bSizes[6];
+	D3DXVECTOR3 bVecs[6][2];
+	D3DXVECTOR3 bNormals[6];
+	// 正面
+	bPoss   [0] -= b->GetGameObject()->GetTransform()->GetForward() * b->GetSize().z;
+	bSizes  [0] = D3DXVECTOR2(b->GetSize().x, b->GetSize().y);
+	bVecs   [0][0]= b->GetGameObject()->GetTransform()->GetRight();
+	bVecs   [0][1] = b->GetGameObject()->GetTransform()->GetUp();
+	bNormals[0] = b->GetGameObject()->GetTransform()->GetForward() * -1.0f;
+	// 後ろ
+	bPoss   [1] += b->GetGameObject()->GetTransform()->GetForward() * b->GetSize().z;
+	bSizes  [1] = D3DXVECTOR2(b->GetSize().x, b->GetSize().y);
+	bVecs   [1][0] = b->GetGameObject()->GetTransform()->GetRight();
+	bVecs   [1][1] = b->GetGameObject()->GetTransform()->GetUp();
+	bNormals[1] = b->GetGameObject()->GetTransform()->GetForward();
+	// 右
+	bPoss   [2] += b->GetGameObject()->GetTransform()->GetRight() * b->GetSize().x;
+	bSizes  [2] = D3DXVECTOR2(b->GetSize().z, b->GetSize().y);
+	bVecs   [2][0] = b->GetGameObject()->GetTransform()->GetForward();
+	bVecs   [2][1] = b->GetGameObject()->GetTransform()->GetUp();
+	bNormals[2] = b->GetGameObject()->GetTransform()->GetRight();
+	// 左
+	bPoss   [3] -= b->GetGameObject()->GetTransform()->GetRight() * b->GetSize().x;
+	bSizes  [3] = D3DXVECTOR2(b->GetSize().z, b->GetSize().y);
+	bVecs   [3][0] = b->GetGameObject()->GetTransform()->GetForward() * -1.0f;
+	bVecs   [3][1] = b->GetGameObject()->GetTransform()->GetUp();
+	bNormals[3] = b->GetGameObject()->GetTransform()->GetRight() * -1.0f;
+	// 上
+	bPoss   [4] += b->GetGameObject()->GetTransform()->GetUp() * b->GetSize().y;
+	bSizes  [4] = D3DXVECTOR2(b->GetSize().x, b->GetSize().z);
+	bVecs   [4][0] = b->GetGameObject()->GetTransform()->GetRight();
+	bVecs   [4][1] = b->GetGameObject()->GetTransform()->GetForward();
+	bNormals[4] = b->GetGameObject()->GetTransform()->GetUp();
+	// 下
+	bPoss   [5] -= b->GetGameObject()->GetTransform()->GetUp() * b->GetSize().y;
+	bSizes  [5] = D3DXVECTOR2(b->GetSize().x, b->GetSize().z);
+	bVecs   [5][0] = b->GetGameObject()->GetTransform()->GetRight() * -1.0f;
+	bVecs   [5][1] = b->GetGameObject()->GetTransform()->GetForward();
+	bNormals[5] = b->GetGameObject()->GetTransform()->GetUp() * -1.0f;
+
+	float minL = -1.0f;
+	D3DXVECTOR3 minDir;
 	// どの平面とaが衝突しているかをチェック
-	// 戻す方向を算出
-	// 戻す長さを算出
+	for (int i = 0; i < 6; i++) {
+		float l = -1.0f;
+		D3DXVECTOR3 dir;
+		// OBBと平面の当たり判定
+		if (Collision_BoxToQuad(a, bPoss[i], bSizes[i], bVecs[i], bNormals[i], &l, &dir)) {
+			// 衝突していたなら押し戻す長さを比較
+			if (minL < 0.0f) {
+				minL = l;
+				minDir = dir;
+			}
+			else {
+				if (minL > l) {
+					minL = l;
+					minDir = dir;
+				}
+			}
+		}
+	}
+	if (minL >= 0.0f) {
+		*out_L = minL;
+		*out_Dir = minDir;
+	}
 }
 
 //-------------------------------------
@@ -288,12 +355,12 @@ void CollisionManager::GetHitBoxSurface(BoxCollision* a, BoxCollision* b, float*
 // //----------------------------------
 // 戻り値 : 当たったかどうか
 //-------------------------------------
-// a   : OBB用コリジョン
-// b   : 板ポリゴン用コリジョン
-// l   : めり込んだOBBを戻す距離
-// dir : めり込んだOBBを戻す方向
+// a       : OBB用コリジョン
+// b       : 板ポリゴン用コリジョン
+// out_L   : めり込んだOBBを戻す距離
+// out_Dir : めり込んだOBBを戻す方向
 //-------------------------------------
-bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, float* l, D3DXVECTOR3* dir)
+bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, float* out_L, D3DXVECTOR3* out_Dir)
 {
 	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_Position;
 	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight()   * (a->GetSize().x);
@@ -321,7 +388,7 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 	float hpVecB = D3DXVec3Length(&bVecX);
 	// 2つのオブジェクトの中心点間の距離を分離軸上に投影
 	float dDistance = fabs(D3DXVec3Dot(&distance, &nBVecX));
-	if (hpVecA + hpVecB < dDistance) {
+	if (hpVecA + hpVecB <= dDistance) {
 		// 衝突していない
 		return false;
 	}
@@ -335,7 +402,7 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 	hpVecB = D3DXVec3Length(&bVecZ);
 	// 2つのオブジェクトの中心点間の距離を分離軸上に投影
 	dDistance = fabs(D3DXVec3Dot(&distance, &nBVecZ));
-	if (hpVecA + hpVecB < dDistance) {
+	if (hpVecA + hpVecB <= dDistance) {
 		// 衝突していない
 		return false;
 	}
@@ -350,12 +417,12 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 	D3DXVECTOR3 dis = aPos - bPos;
 	float s = fabs(D3DXVec3Dot(&dis, &n));
 	// 戻す距離を計算
-	if (l != nullptr) {
+	if (out_L != nullptr) {
 		if (s > 0)
-			*l = r - fabs(s);
+			*out_L = r - fabs(s);
 		else
-			*l = r + fabs(s);
-		*dir = n;
+			*out_L = r + fabs(s);
+		*out_Dir = n;
 	}
 	// 衝突判定
 	// ボックスの中点から各頂点までの長さ(r)がボックスと平面までの長さ(s)よりも大きいなら当たっている
@@ -375,12 +442,12 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 // bSize   : 平面のサイズ
 // bVec[2] : 平面のワールド座標での向き(縦と横)
 // bNormal : 平面の法線ベクトル
-// l       : めり込んだOBBを戻す距離
-// dir     : めり込んだOBBを戻す方向
+// out_L   : めり込んだOBBを戻す距離
+// out_Dir : めり込んだOBBを戻す方向
 //-------------------------------------
 
 bool CollisionManager::Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos, 
-		D3DXVECTOR3 bSize, D3DXVECTOR3 bVec[2], D3DXVECTOR3 bNormal, float* l, D3DXVECTOR3* dir)
+		D3DXVECTOR2 bSize, D3DXVECTOR3 bVec[2], D3DXVECTOR3 bNormal, float* out_L, D3DXVECTOR3* out_Dir)
 {
 	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_Position;
 	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight() * (a->GetSize().x);
@@ -436,12 +503,12 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos,
 	D3DXVECTOR3 dis = aPos - bPos;
 	float s = fabs(D3DXVec3Dot(&dis, &n));
 	// 戻す距離を計算
-	if (l != nullptr) {
+	if (out_L != nullptr) {
 		if (s > 0)
-			*l = r - fabs(s);
+			*out_L = r - fabs(s);
 		else
-			*l = r + fabs(s);
-		*dir = n;
+			*out_L = r + fabs(s);
+		*out_Dir = n;
 	}
 	// 衝突判定
 	// ボックスの中点から各頂点までの長さ(r)がボックスと平面までの長さ(s)よりも大きいなら当たっている

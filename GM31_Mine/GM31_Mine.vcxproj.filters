@@ -180,6 +180,9 @@
     <ClCompile Include="tree.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="treeFactory.cpp">
+      <Filter>ソース ファイル\Factory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="field.h">
@@ -328,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="tree.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="treeFactory.h">
+      <Filter>ヘッダー ファイル\Factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

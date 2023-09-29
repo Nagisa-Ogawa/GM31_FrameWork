@@ -19,6 +19,7 @@
 #include "meshField.h"
 #include "rock.h"
 #include "tree.h"
+#include "treeFactory.h"
 
 void Game::Init()
 {
@@ -32,25 +33,25 @@ void Game::Init()
 
 	Enemy* pEnemy1 = EnemyFactory::GetInstance()->ActiveObject();
 	pEnemy1->GetTransform()->m_Position = D3DXVECTOR3(5.0f, 0.0f, 15.0f);
-	pEnemy1->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 3.14f/3.0f, 0.0f);
+	pEnemy1->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 1.1f, 0.0f);
 
-	Enemy* pEnemy2 = EnemyFactory::GetInstance()->ActiveObject();
-	pEnemy2->GetTransform()->m_Position = D3DXVECTOR3(0.0f, 0.0f, 14.0f);
-	pEnemy2->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 1.1f, 0.0f);
+	//Enemy* pEnemy2 = EnemyFactory::GetInstance()->ActiveObject();
+	//pEnemy2->GetTransform()->m_Position = D3DXVECTOR3(0.0f, 0.0f, 14.0f);
+	//pEnemy2->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	Enemy* pEnemy3 = EnemyFactory::GetInstance()->ActiveObject();
-	pEnemy3->GetTransform()->m_Position = D3DXVECTOR3(-3.0f, 0.0f, 16.0f);
-	pEnemy3->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//Enemy* pEnemy3 = EnemyFactory::GetInstance()->ActiveObject();
+	//pEnemy3->GetTransform()->m_Position = D3DXVECTOR3(-3.0f, 0.0f, 16.0f);
+	//pEnemy3->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	
 	auto meshField = AddGameObject<MeshField>(1);
 
 	for (int i = 0; i < 20; i++) {
-		Tree* tree = AddGameObject<Tree>(1);
-		tree->Init(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR2(4.0f, 8.0f));
+		auto tree = TreeFactory::GetInstance()->ActiveObject();
 
 		D3DXVECTOR3 pos;
 		pos.x = (float)rand() / RAND_MAX * 100.0f - 50.0f;
 		pos.z = (float)rand() / RAND_MAX * 100.0f - 50.0f;
-		pos.y = meshField->GetHeight(pos);
+		pos.y = meshField->GetHeight(pos)-1.5f;
 		tree->GetTransform()->m_Position = pos;
 	}
 	//for (int i = 0; i < 20; i++) {
