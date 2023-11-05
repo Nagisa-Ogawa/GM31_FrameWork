@@ -103,6 +103,10 @@ void Player::Update()
 
 	m_Transform->m_Position.y = groundHeight;
 
+	//---------------------------------
+	// 仮
+	// --------------------------------
+	// プレイヤーと敵（正方形）の当たり判定
 	m_IsHitEnemy = false;
 	BoxCollision* pPCollision = GetComponent<BoxCollision>();
 	auto pEnemies = Manager::GetInstance()->GetScene()->GetActiveGameObjects<Enemy>();
@@ -120,6 +124,7 @@ void Player::Update()
 
 	m_IsHitWall = false;
 
+	// プレイヤーと壁の当たり判定
 	auto pWalls = Manager::GetInstance()->GetScene()->GetGameObjects<Wall>();
 	for (Wall* pWall : pWalls) {
 		float l = 0.0f;

@@ -50,14 +50,19 @@ void MyImGuiManager::Init(HWND hwnd)
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();(void)io;
 	pio = &io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	// キーボードとコントローラーの入力を有効化
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; 
+	// ドッキングウィンドウを有効化
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  
+	
 
-	// Setup Dear ImGui style
+	// カラースタイルを選択
 	ImGui::StyleColorsDark();
 	//ImGui::StyleColorsLight();
 
-	// Setup Platform/Renderer backends
+	
+	// imguiの初期化処理を呼び出し
 	ImGui_ImplWin32_Init(hwnd);
 	ImGui_ImplDX11_Init(Renderer::GetDevice(), Renderer::GetDeviceContext());
 
@@ -76,6 +81,10 @@ void MyImGuiManager::Update()
 	static float f = 0.0f;
 	static int counter = 0;
 	auto nowScene = Manager::GetInstance()->GetScene();
+
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
 
 	ImGui::Begin("GameInfo");                          // Create a window called "Hello, world!" and append into it.
 

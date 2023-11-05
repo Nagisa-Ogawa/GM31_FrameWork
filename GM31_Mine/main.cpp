@@ -93,11 +93,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			{
 				dwExecLastTime = dwCurrentTime;
 
-				// Start the Dear ImGui frame
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplWin32_NewFrame();
-				ImGui::NewFrame();
-
 				manager->Update();
 
 				myImGuiManager->Update();
@@ -141,7 +136,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 		break;
-
 	default:
 		break;
 	}

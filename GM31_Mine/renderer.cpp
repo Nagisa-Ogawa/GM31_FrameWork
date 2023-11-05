@@ -108,8 +108,8 @@ void Renderer::Init()
 
 	// ビューポート設定
 	D3D11_VIEWPORT viewport;
-	viewport.Width = (FLOAT)SCREEN_WIDTH;
-	viewport.Height = (FLOAT)SCREEN_HEIGHT;
+	viewport.Width = (FLOAT)GAMEWINDOW_WIDTH;
+	viewport.Height = (FLOAT)GAMEWINDOW_HEIGHT;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0;
