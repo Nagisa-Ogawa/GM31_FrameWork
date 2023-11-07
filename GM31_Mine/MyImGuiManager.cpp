@@ -123,6 +123,10 @@ void MyImGuiManager::Update()
 			ImGui::End();
 		}
 	}
+
+	ImGui::Begin("GameView");
+
+	ImGui::End();
 }
 
 void MyImGuiManager::Draw()

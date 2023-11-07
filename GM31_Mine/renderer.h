@@ -63,7 +63,8 @@ private:
 	static ID3D11BlendState*		m_BlendState;
 	static ID3D11BlendState*		m_BlendStateATC;
 
-
+	// ゲームビュー用テクスチャ
+	static ID3D11Texture2D*			m_GameViewTexture;
 
 public:
 	static void Init();
