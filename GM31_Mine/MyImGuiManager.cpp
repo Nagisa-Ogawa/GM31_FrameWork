@@ -86,22 +86,33 @@ void MyImGuiManager::Update()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("GameInfo");                          // Create a window called "Hello, world!" and append into it.
+	ImGui::SetNextWindowSize(ImVec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+	ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+	ImGui::Begin("CurrentWindow",FALSE, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+		ImGui::End();
 
-	ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
-	ImGui::Text(" ObjectCount : %d", Manager::GetInstance()->GetScene()->GetGameObjectCount());
-	ImGui::Text(" ActiveObjectCount : %d", Manager::GetInstance()->GetScene()->GetActiveGameObjectCount());
-	if (typeid(*nowScene) == typeid(Game)) {
-		if (ImGui::Checkbox(" Show Collision", &m_IsShowColl)) {
-			auto colls = Manager::GetInstance()->GetScene()->GetGameObjects<BoxCollisionFrame>();
-			for (auto coll : colls) {
-				coll->SetActive(m_IsShowColl);
+	ImGui::BeginChild( "GameInfo");
+		ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
+		ImGui::Text(" ObjectCount : %d", Manager::GetInstance()->GetScene()->GetGameObjectCount());
+		ImGui::Text(" ActiveObjectCount : %d", Manager::GetInstance()->GetScene()->GetActiveGameObjectCount());
+		if (typeid(*nowScene) == typeid(Game)) {
+			if (ImGui::Checkbox(" Show Collision", &m_IsShowColl)) {
+				auto colls = Manager::GetInstance()->GetScene()->GetGameObjects<BoxCollisionFrame>();
+				for (auto coll : colls) {
+					coll->SetActive(m_IsShowColl);
+				}
 			}
 		}
-	}
-	ImGui::End();
+		ImGui::EndChild();
 
-	if (typeid(*nowScene) == typeid(Game)) {
+	
+
+	ImGui::BeginChild("GameView");
+		ImVec2 imageSize = ImGui::GetContentRegionAvail();
+		ImGui::Image((void*)Renderer::GetGameShaderResourceView(), imageSize);
+		ImGui::EndChild();
+
+	/*if (typeid(*nowScene) == typeid(Game)) {
 		if (Input::GetKeyPress(VK_LBUTTON)) {
 			auto obj = GetMousePosObject();
 			if (obj)
@@ -122,11 +133,7 @@ void MyImGuiManager::Update()
 			}
 			ImGui::End();
 		}
-	}
-
-	ImGui::Begin("GameView");
-
-	ImGui::End();
+	}*/
 }
 
 void MyImGuiManager::Draw()

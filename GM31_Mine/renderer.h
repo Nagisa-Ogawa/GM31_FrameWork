@@ -65,12 +65,16 @@ private:
 
 	// ゲームビュー用テクスチャ
 	static ID3D11Texture2D*			m_GameViewTexture;
-
+	static ID3D11RenderTargetView*  m_GameViewRenderTargetView;
+	static ID3D11DepthStencilView*	m_GameViewDepthStencilView;
+	static ID3D11ShaderResourceView* m_GameViewShaderresourceView;
 public:
 	static void Init();
 	static void Uninit();
 	static void Begin();
+	static void GameViewBegin();
 	static void End();
+	static void GameViewEnd();
 
 	static void SetDepthEnable(bool Enable);
 	static void SetATCEnable(bool Enable);
@@ -84,6 +88,8 @@ public:
 	static ID3D11Device* GetDevice( void ){ return m_Device; }
 	static ID3D11DeviceContext* GetDeviceContext( void ){ return m_DeviceContext; }
 	static ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTargetView; }
+	static ID3D11RenderTargetView* GetGameViewRenderTargetView() { return m_GameViewRenderTargetView; }
+	static ID3D11ShaderResourceView* GetGameShaderResourceView() { return m_GameViewShaderresourceView; }
 
 
 

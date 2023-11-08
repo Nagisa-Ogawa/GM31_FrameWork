@@ -6,6 +6,7 @@
 #include "input.h"
 #include "title.h"
 #include "game.h"
+#include "test.h"
 
 Manager* Manager::m_Instance = NULL;
 
@@ -49,6 +50,7 @@ void Manager::Init()
 {
 	Renderer::Init();
 	SetScene<Title>();
+	
 	Input::Init();
 }
 
@@ -56,6 +58,7 @@ void Manager::Uninit()
 {
 	m_Scene->Uninit();
 	delete m_Scene;
+	
 	Renderer::Uninit();
 }
 
@@ -79,10 +82,14 @@ void Manager::Update()
 
 void Manager::Draw()
 {
-	Renderer::Begin();
+	Renderer::GameViewBegin();
 
 	m_Scene->Draw();
+
+	Renderer::Begin();
+
 	MyImGuiManager::GetInstance()->Draw();
 
 	Renderer::End();
+
 }
