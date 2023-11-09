@@ -28,10 +28,9 @@
 // 画面サイズ
 #define SCREEN_WIDTH	(1540)
 #define SCREEN_HEIGHT	(845)
-// ゲーム画面が映る画面サイズ
-#define GAMEWINDOW_WIDTH	(SCREEN_WIDTH*1.0f)
-#define GAMEWINDOW_HEIGHT	(SCREEN_HEIGHT*1.0f)
 
+#define GAMEVIEW_WIDTH	(1920)
+#define GAMEVIEW_HEIGHT	(1080)
 
 HWND GetWindow();
 

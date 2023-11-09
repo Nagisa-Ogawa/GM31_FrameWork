@@ -54,13 +54,20 @@ void MyImGuiManager::Init(HWND hwnd)
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; 
 	// ドッキングウィンドウを有効化
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  
-	
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; 
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+	// io.ConfigWindowsMoveFromTitleBarOnly = TRUE;
 
 	// カラースタイルを選択
 	ImGui::StyleColorsDark();
 	//ImGui::StyleColorsLight();
 
+	ImGuiStyle& style = ImGui::GetStyle();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		style.WindowRounding = 0.0f;
+		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+	}
 	
 	// imguiの初期化処理を呼び出し
 	ImGui_ImplWin32_Init(hwnd);
@@ -82,16 +89,24 @@ void MyImGuiManager::Update()
 	static int counter = 0;
 	auto nowScene = Manager::GetInstance()->GetScene();
 
+	if (Renderer::GetResizeWidth() != 0 && Renderer::GetResizeHeight() != 0)
+	{
+		// レンダーターゲットをクリア
+		Renderer::CleanRenderTarget();
+		// スワップチェーンのバッファサイズを変更されたウィンドウのサイズに変更
+		Renderer::GetSwapChain()->ResizeBuffers(0, Renderer::GetResizeWidth(), Renderer::GetResizeHeight(), DXGI_FORMAT_UNKNOWN, 0);
+		// レンダーターゲットを再作成
+		Renderer::SetRenderTarget(Renderer::GetResizeWidth(), Renderer::GetResizeHeight());
+		Renderer::SetResizeWidth(0); Renderer::SetResizeHeight(0);
+	}
+
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::SetNextWindowSize(ImVec2(SCREEN_WIDTH, SCREEN_HEIGHT));
-	ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
-	ImGui::Begin("CurrentWindow",FALSE, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-		ImGui::End();
+	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
-	ImGui::BeginChild( "GameInfo");
+	ImGui::Begin("GameInfo");
 		ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
 		ImGui::Text(" ObjectCount : %d", Manager::GetInstance()->GetScene()->GetGameObjectCount());
 		ImGui::Text(" ActiveObjectCount : %d", Manager::GetInstance()->GetScene()->GetActiveGameObjectCount());
@@ -103,16 +118,24 @@ void MyImGuiManager::Update()
 				}
 			}
 		}
-		ImGui::EndChild();
+		ImGui::End();
 
-	
-
-	ImGui::BeginChild("GameView");
+	ImGui::Begin("GameView");
 		ImVec2 imageSize = ImGui::GetContentRegionAvail();
 		ImGui::Image((void*)Renderer::GetGameShaderResourceView(), imageSize);
-		ImGui::EndChild();
+		ImGui::End();
 
-	/*if (typeid(*nowScene) == typeid(Game)) {
+	ImGui::Begin("Project");
+		ImGui::End();
+
+	ImGui::Begin("Hierarchy");
+		ImGui::End();
+
+	ImGui::Begin("Console");
+		
+		ImGui::End();
+
+	if (typeid(*nowScene) == typeid(Game)) {
 		if (Input::GetKeyPress(VK_LBUTTON)) {
 			auto obj = GetMousePosObject();
 			if (obj)
@@ -133,7 +156,7 @@ void MyImGuiManager::Update()
 			}
 			ImGui::End();
 		}
-	}*/
+	}
 }
 
 void MyImGuiManager::Draw()
@@ -141,6 +164,12 @@ void MyImGuiManager::Draw()
 	// Rendering
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
 }
 
 

@@ -68,6 +68,10 @@ private:
 	static ID3D11RenderTargetView*  m_GameViewRenderTargetView;
 	static ID3D11DepthStencilView*	m_GameViewDepthStencilView;
 	static ID3D11ShaderResourceView* m_GameViewShaderresourceView;
+
+	// ウィンドウのサイズが変わった際のサイズ
+	static UINT		m_ResizeWidth;
+	static UINT		m_ResizeHeight;
 public:
 	static void Init();
 	static void Uninit();
@@ -84,12 +88,29 @@ public:
 	static void SetProjectionMatrix(D3DXMATRIX* ProjectionMatrix);
 	static void SetMaterial(MATERIAL Material);
 	static void SetLight(LIGHT Light);
+	static void SetResizeWidth(UINT width) { m_ResizeWidth = width; }
+	static void SetResizeHeight(UINT height) { m_ResizeHeight = height; }
+	static void SetViewport(UINT width, UINT height);
 
+	// Get系関数
 	static ID3D11Device* GetDevice( void ){ return m_Device; }
 	static ID3D11DeviceContext* GetDeviceContext( void ){ return m_DeviceContext; }
 	static ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTargetView; }
 	static ID3D11RenderTargetView* GetGameViewRenderTargetView() { return m_GameViewRenderTargetView; }
 	static ID3D11ShaderResourceView* GetGameShaderResourceView() { return m_GameViewShaderresourceView; }
+	static IDXGISwapChain* GetSwapChain() { return m_SwapChain; }
+	static UINT GetResizeWidth() { return m_ResizeWidth; }
+	static UINT GetResizeHeight() { return m_ResizeHeight; }
+
+	/// <summary>
+	/// レンダーターゲットを作成する関数
+	/// </summary>
+	static void SetRenderTarget(UINT width, UINT height);
+
+	/// <summary>
+	/// レンダーターゲットをクリアする関数
+	/// </summary>
+	static void CleanRenderTarget();
 
 
 

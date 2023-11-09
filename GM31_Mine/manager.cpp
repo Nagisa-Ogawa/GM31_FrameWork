@@ -82,13 +82,20 @@ void Manager::Update()
 
 void Manager::Draw()
 {
+	// テクスチャにゲーム画面をレンダリング
 	Renderer::GameViewBegin();
 
 	m_Scene->Draw();
 
+	// Imguiのみをレンダリング
 	Renderer::Begin();
 
 	MyImGuiManager::GetInstance()->Draw();
+
+	//Renderer::Begin();
+
+	//m_Scene->Draw();
+	//MyImGuiManager::GetInstance()->Draw();
 
 	Renderer::End();
 

@@ -33,6 +33,8 @@ ID3D11RenderTargetView*		Renderer::m_GameViewRenderTargetView{};
 ID3D11ShaderResourceView* Renderer::m_GameViewShaderresourceView{};
 ID3D11DepthStencilView*	Renderer::m_GameViewDepthStencilView{};
 
+UINT Renderer::m_ResizeWidth{};
+UINT Renderer::m_ResizeHeight{};
 
 void Renderer::Init()
 {
@@ -70,57 +72,54 @@ void Renderer::Init()
 
 
 
+	SetRenderTarget(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	{
+
+	//	// レンダーターゲットビュー作成
+	//	ID3D11Texture2D* renderTarget{};
+	//	m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
+	//	m_Device->CreateRenderTargetView(renderTarget, NULL, &m_RenderTargetView);
+	//	renderTarget->Release();
 
 
+	//	// デプスステンシルバッファ作成
+	//	ID3D11Texture2D* depthStencile{};
+	//	D3D11_TEXTURE2D_DESC textureDesc{};
+	//	textureDesc.Width = swapChainDesc.BufferDesc.Width;
+	//	textureDesc.Height = swapChainDesc.BufferDesc.Height;
+	//	textureDesc.MipLevels = 1;
+	//	textureDesc.ArraySize = 1;
+	//	textureDesc.Format = DXGI_FORMAT_D16_UNORM;
+	//	textureDesc.SampleDesc = swapChainDesc.SampleDesc;
+	//	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	//	textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	//	textureDesc.CPUAccessFlags = 0;
+	//	textureDesc.MiscFlags = 0;
+	//	m_Device->CreateTexture2D(&textureDesc, NULL, &depthStencile);
 
-	// レンダーターゲットビュー作成
-	ID3D11Texture2D* renderTarget{};
-	m_SwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( LPVOID* )&renderTarget );
-	m_Device->CreateRenderTargetView( renderTarget, NULL, &m_RenderTargetView );
-	renderTarget->Release();
-
-
-	// デプスステンシルバッファ作成
-	ID3D11Texture2D* depthStencile{};
-	D3D11_TEXTURE2D_DESC textureDesc{};
-	textureDesc.Width = swapChainDesc.BufferDesc.Width;
-	textureDesc.Height = swapChainDesc.BufferDesc.Height;
-	textureDesc.MipLevels = 1;
-	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_D16_UNORM;
-	textureDesc.SampleDesc = swapChainDesc.SampleDesc;
-	textureDesc.Usage = D3D11_USAGE_DEFAULT;
-	textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	textureDesc.CPUAccessFlags = 0;
-	textureDesc.MiscFlags = 0;
-	m_Device->CreateTexture2D(&textureDesc, NULL, &depthStencile);
-
-	// デプスステンシルビュー作成
-	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc{};
-	depthStencilViewDesc.Format = textureDesc.Format;
-	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	depthStencilViewDesc.Flags = 0;
-	m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_DepthStencilView);
-	depthStencile->Release();
+	//	// デプスステンシルビュー作成
+	//	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc{};
+	//	depthStencilViewDesc.Format = textureDesc.Format;
+	//	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	//	depthStencilViewDesc.Flags = 0;
+	//	m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_DepthStencilView);
+	//	depthStencile->Release();
 
 
-	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	//	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 
+	//	// ビューポート設定
+	//	D3D11_VIEWPORT viewport;
+	//	viewport.Width = (FLOAT)SCREEN_WIDTH;
+	//	viewport.Height = (FLOAT)SCREEN_HEIGHT;
+	//	viewport.MinDepth = 0.0f;
+	//	viewport.MaxDepth = 1.0f;
+	//	viewport.TopLeftX = 0;
+	//	viewport.TopLeftY = 0;
+	//	m_DeviceContext->RSSetViewports(1, &viewport);
 
-
-
-
-	// ビューポート設定
-	D3D11_VIEWPORT viewport;
-	viewport.Width = (FLOAT)GAMEWINDOW_WIDTH;
-	viewport.Height = (FLOAT)GAMEWINDOW_HEIGHT;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	m_DeviceContext->RSSetViewports( 1, &viewport );
-
-
+	}
 
 	// ラスタライザステート設定
 	D3D11_RASTERIZER_DESC rasterizerDesc{};
@@ -257,8 +256,8 @@ void Renderer::Init()
 
 	// テクスチャの設定
 	ZeroMemory(&gameViewTextureDesc, sizeof(gameViewTextureDesc));
-	gameViewTextureDesc.Width = SCREEN_WIDTH;
-	gameViewTextureDesc.Height = SCREEN_HEIGHT;
+	gameViewTextureDesc.Width = GAMEVIEW_WIDTH;
+	gameViewTextureDesc.Height = GAMEVIEW_HEIGHT;
 	gameViewTextureDesc.MipLevels = 1;
 	gameViewTextureDesc.ArraySize = 1;
 	gameViewTextureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -347,6 +346,8 @@ void Renderer::Begin()
 
 void Renderer::GameViewBegin()
 {
+	// ビューポートを変更
+	SetViewport(GAMEVIEW_WIDTH, GAMEVIEW_HEIGHT);
 	m_DeviceContext->OMSetRenderTargets(1, &m_GameViewRenderTargetView, m_GameViewDepthStencilView);
 	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	m_DeviceContext->ClearRenderTargetView(m_GameViewRenderTargetView, clearColor);
@@ -366,6 +367,47 @@ void Renderer::GameViewEnd()
 }
 
 
+void Renderer::SetRenderTarget(UINT width, UINT height)
+{
+	ID3D11Texture2D* renderTarget{};
+	m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
+	m_Device->CreateRenderTargetView(renderTarget, NULL, &m_RenderTargetView);
+	renderTarget->Release();
+
+	// デプスステンシルバッファ作成
+	ID3D11Texture2D* depthStencile{};
+	D3D11_TEXTURE2D_DESC textureDesc{};
+	textureDesc.Width = width;
+	textureDesc.Height = width;
+	textureDesc.MipLevels = 1;
+	textureDesc.ArraySize = 1;
+	textureDesc.Format = DXGI_FORMAT_D16_UNORM;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	textureDesc.CPUAccessFlags = 0;
+	textureDesc.MiscFlags = 0;
+	m_Device->CreateTexture2D(&textureDesc, NULL, &depthStencile);
+
+	// デプスステンシルビュー作成
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc{};
+	depthStencilViewDesc.Format = textureDesc.Format;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Flags = 0;
+	m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_DepthStencilView);
+	depthStencile->Release();
+
+	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+
+	SetViewport(width, height);
+}
+
+void Renderer::CleanRenderTarget()
+{
+	if (m_RenderTargetView) { m_RenderTargetView->Release(); m_RenderTargetView = nullptr; }
+	if (m_DepthStencilView) { m_DepthStencilView->Release(); m_DepthStencilView = nullptr; }
+}
 
 
 void Renderer::SetDepthEnable( bool Enable )
@@ -444,9 +486,18 @@ void Renderer::SetLight( LIGHT Light )
 	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &Light, 0, 0);
 }
 
-
-
-
+void Renderer::SetViewport(UINT width, UINT height)
+{
+	// ビューポート設定
+	D3D11_VIEWPORT viewport;
+	viewport.Width = (FLOAT)width;
+	viewport.Height = (FLOAT)height;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	m_DeviceContext->RSSetViewports(1, &viewport);
+}
 
 void Renderer::CreateVertexShader( ID3D11VertexShader** VertexShader, ID3D11InputLayout** VertexLayout, const char* FileName )
 {

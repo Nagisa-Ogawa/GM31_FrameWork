@@ -13,7 +13,9 @@ private:
 	// シングルトン用インスタンス
 	static MyImGuiManager* m_Instance;
 
-	bool m_IsShowColl{};
+	bool		m_IsShowColl{};
+	
+
 	GameObject* m_InfoObj{};
 
 	// コンストラクタ

@@ -136,6 +136,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 		break;
+	case WM_SIZE:
+		if (wParam == SIZE_MINIMIZED)
+			return 0;
+		Renderer::SetResizeWidth((UINT)LOWORD(lParam)); // Queue resize
+		Renderer::SetResizeHeight((UINT)HIWORD(lParam));
+		return 0;
+	case WM_DPICHANGED:
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
+		{
+			//const int dpi = HIWORD(wParam);
+			//printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
+			const RECT* suggested_rect = (RECT*)lParam;
+			::SetWindowPos(hWnd, nullptr, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
+		}
+		break;
 	default:
 		break;
 	}
