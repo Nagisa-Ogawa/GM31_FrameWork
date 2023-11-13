@@ -106,43 +106,55 @@ void MyImGuiManager::Update()
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
-	ImGui::Begin("GameInfo");
-		ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
-		ImGui::Text(" ObjectCount : %d", Manager::GetInstance()->GetScene()->GetGameObjectCount());
-		ImGui::Text(" ActiveObjectCount : %d", Manager::GetInstance()->GetScene()->GetActiveGameObjectCount());
-		if (typeid(*nowScene) == typeid(Game)) {
-			if (ImGui::Checkbox(" Show Collision", &m_IsShowColl)) {
-				auto colls = Manager::GetInstance()->GetScene()->GetGameObjects<BoxCollisionFrame>();
-				for (auto coll : colls) {
-					coll->SetActive(m_IsShowColl);
-				}
-			}
-		}
+	
+	ImVec2 imgSize;
+	ImVec2 imgPos;
+	ImGui::Begin("Scene");
+		imgSize = ImGui::GetContentRegionAvail();
+		imgPos = ImGui::GetCursorScreenPos();
+		ImGui::Image((void*)Renderer::GetGameShaderResourceView(), imgSize);
 		ImGui::End();
 
-	ImGui::Begin("GameView");
+	ImVec2 mousePos;
+	mousePos.x = 0;
+	mousePos.y = 0;
+	// シーン用ウィンドウ内で右クリックしたことを検知
+	if (ImGui::GetIO().MouseDown[0]) {
+		mousePos = ImGui::GetMousePos();
+		POINT pos = ScreenToGameScreenPoint(mousePos, imgPos,imgSize);
+		auto obj = GetMousePosObject(pos);
+		if (obj)
+			m_InfoObj = obj;
+	}
+
+	ImGui::Begin("Game");
 		ImVec2 imageSize = ImGui::GetContentRegionAvail();
 		ImGui::Image((void*)Renderer::GetGameShaderResourceView(), imageSize);
 		ImGui::End();
 
-	ImGui::Begin("Project");
-		ImGui::End();
 
-	ImGui::Begin("Hierarchy");
-		ImGui::End();
-
-	ImGui::Begin("Console");
-		
-		ImGui::End();
-
-	if (typeid(*nowScene) == typeid(Game)) {
-		if (Input::GetKeyPress(VK_LBUTTON)) {
-			auto obj = GetMousePosObject();
-			if (obj)
-				m_InfoObj = obj;
+	ImGui::Begin("Inspecter");
+		ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
+		ImGui::Text(" ObjectCount : %d", Manager::GetInstance()->GetScene()->GetGameObjectCount());
+		ImGui::Text(" ActiveObjectCount : %d", Manager::GetInstance()->GetScene()->GetActiveGameObjectCount());
+		if (ImGui::Checkbox(" Show Collision", &m_isShowColl)) {
+			auto colls = Manager::GetInstance()->GetScene()->GetGameObjects<BoxCollisionFrame>();
+			for (auto coll : colls) {
+				coll->SetActive(m_isShowColl);
+			}
 		}
+		CameraObject* cameraObj = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>();
+		Camera* camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
+		ImGui::Text("CameraObject");
+		ImGui::Text("position     x:%.2f y:%.2f z:%.2f", cameraObj->GetTransform()->m_Position.x, cameraObj->GetTransform()->m_Position.y, cameraObj->GetTransform()->m_Position.z);
+		ImGui::Text("rotation	 x:%.2f y:%.2f z:%.2f", cameraObj->GetTransform()->m_Rotation.x, cameraObj->GetTransform()->m_Rotation.y, cameraObj->GetTransform()->m_Rotation.z);
+		ImGui::Text("Camera");
+		ImGui::Text("position     x:%.2f y:%.2f z:%.2f", camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z);
+		ImGui::Text("target	   x:%.2f y:%.2f z:%.2f", camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z);
+		ImGui::Text("up		   x:%.2f y:%.2f z:%.2f", camera->GetUp().x, camera->GetUp().y, camera->GetUp().z);
+
+
 		if (m_InfoObj) {
-			ImGui::Begin("ObjectInfo");
 			ImGui::Text("ObjectType : %s", typeid(*m_InfoObj).name());
 			if (ImGui::TreeNode("Position")) {
 				ImGui::Text("x:%.3f y:%.3f z:%.3f",
@@ -154,9 +166,18 @@ void MyImGuiManager::Update()
 					m_InfoObj->GetTransform()->m_Rotation.x, m_InfoObj->GetTransform()->m_Rotation.y, m_InfoObj->GetTransform()->m_Rotation.z);
 				ImGui::TreePop();
 			}
-			ImGui::End();
 		}
-	}
+		ImGui::End();
+
+	ImGui::Begin("Project");
+		ImGui::End();
+
+	ImGui::Begin("Hierarchy");
+		ImGui::End();
+
+	ImGui::Begin("Console");
+		
+		ImGui::End();
 }
 
 void MyImGuiManager::Draw()
@@ -173,16 +194,48 @@ void MyImGuiManager::Draw()
 }
 
 
-// マウス座標にオブジェクトがあるかを調べそのオブジェクトを返す関数
-GameObject* MyImGuiManager::GetMousePosObject()
+/// <summary>
+/// 通常の画面で取得した座標をゲーム画面をレンダリングしている画面での座標に変換
+/// </summary>
+/// <param name="pos">ゲーム画像の左上を(0,0)としたときの座標</param>
+/// <param name="imgSize">画像のサイズ</param>
+/// <returns>変換後の座標</returns>
+POINT MyImGuiManager::ScreenToGameScreenPoint(ImVec2 pos, ImVec2 imgPos, ImVec2 imgSize)
+{
+	POINT mousePos;
+	// ウィンドウの左上を(0,0)とした座標に変換
+	POINT cPos, cImgPos;
+	cPos.x = (int)pos.x; cPos.y = (int)pos.y;
+	cImgPos.x = (int)imgPos.x; cImgPos.y = (int)imgPos.y;
+	ScreenToClient(GetWindow(), &cPos);
+	ScreenToClient(GetWindow(), &cImgPos);
+
+	cPos.x -= cImgPos.x;
+	cPos.y -= cImgPos.y;
+	float ratioX = cPos.x / imgSize.x;
+	float ratioY = cPos.y / imgSize.y;
+	mousePos.x = GAMESCREEN_WIDTH * ratioX;
+	mousePos.y = GAMESCREEN_HEIGHT * ratioY;
+	return mousePos;
+}
+
+
+/// <summary>
+/// マウス座標にオブジェクトがあるかを調べそのオブジェクトを返す関数
+/// </summary>
+/// <param name="mousePos">マウス座標</param>
+/// <returns>その座標にあったオブジェクト</returns>
+GameObject* MyImGuiManager::GetMousePosObject(POINT mousePos)
 {
 	GameObject* obj = nullptr;
 	float minT = -10.0f;
 	auto colls = CollisionManager::GetInstance()->GetBoxCollList();
-	auto mousePos = Input::GetClientMousePos();
+
 	auto camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
+	// ゲーム内のゲームオブジェクトの数だけループ
 	for (auto coll : colls) {
 		D3DXVECTOR3 world1, world2;
+		// レイを判定を取るオブジェクトのローカル座標系に変換
 		auto worldMatrix = coll->GetWorldMatrix();
 		CollisionManager::GetInstance()->ScreenToLocalPosition(&worldMatrix,
 			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 0.0f, &world1);
@@ -215,8 +268,10 @@ GameObject* MyImGuiManager::GetMousePosObject()
 }
 
 
-
-
+/// <summary>
+/// インスタンスがなければ生成し、あればそれを返す関数
+/// </summary>
+/// <returns>インスタンス</returns>
 MyImGuiManager* MyImGuiManager::GetInstance()
 {
 	// 初めて使うときにインスタンスを生成

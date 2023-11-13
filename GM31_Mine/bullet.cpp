@@ -20,7 +20,7 @@ void Bullet::Init(MODEL* pModel)
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
 	if(m_pModel)
 		AddComponent<Model>()->Init(m_pModel);
-	m_Transform->m_Scale=D3DXVECTOR3(0.3f, 0.3f, 0.3f);
+	m_transform->m_Scale=D3DXVECTOR3(0.3f, 0.3f, 0.3f);
 	AddComponent<BoxCollision>()->Init(D3DXVECTOR3(0.6f,0.6f,0.6f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 }
 
@@ -29,7 +29,7 @@ void Bullet::Update()
 {
 	if (m_NowFrame < m_ThrowFrame) {
 		D3DXVECTOR3 pos = Throw();
-		m_Transform->m_Position = pos;
+		m_transform->m_Position = pos;
 		m_NowFrame++;
 	}
 
@@ -72,8 +72,8 @@ D3DXVECTOR3 Bullet::Throw() {
 }
 
 void Bullet::Set() {
-	m_StartPos = m_Transform->m_Position;
-	m_EndPos = m_Transform->m_Position + (D3DXVECTOR3(m_pVec.x, 0.0f, m_pVec.z) * 20.0f);
+	m_StartPos = m_transform->m_Position;
+	m_EndPos = m_transform->m_Position + (D3DXVECTOR3(m_pVec.x, 0.0f, m_pVec.z) * 20.0f);
 	m_EndPos.y = 0.0f;
 	m_StartVec = D3DXVECTOR3(m_pVec.x*3.0f,8.0f,m_pVec.z*3.0f);
 	m_EndVec = -m_StartVec;

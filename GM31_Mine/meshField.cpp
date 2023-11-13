@@ -169,9 +169,9 @@ void MeshField::Draw()
 
 	// マトリクス設定
 	D3DXMATRIX world, scale, rot, trans;
-	D3DXMatrixScaling(&scale, m_Transform->m_Scale.x, m_Transform->m_Scale.y, m_Transform->m_Scale.z);
-	D3DXMatrixRotationYawPitchRoll(&rot, m_Transform->m_Rotation.y, m_Transform->m_Rotation.x, m_Transform->m_Rotation.z);
-	D3DXMatrixTranslation(&trans, m_Transform->m_Position.x, m_Transform->m_Position.y, m_Transform->m_Position.z);
+	D3DXMatrixScaling(&scale, m_transform->m_Scale.x, m_transform->m_Scale.y, m_transform->m_Scale.z);
+	D3DXMatrixRotationYawPitchRoll(&rot, m_transform->m_Rotation.y, m_transform->m_Rotation.x, m_transform->m_Rotation.z);
+	D3DXMatrixTranslation(&trans, m_transform->m_Position.x, m_transform->m_Position.y, m_transform->m_Position.z);
 	world = scale * rot * trans;
 	Renderer::SetWorldMatrix(&world);
 

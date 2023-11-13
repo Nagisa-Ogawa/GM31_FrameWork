@@ -2,7 +2,6 @@
 #include "game.h"
 #include "renderer.h"
 #include "manager.h"
-#include "result.h"
 
 #include "cameraObject.h"
 #include "field.h"
@@ -77,7 +76,4 @@ void Game::Uninit()
 void Game::Update()
 {
 	Scene::Update();
-	if (GetGameObject<Score>()->GetScore() >= 3) {
-		Manager::GetInstance()->SetScene<Result>();
-	}
 }

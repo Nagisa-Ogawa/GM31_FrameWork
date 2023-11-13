@@ -74,53 +74,6 @@ void Renderer::Init()
 
 	SetRenderTarget(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	{
-
-	//	// レンダーターゲットビュー作成
-	//	ID3D11Texture2D* renderTarget{};
-	//	m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
-	//	m_Device->CreateRenderTargetView(renderTarget, NULL, &m_RenderTargetView);
-	//	renderTarget->Release();
-
-
-	//	// デプスステンシルバッファ作成
-	//	ID3D11Texture2D* depthStencile{};
-	//	D3D11_TEXTURE2D_DESC textureDesc{};
-	//	textureDesc.Width = swapChainDesc.BufferDesc.Width;
-	//	textureDesc.Height = swapChainDesc.BufferDesc.Height;
-	//	textureDesc.MipLevels = 1;
-	//	textureDesc.ArraySize = 1;
-	//	textureDesc.Format = DXGI_FORMAT_D16_UNORM;
-	//	textureDesc.SampleDesc = swapChainDesc.SampleDesc;
-	//	textureDesc.Usage = D3D11_USAGE_DEFAULT;
-	//	textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	//	textureDesc.CPUAccessFlags = 0;
-	//	textureDesc.MiscFlags = 0;
-	//	m_Device->CreateTexture2D(&textureDesc, NULL, &depthStencile);
-
-	//	// デプスステンシルビュー作成
-	//	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc{};
-	//	depthStencilViewDesc.Format = textureDesc.Format;
-	//	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	//	depthStencilViewDesc.Flags = 0;
-	//	m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_DepthStencilView);
-	//	depthStencile->Release();
-
-
-	//	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
-
-	//	// ビューポート設定
-	//	D3D11_VIEWPORT viewport;
-	//	viewport.Width = (FLOAT)SCREEN_WIDTH;
-	//	viewport.Height = (FLOAT)SCREEN_HEIGHT;
-	//	viewport.MinDepth = 0.0f;
-	//	viewport.MaxDepth = 1.0f;
-	//	viewport.TopLeftX = 0;
-	//	viewport.TopLeftY = 0;
-	//	m_DeviceContext->RSSetViewports(1, &viewport);
-
-	}
-
 	// ラスタライザステート設定
 	D3D11_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.FillMode = D3D11_FILL_SOLID; 
@@ -256,8 +209,8 @@ void Renderer::Init()
 
 	// テクスチャの設定
 	ZeroMemory(&gameViewTextureDesc, sizeof(gameViewTextureDesc));
-	gameViewTextureDesc.Width = GAMEVIEW_WIDTH;
-	gameViewTextureDesc.Height = GAMEVIEW_HEIGHT;
+	gameViewTextureDesc.Width = GAMESCREEN_WIDTH;
+	gameViewTextureDesc.Height = GAMESCREEN_HEIGHT;
 	gameViewTextureDesc.MipLevels = 1;
 	gameViewTextureDesc.ArraySize = 1;
 	gameViewTextureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -327,10 +280,7 @@ void Renderer::Uninit()
 	m_GameViewTexture->Release();
 	m_GameViewRenderTargetView->Release();
 	m_GameViewDepthStencilView->Release();
-	if (m_GameViewShaderresourceView != NULL) {
-
-		m_GameViewShaderresourceView->Release();
-	}
+	m_GameViewShaderresourceView->Release();
 }
 
 
@@ -347,7 +297,7 @@ void Renderer::Begin()
 void Renderer::GameViewBegin()
 {
 	// ビューポートを変更
-	SetViewport(GAMEVIEW_WIDTH, GAMEVIEW_HEIGHT);
+	SetViewport(GAMESCREEN_WIDTH, GAMESCREEN_HEIGHT);
 	m_DeviceContext->OMSetRenderTargets(1, &m_GameViewRenderTargetView, m_GameViewDepthStencilView);
 	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	m_DeviceContext->ClearRenderTargetView(m_GameViewRenderTargetView, clearColor);
@@ -446,7 +396,7 @@ void Renderer::SetWorldViewProjection2D()
 	m_DeviceContext->UpdateSubresource(m_ViewBuffer, 0, NULL, &view, 0, 0);
 
 	D3DXMATRIX projection;
-	D3DXMatrixOrthoOffCenterLH(&projection, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f);
+	D3DXMatrixOrthoOffCenterLH(&projection, 0.0f, GAMESCREEN_WIDTH, GAMESCREEN_HEIGHT, 0.0f, 0.0f, 1.0f);
 	D3DXMatrixTranspose(&projection, &projection);
 	m_DeviceContext->UpdateSubresource( m_ProjectionBuffer, 0, NULL, &projection, 0, 0 );
 

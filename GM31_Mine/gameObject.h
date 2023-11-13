@@ -8,21 +8,21 @@
 class GameObject
 {
 protected:
-	Transform* m_Transform = nullptr;
-	std::list<Component*> m_Component;
-	bool m_Destroy = false;
-	bool m_Active = true;
+	Transform* m_transform = nullptr;
+	std::list<Component*> m_component;
+	bool m_destroy = false;
+	bool m_active = true;
 
 public:
-	void SetTransform(Transform* transform) { m_Transform = transform; }
-	Transform* GetTransform() { return m_Transform; }
-	void SetDestroy() { m_Destroy = true; }
-	bool GetActive() { return m_Active; }
-	void SetActive(bool active) { m_Active = active; }
+	void SetTransform(Transform* transform) { m_transform = transform; }
+	Transform* GetTransform() { return m_transform; }
+	void SetDestroy() { m_destroy = true; }
+	bool GetActive() { return m_active; }
+	void SetActive(bool active) { m_active = active; }
 
 	bool Destroy()
 	{
-		if (m_Destroy)
+		if (m_destroy)
 		{
 			Uninit();
 			delete this;
@@ -39,7 +39,7 @@ public:
 	{
 		Component* component = new TFactory();
 		// コンポーネントが付いているゲームオブジェクトを格納
-		m_Component.push_back(component);
+		m_component.push_back(component);
 		component->SetGameObject(this);
 		component->Init();
 
@@ -49,7 +49,7 @@ public:
 	template <typename T>
 	T* GetComponent() 
 	{
-		for (Component* pComp : m_Component)
+		for (Component* pComp : m_component)
 		{
 			if (typeid(*pComp) == typeid(T))// 型を調べる(RTTI動的型情報)
 			{
@@ -61,27 +61,27 @@ public:
 
 	virtual void Init() 
 	{
-		for (Component* component : m_Component) {
+		for (Component* component : m_component) {
 			component->Init();
 		}
 	}
 	virtual void Uninit()
 	{
-		for (Component* component : m_Component) {
+		for (Component* component : m_component) {
 			component->Uninit();
 			delete component;
 		}
-		m_Component.clear();
+		m_component.clear();
 	}
 	virtual void Update()
 	{
-		for (Component* component : m_Component) {
+		for (Component* component : m_component) {
 			component->Update();
 		}
 	}
 	virtual void Draw()
 	{
-		for (Component* component : m_Component) {
+		for (Component* component : m_component) {
 			component->Draw();
 		}
 	}

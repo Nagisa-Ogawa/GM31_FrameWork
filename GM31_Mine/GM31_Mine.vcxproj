@@ -182,7 +182,6 @@
     <ClCompile Include="polygon2D.cpp" />
     <ClCompile Include="quadCollision.cpp" />
     <ClCompile Include="renderer.cpp" />
-    <ClCompile Include="result.cpp" />
     <ClCompile Include="rock.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="shader.cpp" />
@@ -190,8 +189,6 @@
     <ClCompile Include="sphereCollision.cpp" />
     <ClCompile Include="sphereCollisionFrame.cpp" />
     <ClCompile Include="sprite.cpp" />
-    <ClCompile Include="test.cpp" />
-    <ClCompile Include="title.cpp" />
     <ClCompile Include="transform.cpp" />
     <ClCompile Include="tree.cpp" />
     <ClCompile Include="treeFactory.cpp" />
@@ -234,7 +231,6 @@
     <ClInclude Include="quadCollision.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="renderer.h" />
-    <ClInclude Include="result.h" />
     <ClInclude Include="rock.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="score.h" />
@@ -243,8 +239,6 @@
     <ClInclude Include="sphereCollision.h" />
     <ClInclude Include="sphereCollisionFrame.h" />
     <ClInclude Include="sprite.h" />
-    <ClInclude Include="test.h" />
-    <ClInclude Include="title.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="tree.h" />
     <ClInclude Include="treeFactory.h" />

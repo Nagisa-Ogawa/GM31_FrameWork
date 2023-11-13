@@ -4,9 +4,7 @@
 #include "renderer.h"
 #include "scene.h"
 #include "input.h"
-#include "title.h"
 #include "game.h"
-#include "test.h"
 
 Manager* Manager::m_Instance = NULL;
 
@@ -49,7 +47,7 @@ Manager* Manager::GetInstance()
 void Manager::Init()
 {
 	Renderer::Init();
-	SetScene<Title>();
+	SetScene<Game>();
 	
 	Input::Init();
 }
@@ -87,7 +85,7 @@ void Manager::Draw()
 
 	m_Scene->Draw();
 
-	// Imguiのみをレンダリング
+	// 画面全体をレンダリング
 	Renderer::Begin();
 
 	MyImGuiManager::GetInstance()->Draw();

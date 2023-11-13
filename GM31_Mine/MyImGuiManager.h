@@ -13,8 +13,7 @@ private:
 	// シングルトン用インスタンス
 	static MyImGuiManager* m_Instance;
 
-	bool		m_IsShowColl{};
-	
+	bool		m_isShowColl{};
 
 	GameObject* m_InfoObj{};
 
@@ -34,7 +33,9 @@ public:
 	void Update();
 	void Draw();
 
-	GameObject* GetMousePosObject();
+
+	POINT		ScreenToGameScreenPoint(ImVec2 pos, ImVec2 imgPos, ImVec2 imgSize);	// 通常の画面で取得した座標をゲーム画面をレンダリングしている画面での座標に変換
+	GameObject* GetMousePosObject(POINT mousePos);		// マウス座標にオブジェクトがあるかを調べそのオブジェクトを返す関数
 
 	static MyImGuiManager* GetInstance();
 };
