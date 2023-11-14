@@ -49,6 +49,12 @@
     <Filter Include="ヘッダー ファイル\Scene">
       <UniqueIdentifier>{3dd65dfd-2765-4d7d-925f-53bb557b36bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\MyImGui">
+      <UniqueIdentifier>{af4a5cb1-0eae-4ee0-9eb9-6771f641d05d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\MyImGui">
+      <UniqueIdentifier>{acd4bec9-cd9e-4920-9886-ece1180b2782}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="field.cpp">
@@ -117,9 +123,6 @@
     <ClCompile Include="wall.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="MyImGuiManager.cpp">
-      <Filter>ソース ファイル\Other</Filter>
-    </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
@@ -173,6 +176,9 @@
     </ClCompile>
     <ClCompile Include="ImGui\imgui_impl_win32.cpp">
       <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="MyImGuiManager.cpp">
+      <Filter>ソース ファイル\MyImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -251,9 +257,6 @@
     <ClInclude Include="wall.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="MyImGuiManager.h">
-      <Filter>ヘッダー ファイル\Other</Filter>
-    </ClInclude>
     <ClInclude Include="game.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
@@ -319,6 +322,12 @@
     </ClInclude>
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="MyImGuiManager.h">
+      <Filter>ヘッダー ファイル\MyImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="MyImGui.h">
+      <Filter>ヘッダー ファイル\MyImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

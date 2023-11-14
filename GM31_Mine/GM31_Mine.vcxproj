@@ -224,6 +224,7 @@
     <ClInclude Include="manager.h" />
     <ClInclude Include="meshField.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="MyImGui.h" />
     <ClInclude Include="MyImGuiManager.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="player.h" />

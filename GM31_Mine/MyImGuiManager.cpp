@@ -1,3 +1,4 @@
+
 #include "main.h"
 #include "scene.h"
 #include "manager.h"
@@ -132,8 +133,7 @@ void MyImGuiManager::Update()
 		ImGui::Image((void*)Renderer::GetGameShaderResourceView(), imageSize);
 		ImGui::End();
 
-
-	ImGui::Begin("Inspecter");
+	ImGui::Begin("EngineDebug");
 		ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", pio->Framerate, 1000.0f / pio->Framerate);
 		ImGui::Text(" ObjectCount : %d", Manager::GetInstance()->GetScene()->GetGameObjectCount());
 		ImGui::Text(" ActiveObjectCount : %d", Manager::GetInstance()->GetScene()->GetActiveGameObjectCount());
@@ -143,17 +143,9 @@ void MyImGuiManager::Update()
 				coll->SetActive(m_isShowColl);
 			}
 		}
-		CameraObject* cameraObj = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>();
-		Camera* camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
-		ImGui::Text("CameraObject");
-		ImGui::Text("position     x:%.2f y:%.2f z:%.2f", cameraObj->GetTransform()->m_Position.x, cameraObj->GetTransform()->m_Position.y, cameraObj->GetTransform()->m_Position.z);
-		ImGui::Text("rotation	 x:%.2f y:%.2f z:%.2f", cameraObj->GetTransform()->m_Rotation.x, cameraObj->GetTransform()->m_Rotation.y, cameraObj->GetTransform()->m_Rotation.z);
-		ImGui::Text("Camera");
-		ImGui::Text("position     x:%.2f y:%.2f z:%.2f", camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z);
-		ImGui::Text("target	   x:%.2f y:%.2f z:%.2f", camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z);
-		ImGui::Text("up		   x:%.2f y:%.2f z:%.2f", camera->GetUp().x, camera->GetUp().y, camera->GetUp().z);
+		ImGui::End();
 
-
+	ImGui::Begin("Inspecter");
 		if (m_InfoObj) {
 			ImGui::Text("ObjectType : %s", typeid(*m_InfoObj).name());
 			if (ImGui::TreeNode("Position")) {

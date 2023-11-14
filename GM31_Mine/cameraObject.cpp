@@ -5,7 +5,8 @@
 #include "cameraObject.h"
 #include "input.h"
 
-#define MOUSE_SENSITIVITY (0.002);
+#define MOUSE_SENSITIVITY (0.003);
+#define MOVECAMERA_SPEED  (0.2)
 
 void CameraObject::Init()
 {
@@ -18,7 +19,6 @@ void CameraObject::Update()
 {
 	// カメラの操作
 	Camera* camera = GetComponent<Camera>();
-	D3DXVECTOR3 target = camera->GetTarget();
 	if (Input::GetKeyPress(VK_RBUTTON)) {
 		// このフレームで初めて右クリックをしたとき
 		if (!m_isRButton) {
@@ -29,34 +29,28 @@ void CameraObject::Update()
 		// 右クリックしながらWASDキーで平行移動
 		if (Input::GetKeyPress('A'))
 		{
-			m_transform->m_Position -= m_transform->GetRight() * 0.1f;
-			target -= m_transform->GetRight() * 0.1f;
+			m_transform->m_Position -= m_transform->GetRight() * MOVECAMERA_SPEED;
 		}
 		if (Input::GetKeyPress('D'))
 		{
-			m_transform->m_Position += m_transform->GetRight() * 0.1f;
-			target += m_transform->GetRight() * 0.1f;
+			m_transform->m_Position += m_transform->GetRight() * MOVECAMERA_SPEED;
 		}
 		if (Input::GetKeyPress('S'))
 		{
-			m_transform->m_Position -= m_transform->GetForward() * 0.1f;
-			target -= m_transform->GetForward() * 0.1f;
+			m_transform->m_Position -= m_transform->GetForward() * MOVECAMERA_SPEED;
 		}
 		if (Input::GetKeyPress('W'))
 		{
-			m_transform->m_Position += m_transform->GetForward() * 0.1f;
-			target += m_transform->GetForward() * 0.1f;
+			m_transform->m_Position += m_transform->GetForward() * MOVECAMERA_SPEED;
 		}
 		// 右クリックしながらQEキーで上下移動
 		if (Input::GetKeyPress('Q'))
 		{
-			m_transform->m_Position -= m_transform->GetUp() * 0.1f;
-			target -= m_transform->GetUp() * 0.1f;
+			m_transform->m_Position -= D3DXVECTOR3(0.0f,1.0f,0.0f) * MOVECAMERA_SPEED;
 		}
 		if (Input::GetKeyPress('E'))
 		{
-			m_transform->m_Position += m_transform->GetUp() * 0.1f;
-			target += m_transform->GetUp() * 0.1f;
+			m_transform->m_Position += D3DXVECTOR3(0.0f, 1.0f, 0.0f) * MOVECAMERA_SPEED;
 		}
 	}
 	else {
@@ -64,7 +58,6 @@ void CameraObject::Update()
 	}
 
 	camera->SetPosition(m_transform->m_Position);
-	camera->SetTarget(target);
 	// マウスホイールでズームイン・アウト
 	// if(Input::GetKeyPress(vk_m))
 
@@ -89,21 +82,9 @@ void CameraObject::Update()
 void CameraObject::RotateCamera(D3DXVECTOR2 delta)
 {
 	Camera* camera = GetComponent<Camera>();
-	m_transform->m_Rotation.x += delta.x;
-	m_transform->m_Rotation.y += delta.y;
-	// 引数から回転行列を作成
-	D3DXMATRIX rotateYMatrix;
-	// xmatrixro(&rotateMatrix, delta.x, delta.y, 0.0f);
-
-	// 回転行列をカメラの各要素にかけ合わせる
-	//D3DXVec3TransformCoord(&m_transform->m_Position, &m_transform->m_Position, &rotateMatrix);
-	//camera->SetPosition(m_transform->m_Position);
-
-	//D3DXVECTOR3 target = camera->GetTarget();
-	//D3DXVec3TransformCoord(&target, &target, &rotateMatrix);
-	//camera->SetTarget(target);
-	//
-	//D3DXVECTOR3 up = camera->GetUp();
-	//D3DXVec3TransformCoord(&up, &up, &rotateMatrix);
-	//camera->SetUp(up);
+	m_transform->m_Rotation.x += delta.y;
+	m_transform->m_Rotation.y += delta.x;
+	// 回転量をカメラへ反映
+	camera->SetRotation(m_transform->m_Rotation);
+	
 }

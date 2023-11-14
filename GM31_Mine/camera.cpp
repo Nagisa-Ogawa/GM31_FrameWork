@@ -11,7 +11,7 @@
 void Camera::Init(D3DXVECTOR3 position)
 {
 	m_position = position;
-	m_target = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	
 	m_up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 }
 
@@ -27,7 +27,14 @@ void Camera::Update()
 
 void Camera::Draw()
 {
-	D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_target, &m_up);
+	// D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_target, &m_up);
+	// カメラの移動と回転行列をからカメラ行列を作成(拡大は使わない)
+	D3DXMATRIX rot, trans;
+	D3DXMatrixRotationYawPitchRoll(&rot, m_rotation.y, m_rotation.x, m_rotation.z);
+	D3DXMatrixTranslation(&trans, m_position.x, m_position.y, m_position.z);
+	m_cameraMatrix = rot * trans;
+	// カメラ行列の逆行列からビュー変換行列を作成
+	D3DXMatrixInverse(&m_viewMatrix, NULL, &m_cameraMatrix);
 
 	Renderer::SetViewMatrix(&m_viewMatrix);
 
