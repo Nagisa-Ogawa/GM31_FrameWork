@@ -37,8 +37,8 @@ D3DXMATRIX BoxCollision::GetWorldMatrix()
 {
 	// マトリクス設定
 	D3DXVECTOR3 m_Scale = m_Size;
-	D3DXVECTOR3 m_Rot = m_Transform->m_Rotation;
-	D3DXVECTOR3 m_Pos = m_Transform->m_Position + m_Offset;
+	D3DXVECTOR3 m_Rot = m_Transform->m_rotation;
+	D3DXVECTOR3 m_Pos = m_Transform->m_position + m_Offset;
 	D3DXMATRIX scale, rot, trans, world;
 	D3DXMatrixScaling(&scale, m_Scale.x, m_Scale.y, m_Scale.z);
 	D3DXMatrixRotationYawPitchRoll(&rot, m_Rot.y, m_Rot.x, m_Rot.z);

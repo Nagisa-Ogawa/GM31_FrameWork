@@ -31,8 +31,8 @@ void Game::Init()
 	AddGameObject<Sky>(1);
 
 	Enemy* pEnemy1 = EnemyFactory::GetInstance()->ActiveObject();
-	pEnemy1->GetTransform()->m_Position = D3DXVECTOR3(5.0f, 0.0f, 15.0f);
-	pEnemy1->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 1.1f, 0.0f);
+	pEnemy1->GetTransform()->m_position = D3DXVECTOR3(5.0f, 0.0f, 15.0f);
+	pEnemy1->GetTransform()->m_rotation = D3DXVECTOR3(0.0f, 1.1f, 0.0f);
 
 	//Enemy* pEnemy2 = EnemyFactory::GetInstance()->ActiveObject();
 	//pEnemy2->GetTransform()->m_Position = D3DXVECTOR3(0.0f, 0.0f, 14.0f);
@@ -51,7 +51,7 @@ void Game::Init()
 		pos.x = (float)rand() / RAND_MAX * 100.0f - 50.0f;
 		pos.z = (float)rand() / RAND_MAX * 100.0f - 50.0f;
 		pos.y = meshField->GetHeight(pos)-1.5f;
-		tree->GetTransform()->m_Position = pos;
+		tree->GetTransform()->m_position = pos;
 	}
 	//for (int i = 0; i < 20; i++) {
 	//	Rock* rock = AddGameObject<Rock>(1);

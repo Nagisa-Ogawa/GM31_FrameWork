@@ -10,9 +10,9 @@
 
 void CameraObject::Init()
 {
-	m_transform->m_Position = D3DXVECTOR3(0.0f, 5.0f, -10.0f);
-	m_transform->m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	AddComponent<Camera>()->Init(m_transform->m_Position);
+	m_transform->m_position = D3DXVECTOR3(0.0f, 5.0f, -10.0f);
+	m_transform->m_rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	AddComponent<Camera>()->Init(m_transform->m_position);
 }
 
 void CameraObject::Update()
@@ -29,35 +29,35 @@ void CameraObject::Update()
 		// 右クリックしながらWASDキーで平行移動
 		if (Input::GetKeyPress('A'))
 		{
-			m_transform->m_Position -= m_transform->GetRight() * MOVECAMERA_SPEED;
+			m_transform->m_position -= m_transform->GetRight() * MOVECAMERA_SPEED;
 		}
 		if (Input::GetKeyPress('D'))
 		{
-			m_transform->m_Position += m_transform->GetRight() * MOVECAMERA_SPEED;
+			m_transform->m_position += m_transform->GetRight() * MOVECAMERA_SPEED;
 		}
 		if (Input::GetKeyPress('S'))
 		{
-			m_transform->m_Position -= m_transform->GetForward() * MOVECAMERA_SPEED;
+			m_transform->m_position -= m_transform->GetForward() * MOVECAMERA_SPEED;
 		}
 		if (Input::GetKeyPress('W'))
 		{
-			m_transform->m_Position += m_transform->GetForward() * MOVECAMERA_SPEED;
+			m_transform->m_position += m_transform->GetForward() * MOVECAMERA_SPEED;
 		}
 		// 右クリックしながらQEキーで上下移動
 		if (Input::GetKeyPress('Q'))
 		{
-			m_transform->m_Position -= D3DXVECTOR3(0.0f,1.0f,0.0f) * MOVECAMERA_SPEED;
+			m_transform->m_position -= m_transform->GetUp() * MOVECAMERA_SPEED;
 		}
 		if (Input::GetKeyPress('E'))
 		{
-			m_transform->m_Position += D3DXVECTOR3(0.0f, 1.0f, 0.0f) * MOVECAMERA_SPEED;
+			m_transform->m_position += m_transform->GetUp() * MOVECAMERA_SPEED;
 		}
 	}
 	else {
 		m_isRButton = false;
 	}
 
-	camera->SetPosition(m_transform->m_Position);
+	camera->SetPosition(m_transform->m_position);
 	// マウスホイールでズームイン・アウト
 	// if(Input::GetKeyPress(vk_m))
 
@@ -82,9 +82,9 @@ void CameraObject::Update()
 void CameraObject::RotateCamera(D3DXVECTOR2 delta)
 {
 	Camera* camera = GetComponent<Camera>();
-	m_transform->m_Rotation.x += delta.y;
-	m_transform->m_Rotation.y += delta.x;
+	m_transform->m_rotation.x += delta.y;
+	m_transform->m_rotation.y += delta.x;
 	// 回転量をカメラへ反映
-	camera->SetRotation(m_transform->m_Rotation);
+	camera->SetRotation(m_transform->m_rotation);
 	
 }

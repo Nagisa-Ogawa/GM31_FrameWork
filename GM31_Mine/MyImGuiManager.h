@@ -15,13 +15,13 @@ class MyImGuiManager
 {
 private:
 	
-	static MyImGuiManager* m_Instance;	// シングルトン用インスタンス
+	static MyImGuiManager* m_instance;	// シングルトン用インスタンス
 	
 	std::list<MyImGui*> m_myImGuiList;
 
 	bool		m_isShowColl{};
 
-	GameObject* m_InfoObj{};
+	GameObject* m_infoObj{};
 
 	MyImGuiManager();	// コンストラクタ
 	MyImGuiManager(const MyImGuiManager& manager);	// コピーコンストラクタ
@@ -35,9 +35,25 @@ public:
 	void Update();				// 更新処理
 	void Draw();				// 描画処理
 
+	/// <summary>
+	/// ImGuiのWindowを追加
+	/// </summary>
+	/// <typeparam name="T">MyImGuiを継承したクラス</typeparam>
+	/// <returns>MyImGuiを継承したクラス</returns>
+	template <typename T>
+	T* AddImGui();
+
+	/// <summary>
+	/// ImGuiを取得
+	/// </summary>
+	/// <typeparam name="T">MyImGuiを継承したクラス</typeparam>
+	/// <returns>MyImGuiを継承したクラス</returns>
+	template <typename T>
+	T* GetImGui();
 
 	POINT		ScreenToGameScreenPoint(ImVec2 pos, ImVec2 imgPos, ImVec2 imgSize);	// 通常の画面で取得した座標をゲーム画面をレンダリングしている画面での座標に変換
 	GameObject* GetMousePosObject(POINT mousePos);		// マウス座標にオブジェクトがあるかを調べそのオブジェクトを返す関数
 
 	static MyImGuiManager* GetInstance();
 };
+

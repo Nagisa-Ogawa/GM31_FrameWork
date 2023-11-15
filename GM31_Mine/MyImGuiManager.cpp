@@ -6,6 +6,7 @@
 #include "renderer.h"
 #include "input.h"
 #include "MyImGuiManager.h"
+#include "MyImGui.h"
 #include "player.h"
 #include "CollisionManager.h"
 #include "boxCollision.h"
@@ -14,7 +15,7 @@
 #include "cameraObject.h"
 #include "Ray.h"
 
-MyImGuiManager* MyImGuiManager::m_Instance = NULL;
+MyImGuiManager* MyImGuiManager::m_instance = NULL;
 
 // Our state
 ImGuiIO* pio = nullptr;
@@ -27,13 +28,13 @@ MyImGuiManager::MyImGuiManager()
 MyImGuiManager::MyImGuiManager(const MyImGuiManager& manager)
 {
 	// インスタンスをコピー
-	m_Instance = manager.m_Instance;
+	m_instance = manager.m_instance;
 }
 
 MyImGuiManager& MyImGuiManager::operator=(const MyImGuiManager& manager)
 {
 	// インスタンスをコピー
-	m_Instance = manager.m_Instance;
+	m_instance = manager.m_instance;
 	return *this;
 }
 
@@ -41,7 +42,7 @@ MyImGuiManager& MyImGuiManager::operator=(const MyImGuiManager& manager)
 MyImGuiManager::~MyImGuiManager()
 {
 	// インスタンスを解放
-	delete m_Instance;
+	delete m_instance;
 }
 
 void MyImGuiManager::Init(HWND hwnd)
@@ -125,7 +126,7 @@ void MyImGuiManager::Update()
 		POINT pos = ScreenToGameScreenPoint(mousePos, imgPos,imgSize);
 		auto obj = GetMousePosObject(pos);
 		if (obj)
-			m_InfoObj = obj;
+			m_infoObj = obj;
 	}
 
 	ImGui::Begin("Game");
@@ -146,16 +147,16 @@ void MyImGuiManager::Update()
 		ImGui::End();
 
 	ImGui::Begin("Inspecter");
-		if (m_InfoObj) {
-			ImGui::Text("ObjectType : %s", typeid(*m_InfoObj).name());
+		if (m_infoObj) {
+			ImGui::Text("ObjectType : %s", typeid(*m_infoObj).name());
 			if (ImGui::TreeNode("Position")) {
 				ImGui::Text("x:%.3f y:%.3f z:%.3f",
-					m_InfoObj->GetTransform()->m_Position.x, m_InfoObj->GetTransform()->m_Position.y, m_InfoObj->GetTransform()->m_Position.z);
+					m_infoObj->GetTransform()->m_position.x, m_infoObj->GetTransform()->m_position.y, m_infoObj->GetTransform()->m_position.z);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("Rotation")) {
 				ImGui::Text("x:%.3f y:%.3f z:%.3f",
-					m_InfoObj->GetTransform()->m_Rotation.x, m_InfoObj->GetTransform()->m_Rotation.y, m_InfoObj->GetTransform()->m_Rotation.z);
+					m_infoObj->GetTransform()->m_rotation.x, m_infoObj->GetTransform()->m_rotation.y, m_infoObj->GetTransform()->m_rotation.z);
 				ImGui::TreePop();
 			}
 		}
@@ -170,6 +171,10 @@ void MyImGuiManager::Update()
 	ImGui::Begin("Console");
 		
 		ImGui::End();
+	for (MyImGui* myImGui : m_myImGuiList)
+	{
+		myImGui->Update();
+	}
 }
 
 void MyImGuiManager::Draw()
@@ -259,6 +264,29 @@ GameObject* MyImGuiManager::GetMousePosObject(POINT mousePos)
 	return nullptr;
 }
 
+template<typename T>
+T* MyImGuiManager::AddImGui()
+{
+	MyImGui* myImGui = new T();
+	m_myImGuiList.push_back(myImGui);
+	myImGui->Init();
+
+	return (T*)myImGui;
+}
+
+template<typename T>
+T* MyImGuiManager::GetImGui()
+{
+	for (MyImGui* myImGui : m_myImGuiList)
+	{
+		if (typeid(*myImGui) == typeid(T))// 型を調べる(RTTI動的型情報)
+		{
+			return (T*)myImGui;
+		}
+	}
+	return nullptr;
+}
+
 
 /// <summary>
 /// インスタンスがなければ生成し、あればそれを返す関数
@@ -268,10 +296,10 @@ MyImGuiManager* MyImGuiManager::GetInstance()
 {
 	// 初めて使うときにインスタンスを生成
 	// それ以降は生成したインスタンスを渡す
-	if (m_Instance == NULL)
+	if (m_instance == NULL)
 	{
-		m_Instance = new MyImGuiManager();
+		m_instance = new MyImGuiManager();
 	}
-	return m_Instance;
+	return m_instance;
 
 }

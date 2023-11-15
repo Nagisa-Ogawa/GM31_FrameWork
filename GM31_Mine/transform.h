@@ -6,45 +6,45 @@
 class Transform : public Component
 {
 public:
-	D3DXVECTOR3 m_Position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	D3DXVECTOR3 m_position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 m_rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 m_scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
-	D3DXMATRIX  m_WorldMatrix{};
+	D3DXMATRIX  m_worldMatrix{};
 
 	// 右方向ベクトル取得
 	D3DXVECTOR3 GetRight()
 	{
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, m_Rotation.y, m_Rotation.x, m_Rotation.z);
+		D3DXMatrixRotationYawPitchRoll(&rot, m_rotation.y, m_rotation.x, m_rotation.z);
 
-		D3DXVECTOR3 Right;
-		Right.x = rot._11;
-		Right.y = rot._12;
-		Right.z = rot._13;
+		D3DXVECTOR3 right;
+		right.x = rot._11;
+		right.y = rot._12;
+		right.z = rot._13;
 
-		return Right;
+		return right;
 	}
 
 	// 上方向ベクトル取得
 	D3DXVECTOR3 GetUp()
 	{
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, m_Rotation.y, m_Rotation.x, m_Rotation.z);
+		D3DXMatrixRotationYawPitchRoll(&rot, m_rotation.y, m_rotation.x, m_rotation.z);
 
-		D3DXVECTOR3 Up;
-		Up.x = rot._21;
-		Up.y = rot._22;
-		Up.z = rot._23;
+		D3DXVECTOR3 up;
+		up.x = rot._21;
+		up.y = rot._22;
+		up.z = rot._23;
 
-		return Up;
+		return up;
 	}
 
 	// 前方向ベクトル取得
 	D3DXVECTOR3 GetForward()
 	{
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, m_Rotation.y, m_Rotation.x, m_Rotation.z);
+		D3DXMatrixRotationYawPitchRoll(&rot, m_rotation.y, m_rotation.x, m_rotation.z);
 
 		D3DXVECTOR3 forward;
 		forward.x = rot._31;
@@ -54,7 +54,7 @@ public:
 		return forward;
 	}
 
-	D3DXMATRIX* GetWorldMatrix() { return &m_WorldMatrix; }
+	D3DXMATRIX* GetWorldMatrix() { return &m_worldMatrix; }
 
 
 	void Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale);
