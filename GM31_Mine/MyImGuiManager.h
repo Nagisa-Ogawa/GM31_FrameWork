@@ -21,7 +21,6 @@ private:
 
 	bool		m_isShowColl{};
 
-	GameObject* m_infoObj{};
 
 	MyImGuiManager();	// コンストラクタ
 	MyImGuiManager(const MyImGuiManager& manager);	// コピーコンストラクタ
@@ -41,7 +40,13 @@ public:
 	/// <typeparam name="T">MyImGuiを継承したクラス</typeparam>
 	/// <returns>MyImGuiを継承したクラス</returns>
 	template <typename T>
-	T* AddImGui();
+	T* AddImGui() {
+		MyImGui* myImGui = new T();
+		m_myImGuiList.push_back(myImGui);
+		myImGui->Init();
+
+		return (T*)myImGui;
+	}
 
 	/// <summary>
 	/// ImGuiを取得
@@ -49,10 +54,18 @@ public:
 	/// <typeparam name="T">MyImGuiを継承したクラス</typeparam>
 	/// <returns>MyImGuiを継承したクラス</returns>
 	template <typename T>
-	T* GetImGui();
+	T* GetImGui() {
+		for (MyImGui* myImGui : m_myImGuiList)
+		{
+			if (typeid(*myImGui) == typeid(T))// 型を調べる(RTTI動的型情報)
+			{
+				return (T*)myImGui;
+			}
+		}
+		return nullptr;
 
-	POINT		ScreenToGameScreenPoint(ImVec2 pos, ImVec2 imgPos, ImVec2 imgSize);	// 通常の画面で取得した座標をゲーム画面をレンダリングしている画面での座標に変換
-	GameObject* GetMousePosObject(POINT mousePos);		// マウス座標にオブジェクトがあるかを調べそのオブジェクトを返す関数
+	}
+
 
 	static MyImGuiManager* GetInstance();
 };

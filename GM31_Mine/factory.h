@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <string>
 
 // ファクトリーのインターフェース
 template<class TFactory,class TObject>
@@ -36,7 +37,7 @@ public:
 	}
 
 	// 生成されたオブジェクトを入手する関数
-	virtual TObject* ActiveObject() = 0;
+	virtual TObject* ActiveObject(std::string name) = 0;
 	// オブジェクトを非表示にする（deleteはしない)関数
 	virtual void HideObject(TObject* t) = 0;
 

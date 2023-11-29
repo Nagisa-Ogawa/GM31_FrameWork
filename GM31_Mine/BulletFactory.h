@@ -1,6 +1,5 @@
 #pragma once
 
-#include <list>
 #include "factory.h"
 
 struct MODEL;
@@ -17,7 +16,7 @@ private:
 
 	void Init();
 public:
-	Bullet* ActiveObject() override;
+	Bullet* ActiveObject(std::string name) override;
 	void HideObject(Bullet* bullet) override;
 	void Uninit() override;
 	void Clear() override;

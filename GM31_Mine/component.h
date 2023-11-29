@@ -5,13 +5,13 @@ class GameObject;
 class Component
 {
 protected:
-	GameObject* m_GameObject = nullptr;
+	GameObject* m_gameObject = nullptr;
 public:
 	virtual void Init() {}
 	virtual void Uninit() {}
 	virtual void Update() {}
 	virtual void Draw() {}
 
-	void SetGameObject(GameObject* gameObject) { m_GameObject = gameObject; }
-	GameObject* GetGameObject() { return m_GameObject; }
+	void SetGameObject(GameObject* gameObject) { m_gameObject = gameObject; }
+	GameObject* GetGameObject() { return m_gameObject; }
 };

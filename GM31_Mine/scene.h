@@ -55,12 +55,14 @@ public:
 	}
 
 	template <typename T>
-	T* AddGameObject(int layer)
+	T* AddGameObject(int layer,std::string name)
 	{
 		GameObject* gameObject = new T();
 		m_GameObject[layer].push_back(gameObject);
 		// transformコンポーネントは必須なためここでAddComponent
 		gameObject->SetTransform(gameObject->AddComponent<Transform>());
+		// オブジェクトの名前を設定
+		gameObject->SetName(name);
 		gameObject->Init();
 
 		return (T*)gameObject;
@@ -165,6 +167,18 @@ public:
 			}
 		}
 		return count;
+	}
+
+	std::list<GameObject*> GetAllGameObjects() {
+		std::list<GameObject*> objList;
+		for (int i = 0; i < 3; i++)
+		{
+			for (GameObject* gameObject : m_GameObject[i])
+			{
+				objList.push_back(gameObject);
+			}
+		}
+		return objList;
 	}
 
 };

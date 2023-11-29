@@ -24,7 +24,7 @@ void EnemyFactory::Init()
 	model.LoadObj("asset\\model\\enemyBox.obj", m_pModel);
 }
 
-Enemy * EnemyFactory::ActiveObject()
+Enemy * EnemyFactory::ActiveObject(std::string name)
 {
 	// リストから現在使われていない弾があるか探す
     auto iEnemy = std::find_if(m_ObjectList.begin(), m_ObjectList.end(),
@@ -37,7 +37,7 @@ Enemy * EnemyFactory::ActiveObject()
     else
     {	// 見つからなかったならオブジェクトを生成
         Scene* scene = Manager::GetInstance()->GetScene();
-        Enemy* pEnemy = scene->AddGameObject<Enemy>(1);
+        Enemy* pEnemy = scene->AddGameObject<Enemy>(1,name);
         // 弾リストに追加
 		m_ObjectList.push_back(pEnemy);
         // 使用するモデルデータをセット

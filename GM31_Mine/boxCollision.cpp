@@ -11,14 +11,14 @@ void BoxCollision::Init(D3DXVECTOR3 size, D3DXVECTOR3 offset,bool isTrigger)
 	m_Size = size;
 	m_Offset = offset;
 	m_IsTrigger = isTrigger;
-
-	auto m_CollFrame = Manager::GetInstance()->GetScene()->AddGameObject<BoxCollisionFrame>(1);
+	std::string name = m_gameObject->GetName() + "BoxCollisionFrame";
+	auto m_CollFrame = Manager::GetInstance()->GetScene()->AddGameObject<BoxCollisionFrame>(1,name);
 	m_CollFrame->Init(size,offset);
-	m_CollFrame->SetCollTransform(m_GameObject->GetTransform());
+	m_CollFrame->SetCollTransform(m_gameObject->GetTransform());
 	m_CollFrame->SetActive(false);
 
 	CollisionManager::GetInstance()->AddBoxCollision(this);
-	m_Transform = m_GameObject->GetTransform();
+	m_Transform = m_gameObject->GetTransform();
 }
 
 void BoxCollision::Uninit()

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <string>
 
 #include "component.h"
 #include "transform.h"
@@ -8,17 +9,22 @@
 class GameObject
 {
 protected:
-	Transform* m_transform = nullptr;
-	std::list<Component*> m_component;
-	bool m_destroy = false;
-	bool m_active = true;
+	Transform* m_transform = nullptr;	// オブジェクトのトランスフォーム情報(座標、回転)
+	std::list<Component*> m_component;	// オブジェクトのコンポーネントリスト
+	bool m_destroy = false;				// オブジェクトの死亡フラグ
+	bool m_active = true;				// オブジェクトの表示フラグ
+	std::string m_name{};				// オブジェクトの名前
 
 public:
-	void SetTransform(Transform* transform) { m_transform = transform; }
+	// Get系関数
 	Transform* GetTransform() { return m_transform; }
-	void SetDestroy() { m_destroy = true; }
 	bool GetActive() { return m_active; }
+	std::string GetName() { return m_name; }
+	// Set系関数
+	void SetTransform(Transform* transform) { m_transform = transform; }
+	void SetDestroy() { m_destroy = true; }
 	void SetActive(bool active) { m_active = active; }
+	void SetName(std::string name) { m_name = name; }
 
 	bool Destroy()
 	{

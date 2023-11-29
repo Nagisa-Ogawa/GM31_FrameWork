@@ -43,7 +43,8 @@ void Bullet::Update()
 			isHit = true;
 		}
 		if (isHit) {
-			Manager::GetInstance()->GetScene()->AddGameObject<Explosion>(1)->SetTransform(pEnemy->GetTransform());
+			std::string name = m_name + "Explosion";
+			Manager::GetInstance()->GetScene()->AddGameObject<Explosion>(1,name)->SetTransform(pEnemy->GetTransform());
 			SetActive(false);
 			pEnemy->SetActive(false);
 			Manager::GetInstance()->GetScene()->GetGameObject<Score>()->AddCount(1);

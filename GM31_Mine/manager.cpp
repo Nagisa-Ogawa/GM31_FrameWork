@@ -47,7 +47,8 @@ Manager* Manager::GetInstance()
 void Manager::Init()
 {
 	Renderer::Init();
-	SetScene<Game>();
+	m_Scene = new Game();
+	m_Scene->Init();
 	
 	Input::Init();
 }

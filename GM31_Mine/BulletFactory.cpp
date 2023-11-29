@@ -24,7 +24,7 @@ void BulletFactory::Init()
 }
 
 
-Bullet* BulletFactory::ActiveObject()
+Bullet* BulletFactory::ActiveObject(std::string name)
 {
 	// リストから現在使われていない弾があるか探す
 	auto iBullet = std::find_if(m_ObjectList.begin(), m_ObjectList.end(),
@@ -38,7 +38,7 @@ Bullet* BulletFactory::ActiveObject()
 	else
 	{	// 見つからなかったならオブジェクトを生成
 		Scene* scene = Manager::GetInstance()->GetScene();
-		Bullet* pBullet = scene->AddGameObject<Bullet>(1);
+		Bullet* pBullet = scene->AddGameObject<Bullet>(1,name);
 		// 弾リストに追加
 		m_ObjectList.push_back(pBullet);
 		// 使用するモデルデータをセット

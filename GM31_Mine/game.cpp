@@ -22,30 +22,22 @@
 
 void Game::Init()
 {
-	AddGameObject<CameraObject>(0);
+	AddGameObject<CameraObject>(0,"Camera");
 	// AddGameObject<Field>(1);
-	auto player=AddGameObject<Player>(1);
-	AddGameObject<Wall>(1)->Init(D3DXVECTOR3(-20.0f,2.5f,5.0f), D3DXVECTOR3(0.0f, 0.0f, -3.14f / 2.0f));
-	AddGameObject<Wall>(1)->Init(D3DXVECTOR3(-25.0f, 2.5f, 0.0f), D3DXVECTOR3(0.0f, 3.14f / 2.0f, -3.14f / 2.0f));
+	auto player=AddGameObject<Player>(1,"Player");
+	AddGameObject<Wall>(1,"Wall01")->Init(D3DXVECTOR3(-20.0f, 2.5f, 5.0f), D3DXVECTOR3(0.0f, 0.0f, -3.14f / 2.0f));
+	AddGameObject<Wall>(1,"Wall02")->Init(D3DXVECTOR3(-25.0f, 2.5f, 0.0f), D3DXVECTOR3(0.0f, 3.14f / 2.0f, -3.14f / 2.0f));
 
-	AddGameObject<Sky>(1);
+	auto enemy = EnemyFactory::GetInstance()->ActiveObject("Enemy");
+	enemy->GetTransform()->m_position = D3DXVECTOR3(0.0f, 0.0f, 15.0f);
 
-	Enemy* pEnemy1 = EnemyFactory::GetInstance()->ActiveObject();
-	pEnemy1->GetTransform()->m_position = D3DXVECTOR3(5.0f, 0.0f, 15.0f);
-	pEnemy1->GetTransform()->m_rotation = D3DXVECTOR3(0.0f, 1.1f, 0.0f);
+	AddGameObject<Sky>(1,"Sky");
 
-	//Enemy* pEnemy2 = EnemyFactory::GetInstance()->ActiveObject();
-	//pEnemy2->GetTransform()->m_Position = D3DXVECTOR3(0.0f, 0.0f, 14.0f);
-	//pEnemy2->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	//Enemy* pEnemy3 = EnemyFactory::GetInstance()->ActiveObject();
-	//pEnemy3->GetTransform()->m_Position = D3DXVECTOR3(-3.0f, 0.0f, 16.0f);
-	//pEnemy3->GetTransform()->m_Rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	
-	auto meshField = AddGameObject<MeshField>(1);
+	auto meshField = AddGameObject<MeshField>(1,"Filed");
 
 	for (int i = 0; i < 20; i++) {
-		auto tree = TreeFactory::GetInstance()->ActiveObject();
+		auto tree = TreeFactory::GetInstance()->ActiveObject("tree"+std::to_string(i));
 
 		D3DXVECTOR3 pos;
 		pos.x = (float)rand() / RAND_MAX * 100.0f - 50.0f;
@@ -53,17 +45,7 @@ void Game::Init()
 		pos.y = meshField->GetHeight(pos)-1.5f;
 		tree->GetTransform()->m_position = pos;
 	}
-	//for (int i = 0; i < 20; i++) {
-	//	Rock* rock = AddGameObject<Rock>(1);
-
-	//	D3DXVECTOR3 pos;
-	//	pos.x = (float)rand() / RAND_MAX * 100.0f - 50.0f;
-	//	pos.z = (float)rand() / RAND_MAX * 100.0f - 50.0f;
-	//	pos.y = meshField->GetHeight(pos);
-	//	rock->GetTransform()->m_Position = pos;
-	//}
-	AddGameObject<Score>(2);
-	// AddGameObject<Polygon2D>(2);
+	AddGameObject<Score>(2,"Score");
 }
 
 void Game::Uninit()

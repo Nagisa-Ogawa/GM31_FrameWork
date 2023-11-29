@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="animationModel.cpp" />
+    <ClCompile Include="box.cpp" />
     <ClCompile Include="boxCollision.cpp" />
     <ClCompile Include="boxCollisionFrame.cpp" />
     <ClCompile Include="bullet.cpp" />
@@ -160,11 +161,15 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraObject.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="consoleGui.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyFactory.cpp" />
+    <ClCompile Include="engineDebugGui.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gameGui.cpp" />
+    <ClCompile Include="hierarchyGui.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_dx11.cpp" />
@@ -172,7 +177,9 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="inspectorGui.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainMenuBarGui.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="meshField.cpp" />
     <ClCompile Include="model.cpp" />
@@ -180,9 +187,11 @@
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon2D.cpp" />
+    <ClCompile Include="projectGui.cpp" />
     <ClCompile Include="quadCollision.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="rock.cpp" />
+    <ClCompile Include="SceneGui.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sky.cpp" />
@@ -196,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animationModel.h" />
+    <ClInclude Include="box.h" />
     <ClInclude Include="boxCollisionFrame.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="bulletFactory.h" />
@@ -204,13 +214,17 @@
     <ClInclude Include="boxCollision.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="component.h" />
+    <ClInclude Include="consoleGui.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyFactory.h" />
+    <ClInclude Include="engineDebugGui.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gameGui.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="factory.h" />
+    <ClInclude Include="hierarchyGui.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -220,7 +234,9 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="inspectorGui.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="mainMenuBarGui.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="meshField.h" />
     <ClInclude Include="model.h" />
@@ -229,11 +245,13 @@
     <ClInclude Include="plane.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="polygon2D.h" />
+    <ClInclude Include="projectGui.h" />
     <ClInclude Include="quadCollision.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="rock.h" />
     <ClInclude Include="scene.h" />
+    <ClInclude Include="SceneGui.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sky.h" />

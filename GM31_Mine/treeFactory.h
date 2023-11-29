@@ -1,6 +1,5 @@
 #pragma once
 
-#include <list>
 #include "factory.h"
 
 class  Tree;
@@ -15,7 +14,7 @@ private:
 
 	void Init();
 public:
-	Tree* ActiveObject() override;
+	Tree* ActiveObject(std::string name) override;
 	void HideObject(Tree* bullet) override;
 	void Uninit() override;
 	void Clear() override;
