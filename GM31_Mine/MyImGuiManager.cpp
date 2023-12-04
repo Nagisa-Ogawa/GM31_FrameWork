@@ -4,6 +4,7 @@
 #include "input.h"
 #include "MyImGuiManager.h"
 #include "MyImGui.h"
+#include "ImGui/ImGuizmo.h"
 #include "mainMenuBarGui.h"
 #include "SceneGui.h"
 #include "consoleGui.h"
@@ -74,7 +75,7 @@ void MyImGuiManager::Init(HWND hwnd)
 	// Gui‚ð’Ç‰Á
 	AddImGui<MainMenuBarGui>();
 	AddImGui<SceneGui>();
-	AddImGui<GameGui>();
+	// AddImGui<GameGui>();
 	AddImGui<InspectorGui>();
 	AddImGui<HierarchyGui>();
 	AddImGui<ProjectGui>();
@@ -107,6 +108,8 @@ void MyImGuiManager::Update()
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
+
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 

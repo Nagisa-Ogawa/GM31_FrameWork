@@ -1,4 +1,5 @@
 #include "ImGui/imgui.h"
+#include "ImGui/ImGuizmo.h"
 #include "main.h"
 #include "manager.h"
 #include "scene.h"
@@ -37,11 +38,49 @@ void SceneGui::Update()
 		POINT pos = ScreenToGameScreenPoint(mousePos, imgPos, imgSize);
 		auto obj = GetMousePosObject(pos);
 		if (obj) {
-			m_forcusObject = obj;
+			m_selectedObject = obj;
 			InspectorGui* inspector = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>();
 			inspector->SetForcusObject(obj);
 		}
 			
+	}
+	// オブジェクトを選択していたならマニピュレーターを表示
+	if (m_selectedObject) {
+
+		auto camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
+		auto viewMatrix = camera->GetViewMatrix();
+		auto projectionMatrix = camera->GetProjectionMatrix();
+		auto objectMatrix = m_selectedObject->GetTransform()->GetWorldMatrix();
+
+		float objectMatrixAsFloatArray[16] = {
+			objectMatrix->_11,objectMatrix->_12,objectMatrix->_13,objectMatrix->_14,
+			objectMatrix->_21,objectMatrix->_22,objectMatrix->_23,objectMatrix->_24,
+			objectMatrix->_31,objectMatrix->_32,objectMatrix->_33,objectMatrix->_34,
+			objectMatrix->_41,objectMatrix->_42,objectMatrix->_43,objectMatrix->_44,
+		};
+		float viewMatrixAsFloatArray[16] = {
+			viewMatrix->_11,viewMatrix->_12,viewMatrix->_13,viewMatrix->_14,
+			viewMatrix->_21,viewMatrix->_22,viewMatrix->_23,viewMatrix->_24,
+			viewMatrix->_31,viewMatrix->_32,viewMatrix->_33,viewMatrix->_34,
+			viewMatrix->_41,viewMatrix->_42,viewMatrix->_43,viewMatrix->_44,
+		};
+		float projectionMatrixAsFloatArray[16] = {
+			projectionMatrix->_11,projectionMatrix->_12,projectionMatrix->_13,projectionMatrix->_14,
+			projectionMatrix->_21,projectionMatrix->_22,projectionMatrix->_23,projectionMatrix->_24,
+			projectionMatrix->_31,projectionMatrix->_32,projectionMatrix->_33,projectionMatrix->_34,
+			projectionMatrix->_41,projectionMatrix->_42,projectionMatrix->_43,projectionMatrix->_44,
+		};
+
+
+
+		static ImGuizmo::OPERATION currentGuizmoOperation(ImGuizmo::TRANSLATE);
+		static ImGuizmo::MODE currentGuizmoMode(ImGuizmo::LOCAL);
+
+		ImGuiIO& io = ImGui::GetIO();
+		// ImGuizmo::SetRect(imgPos.x, imgPos.y, imgPos.x+imgSize.x, imgPos.y + imgSize.y);
+		ImGuizmo::SetRect(0.0f, 0.0f, io.DisplaySize.x, io.DisplaySize.y);
+		ImGuizmo::Manipulate(viewMatrixAsFloatArray, projectionMatrixAsFloatArray, currentGuizmoOperation, currentGuizmoMode, objectMatrixAsFloatArray, NULL, NULL);
+
 	}
 
 }

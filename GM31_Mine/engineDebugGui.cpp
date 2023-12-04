@@ -23,5 +23,7 @@ void EngineDebugGui::Update()
 			coll->SetActive(isShow);
 		}
 	}
+	ImVec2 mousePos = ImGui::GetMousePos();
+	ImGui::Text("mousePos : x %f   y %f", mousePos.x, mousePos.y);
 	ImGui::End();
 }
