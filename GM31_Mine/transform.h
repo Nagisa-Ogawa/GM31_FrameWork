@@ -55,7 +55,7 @@ public:
 	}
 
 	D3DXMATRIX* GetWorldMatrix() { return &m_worldMatrix; }
-
+	void SetWorldMatrix(D3DXMATRIX* matrix) { m_worldMatrix = *matrix; }
 
 	void Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale);
 	void Uninit();
