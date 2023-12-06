@@ -584,7 +584,12 @@ bool CollisionManager::Collision_RayToBox(Ray* ray, BoxCollision* boxColl, float
 	D3DXVECTOR3 p = *(ray->GetStartPos());
 	D3DXVECTOR3 d = *(ray->GetVec());
 	bool xFlag = false, yFlag = false, zFlag = false;
-	float tx1, tx2, ty1, ty2, tz1, tz2;
+	float tx1 = 0.0f;
+	float tx2 = 0.0f;
+	float ty1 = 0.0f;
+	float ty2 = 0.0f;
+	float tz1 = 0.0f;
+	float tz2 = 0.0f;
 	// XŽ²•ûŒü
 	if (d.x == 0.0f) {
 		// -h.x<=p.x<=h.x‚Å‚È‚¢‚È‚ç“–‚½‚Á‚Ä‚¢‚È‚¢

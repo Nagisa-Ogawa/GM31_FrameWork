@@ -53,6 +53,8 @@ void SceneGui::Update()
 		ImGui::InputFloat3("Rt", matrixRotation);
 		ImGui::InputFloat3("Sc", matrixScale);
 		ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, *objectMatrix->m);
+
+		m_selectedObject->GetTransform()->m_position = D3DXVECTOR3(matrixTranslation[0], matrixTranslation[1], matrixTranslation[2]);
 	}
 
 	ImVec2 imgSize;
@@ -67,6 +69,7 @@ void SceneGui::Update()
 
 	// オブジェクトを選択していたならマニピュレーターを表示
 	if (m_selectedObject) {
+		ImGuizmo::SetDrawlist();
 		ImGuiIO& io = ImGui::GetIO();
 		// ImGuizmo::SetRect(imgPos.x, imgPos.y, imgPos.x+imgSize.x, imgPos.y + imgSize.y);
 		// ImGuizmo::SetRect(0.0f, 0.0f, io.DisplaySize.x, io.DisplaySize.y);
@@ -77,7 +80,6 @@ void SceneGui::Update()
 		//gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
 
 		ImGuizmo::Manipulate(*viewMatrix->m, *projectionMatrix->m, currentGuizmoOperation, currentGuizmoMode, *objectMatrix->m, NULL, NULL);
-
 		m_selectedObject->GetTransform()->SetWorldMatrix(objectMatrix);
 	}
 
