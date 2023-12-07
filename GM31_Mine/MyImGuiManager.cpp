@@ -74,13 +74,13 @@ void MyImGuiManager::Init(HWND hwnd)
 
 	// Gui‚ð’Ç‰Á
 	AddImGui<MainMenuBarGui>();
+	AddImGui<EngineDebugGui>();
 	AddImGui<SceneGui>();
 	// AddImGui<GameGui>();
 	AddImGui<InspectorGui>();
 	AddImGui<HierarchyGui>();
 	AddImGui<ProjectGui>();
 	AddImGui<ConsoleGui>();
-	AddImGui<EngineDebugGui>();
 }
 
 void MyImGuiManager::Uninit()

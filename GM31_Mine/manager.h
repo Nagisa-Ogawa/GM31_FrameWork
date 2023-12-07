@@ -1,5 +1,11 @@
 #pragma once
 
+enum EDITOR_MODE
+{
+	EDIT,
+	RUN,
+};
+
 class Scene;	// 前方宣言
 
 class Manager
@@ -9,7 +15,7 @@ private:
 	static Manager* m_Instance;
 	Scene* m_Scene = nullptr;
 	Scene* m_NextScene = nullptr;
-
+	EDITOR_MODE editorMode;
 	// コンストラクタ
 	Manager();
 	// コピーコンストラクタ

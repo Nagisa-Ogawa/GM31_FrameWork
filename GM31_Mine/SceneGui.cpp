@@ -23,45 +23,25 @@ void SceneGui::Init()
 
 void SceneGui::Update()
 {
-	Camera* camera;
-	D3DXMATRIX* viewMatrix;
-	D3DXMATRIX* projectionMatrix;
-	D3DXMATRIX* objectMatrix;
 	static ImGuizmo::OPERATION currentGuizmoOperation(ImGuizmo::TRANSLATE);
 	static ImGuizmo::MODE currentGuizmoMode(ImGuizmo::LOCAL);
-	static ImGuiWindowFlags gizmoWindowFlags = 0;
 
 
 	// オブジェクトを選択していたならマニピュレーターを表示
 	if (m_selectedObject) {
-		camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
-		viewMatrix = camera->GetViewMatrix();
-		projectionMatrix = camera->GetProjectionMatrix();
-		objectMatrix = m_selectedObject->GetTransform()->GetWorldMatrix();
+		if (ImGui::IsKeyPressed(ImGuiKey_T))
+			currentGuizmoOperation = ImGuizmo::TRANSLATE;
+		if (ImGui::IsKeyPressed(ImGuiKey_R))
+			currentGuizmoOperation = ImGuizmo::ROTATE;
+		if (ImGui::IsKeyPressed(ImGuiKey_Y)) // r Key
+			currentGuizmoOperation = ImGuizmo::SCALE;
 
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::TRANSLATE) ? "Over translate gizmo" : "not Over");
-
-		D3DXVECTOR3 pos = m_selectedObject->GetTransform()->m_position;
-		D3DXVECTOR3 rot = m_selectedObject->GetTransform()->m_rotation;
-		D3DXVECTOR3 scale = m_selectedObject->GetTransform()->m_scale;
-		float matrixTranslation[3] = { pos.x,pos.y,pos.z };
-		float	matrixRotation[3] = { rot.x,rot.y,rot.z };
-		float	matrixScale[3] = { scale.x,scale.y,scale.z };
-
-		ImGuizmo::DecomposeMatrixToComponents(*objectMatrix->m, matrixTranslation, matrixRotation, matrixScale);
-		ImGui::InputFloat3("Tr", matrixTranslation);
-		ImGui::InputFloat3("Rt", matrixRotation);
-		ImGui::InputFloat3("Sc", matrixScale);
-		ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, *objectMatrix->m);
-
-		m_selectedObject->GetTransform()->m_position = D3DXVECTOR3(matrixTranslation[0], matrixTranslation[1], matrixTranslation[2]);
 	}
 
 	ImVec2 imgSize;
 	ImVec2 imgPos;
 
 	ImGui::Begin("Scene");
-	// ImGui::Begin("Scene", 0, gizmoWindowFlags);
 	imgSize = ImGui::GetContentRegionAvail();
 	imgPos = ImGui::GetCursorScreenPos();
 	// シーン画面を画像としてレンダリング
@@ -69,18 +49,43 @@ void SceneGui::Update()
 
 	// オブジェクトを選択していたならマニピュレーターを表示
 	if (m_selectedObject) {
+		Camera* camera;
+		D3DXMATRIX* viewMatrix;
+		D3DXMATRIX* projectionMatrix;
+		D3DXMATRIX objectMatrix;
+		D3DXMatrixIdentity(&objectMatrix);
+
+		// カメラのビュー行列とプロジェクション行列を取得
+		camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
+		viewMatrix = camera->GetViewMatrix();
+		projectionMatrix = camera->GetProjectionMatrix();
+		// オブジェクトのtransformの情報から行列を作成
+		D3DXVECTOR3 pos = m_selectedObject->GetTransform()->m_position;
+		D3DXVECTOR3 rot = m_selectedObject->GetTransform()->GetRotationAsDegree();
+		D3DXVECTOR3 scale = m_selectedObject->GetTransform()->m_scale;
+		float transArray[3] = { pos.x,pos.y,pos.z };
+		float	rotArray[3] = { rot.x,rot.y,rot.z };
+		float	scaleArray[3] = { scale.x,scale.y,scale.z };
+		ImGuizmo::RecomposeMatrixFromComponents(transArray, rotArray, scaleArray, &objectMatrix.m[0][0]);
+
 		ImGuizmo::SetDrawlist();
 		ImGuiIO& io = ImGui::GetIO();
-		// ImGuizmo::SetRect(imgPos.x, imgPos.y, imgPos.x+imgSize.x, imgPos.y + imgSize.y);
-		// ImGuizmo::SetRect(0.0f, 0.0f, io.DisplaySize.x, io.DisplaySize.y);
 		float windowWidth = (float)ImGui::GetWindowWidth();
 		float windowHeight = (float)ImGui::GetWindowHeight();
 		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
-		//ImGuiWindow* window = ImGui::GetCurrentWindow();
-		//gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
 
-		ImGuizmo::Manipulate(*viewMatrix->m, *projectionMatrix->m, currentGuizmoOperation, currentGuizmoMode, *objectMatrix->m, NULL, NULL);
-		m_selectedObject->GetTransform()->SetWorldMatrix(objectMatrix);
+		// マニピュレーターを生成
+		ImGuizmo::Manipulate(*viewMatrix->m, *projectionMatrix->m, currentGuizmoOperation, currentGuizmoMode, &objectMatrix.m[0][0], NULL, NULL);
+		// マニピュレーターが使用されていたなら
+		if (ImGuizmo::IsUsing()) {
+			// マニピュレーターで変更されたtransform情報を取得
+			ImGuizmo::DecomposeMatrixToComponents(&objectMatrix.m[0][0], transArray, rotArray, scaleArray);
+
+			// transformへ送信
+			m_selectedObject->GetTransform()->m_position = D3DXVECTOR3(transArray[0], transArray[1], transArray[2]);
+			m_selectedObject->GetTransform()->SetRotationFromDegree(D3DXVECTOR3(rotArray[0], rotArray[1], rotArray[2]));
+			m_selectedObject->GetTransform()->m_scale = D3DXVECTOR3(scaleArray[0], scaleArray[1], scaleArray[2]);
+		}
 	}
 
 	ImGui::End();

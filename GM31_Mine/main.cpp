@@ -95,8 +95,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 				manager->Update();
 
-				myImGuiManager->Update();
-
 				manager->Draw();
 			}
 		}

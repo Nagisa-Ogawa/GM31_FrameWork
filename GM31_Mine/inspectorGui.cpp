@@ -25,12 +25,20 @@ void InspectorGui::Update()
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNodeEx("Rotation",ImGuiTreeNodeFlags_DefaultOpen)) {
-			float rot[3] = { m_selectedObject->GetTransform()->m_rotation.x,m_selectedObject->GetTransform()->m_rotation.y ,m_selectedObject->GetTransform()->m_rotation.z };
+			float rot[3] = { m_selectedObject->GetTransform()->GetRotationAsDegree().x,m_selectedObject->GetTransform()->GetRotationAsDegree().y ,m_selectedObject->GetTransform()->GetRotationAsDegree().z};
 			if (ImGui::InputFloat3("", rot)) {
-				m_selectedObject->GetTransform()->m_rotation = D3DXVECTOR3(rot[0], rot[1], rot[2]);
+				m_selectedObject->GetTransform()->SetRotationFromDegree(D3DXVECTOR3(rot[0], rot[1], rot[2]));
 			}
 			ImGui::TreePop();
 		}
+		if (ImGui::TreeNodeEx("Scale", ImGuiTreeNodeFlags_DefaultOpen)) {
+			float scale[3] = { m_selectedObject->GetTransform()->m_scale.x,m_selectedObject->GetTransform()->m_scale.y ,m_selectedObject->GetTransform()->m_scale.z };
+			if (ImGui::InputFloat3("", scale)) {
+				m_selectedObject->GetTransform()->m_scale = D3DXVECTOR3(scale[0], scale[1], scale[2]);
+			}
+			ImGui::TreePop();
+		}
+
 	}
 	ImGui::End();
 

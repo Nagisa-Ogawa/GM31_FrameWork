@@ -46,6 +46,8 @@ Manager* Manager::GetInstance()
 
 void Manager::Init()
 {
+	editorMode = EDITOR_MODE::EDIT;
+
 	Renderer::Init();
 	m_Scene = new Game();
 	m_Scene->Init();
@@ -63,9 +65,38 @@ void Manager::Uninit()
 
 void Manager::Update()
 {
+	// ƒQ[ƒ€ƒGƒ“ƒWƒ“‚Ìó‘Ô‚É‡‚í‚¹‚Ä•ªŠò
+	//switch (editorMode)
+	//{
+	//case EDIT:
+	//	MyImGuiManager::GetInstance()->Update();
+	//	break;
+	//case RUN:
+	//	MyImGuiManager::GetInstance()->Update();
+
+	//	Input::Update();
+
+	//	if (m_NextScene)
+	//	{
+	//		if (m_Scene)
+	//		{
+	//			m_Scene->Uninit();
+	//			delete m_Scene;
+	//		}
+	//		m_Scene = m_NextScene;
+	//		m_Scene->Init();
+	//		m_NextScene = nullptr;
+	//	}
+	//	m_Scene->Update();
+	//	break;
+	//default:
+	//	break;
+	//}
+	MyImGuiManager::GetInstance()->Update();
+
 	Input::Update();
 
-	if (m_NextScene) 
+	if (m_NextScene)
 	{
 		if (m_Scene)
 		{
@@ -77,6 +108,7 @@ void Manager::Update()
 		m_NextScene = nullptr;
 	}
 	m_Scene->Update();
+
 }
 
 void Manager::Draw()
