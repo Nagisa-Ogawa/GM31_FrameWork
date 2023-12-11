@@ -22,7 +22,6 @@
 
 void Game::Init()
 {
-	AddGameObject<CameraObject>(0,"Camera");
 	// AddGameObject<Field>(1);
 	AddGameObject<Wall>(1,"Wall01")->Init(D3DXVECTOR3(-20.0f, 2.5f, 5.0f), D3DXVECTOR3(0.0f, 0.0f, -3.14f / 2.0f));
 	AddGameObject<Wall>(1,"Wall02")->Init(D3DXVECTOR3(-25.0f, 2.5f, 0.0f), D3DXVECTOR3(0.0f, 3.14f / 2.0f, -3.14f / 2.0f));
@@ -35,15 +34,6 @@ void Game::Init()
 	
 	auto meshField = AddGameObject<MeshField>(1,"Filed");
 
-	for (int i = 0; i < 20; i++) {
-		auto tree = TreeFactory::GetInstance()->ActiveObject("tree"+std::to_string(i));
-
-		D3DXVECTOR3 pos;
-		pos.x = (float)rand() / RAND_MAX * 100.0f - 50.0f;
-		pos.z = (float)rand() / RAND_MAX * 100.0f - 50.0f;
-		pos.y = meshField->GetHeight(pos)-1.5f;
-		tree->GetTransform()->m_position = pos;
-	}
 }
 
 void Game::Uninit()

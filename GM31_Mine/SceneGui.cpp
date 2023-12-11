@@ -45,7 +45,7 @@ void SceneGui::Update()
 	imgSize = ImGui::GetContentRegionAvail();
 	imgPos = ImGui::GetCursorScreenPos();
 	// シーン画面を画像としてレンダリング
-	ImGui::Image((void*)Renderer::GetGameShaderResourceView(), imgSize);
+	ImGui::Image((void*)Renderer::GetEditorShaderResourceView(), imgSize);
 
 	// オブジェクトを選択していたならマニピュレーターを表示
 	if (m_selectedObject) {
@@ -56,7 +56,7 @@ void SceneGui::Update()
 		D3DXMatrixIdentity(&objectMatrix);
 
 		// カメラのビュー行列とプロジェクション行列を取得
-		camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
+		camera = Manager::GetInstance()->GetEditor()->GetGameObject<CameraObject>()->GetComponent<Camera>();
 		viewMatrix = camera->GetViewMatrix();
 		projectionMatrix = camera->GetProjectionMatrix();
 		// オブジェクトのtransformの情報から行列を作成
@@ -145,7 +145,7 @@ GameObject* SceneGui::GetMousePosObject(POINT mousePos)
 	float minT = -10.0f;
 	auto colls = CollisionManager::GetInstance()->GetBoxCollList();
 
-	auto camera = Manager::GetInstance()->GetScene()->GetGameObject<CameraObject>()->GetComponent<Camera>();
+	auto camera = Manager::GetInstance()->GetEditor()->GetGameObject<CameraObject>()->GetComponent<Camera>();
 	// ゲーム内のゲームオブジェクトの数だけループ
 	for (auto coll : colls) {
 		D3DXVECTOR3 world1, world2;

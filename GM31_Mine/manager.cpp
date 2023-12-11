@@ -5,8 +5,9 @@
 #include "scene.h"
 #include "input.h"
 #include "game.h"
+#include "editor.h"
 
-Manager* Manager::m_Instance = NULL;
+Manager* Manager::m_instance = NULL;
 
 Manager::Manager()
 {
@@ -16,117 +17,108 @@ Manager::Manager()
 Manager::Manager(const Manager& manager)
 {
 	// インスタンスをコピー
-	m_Instance = manager.m_Instance;
+	m_instance = manager.m_instance;
 }
 
 Manager& Manager::operator=(const Manager& manager)
 {
 	// インスタンスをコピー
-	m_Instance = manager.m_Instance;
+	m_instance = manager.m_instance;
 	return *this;
 }
 
 Manager::~Manager()
 {
 	// インスタンスを解放
-	delete m_Instance;
+	delete m_instance;
 }
 
 Manager* Manager::GetInstance()
 {
 	// 初めて使うときにインスタンスを生成
 	// それ以降は生成したインスタンスを渡す
-	if (m_Instance == NULL)
+	if (m_instance == NULL)
 	{
-		m_Instance = new Manager();
-		m_Instance->Init();
+		m_instance = new Manager();
+		m_instance->Init();
 	}
-	return m_Instance;
+	return m_instance;
 }
 
 void Manager::Init()
 {
-	editorMode = EDITOR_MODE::EDIT;
+	m_mode = EDITOR_MODE::EDIT;
 
 	Renderer::Init();
-	m_Scene = new Game();
-	m_Scene->Init();
+	m_editor = new Editor();
+	m_editor->Init();
+	m_scene = new Game();
+	m_scene->Init();
 	
 	Input::Init();
 }
 
 void Manager::Uninit()
 {
-	m_Scene->Uninit();
-	delete m_Scene;
-	
+	m_scene->Uninit();
+	delete m_scene;
+	m_editor->Uninit();
+	delete m_editor;
 	Renderer::Uninit();
 }
 
 void Manager::Update()
 {
-	// ゲームエンジンの状態に合わせて分岐
-	//switch (editorMode)
-	//{
-	//case EDIT:
-	//	MyImGuiManager::GetInstance()->Update();
-	//	break;
-	//case RUN:
-	//	MyImGuiManager::GetInstance()->Update();
-
-	//	Input::Update();
-
-	//	if (m_NextScene)
-	//	{
-	//		if (m_Scene)
-	//		{
-	//			m_Scene->Uninit();
-	//			delete m_Scene;
-	//		}
-	//		m_Scene = m_NextScene;
-	//		m_Scene->Init();
-	//		m_NextScene = nullptr;
-	//	}
-	//	m_Scene->Update();
-	//	break;
-	//default:
-	//	break;
-	//}
-	MyImGuiManager::GetInstance()->Update();
 
 	Input::Update();
 
-	if (m_NextScene)
+	//  ゲームエンジンの状態に合わせて分岐
+	switch (m_mode)
 	{
-		if (m_Scene)
+	case EDIT:
+		// 編集モードの時はエディタのみ更新処理を呼び出す
+		m_editor->Update();
+		break;
+	case RUN:
+		// 実行中の時はエディタとゲームの更新処理をどちらも呼び出す
+		m_editor->Update();
+
+		if (m_nextScene)
 		{
-			m_Scene->Uninit();
-			delete m_Scene;
+			if (m_scene)
+			{
+				m_scene->Uninit();
+				delete m_scene;
+			}
+			m_scene = m_nextScene;
+			m_scene->Init();
+			m_nextScene = nullptr;
 		}
-		m_Scene = m_NextScene;
-		m_Scene->Init();
-		m_NextScene = nullptr;
+		m_scene->Update();
+
+		break;
+	default:
+		break;
 	}
-	m_Scene->Update();
+	MyImGuiManager::GetInstance()->Update();
 
 }
 
 void Manager::Draw()
 {
-	// テクスチャにゲーム画面をレンダリング
-	Renderer::GameViewBegin();
+	// テクスチャにエディタ画面をレンダリング
+	Renderer::EditorViewBegin();
 
-	m_Scene->Draw();
+	m_editor->Draw();
+	m_scene->Draw();
+
+	// テクスチャに実行画面をレンダリング
+
 
 	// 画面全体をレンダリング
 	Renderer::Begin();
 
 	MyImGuiManager::GetInstance()->Draw();
-
-	//Renderer::Begin();
-
-	//m_Scene->Draw();
-	//MyImGuiManager::GetInstance()->Draw();
 
 	Renderer::End();
 

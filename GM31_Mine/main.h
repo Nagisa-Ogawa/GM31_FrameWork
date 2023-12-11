@@ -28,7 +28,7 @@
 // 画面サイズ
 #define SCREEN_WIDTH	(1540)
 #define SCREEN_HEIGHT	(845)
-
+// ゲーム上でのサイズ
 #define GAMESCREEN_WIDTH	(1920)
 #define GAMESCREEN_HEIGHT	(1080)
 

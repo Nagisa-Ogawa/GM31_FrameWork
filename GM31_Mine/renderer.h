@@ -63,11 +63,18 @@ private:
 	static ID3D11BlendState*		m_BlendState;
 	static ID3D11BlendState*		m_BlendStateATC;
 
+	// エディタビュー用テクスチャ
+	static ID3D11Texture2D*			m_editorViewTexture;
+	static ID3D11RenderTargetView*  m_editorViewRenderTargetView;
+	static ID3D11DepthStencilView*	m_editorViewDepthStencilView;
+	static ID3D11ShaderResourceView* m_editorViewShaderresourceView;
+
 	// ゲームビュー用テクスチャ
-	static ID3D11Texture2D*			m_GameViewTexture;
-	static ID3D11RenderTargetView*  m_GameViewRenderTargetView;
-	static ID3D11DepthStencilView*	m_GameViewDepthStencilView;
-	static ID3D11ShaderResourceView* m_GameViewShaderresourceView;
+	static ID3D11Texture2D* m_gameViewTexture;
+	static ID3D11RenderTargetView* m_gameViewRenderTargetView;
+	static ID3D11DepthStencilView* m_gameViewDepthStencilView;
+	static ID3D11ShaderResourceView* m_gameViewShaderresourceView;
+
 
 	// ウィンドウのサイズが変わった際のサイズ
 	static UINT		m_ResizeWidth;
@@ -76,9 +83,9 @@ public:
 	static void Init();
 	static void Uninit();
 	static void Begin();
+	static void EditorViewBegin();
 	static void GameViewBegin();
 	static void End();
-	static void GameViewEnd();
 
 	static void SetDepthEnable(bool Enable);
 	static void SetATCEnable(bool Enable);
@@ -96,8 +103,12 @@ public:
 	static ID3D11Device* GetDevice( void ){ return m_Device; }
 	static ID3D11DeviceContext* GetDeviceContext( void ){ return m_DeviceContext; }
 	static ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTargetView; }
-	static ID3D11RenderTargetView* GetGameViewRenderTargetView() { return m_GameViewRenderTargetView; }
-	static ID3D11ShaderResourceView* GetGameShaderResourceView() { return m_GameViewShaderresourceView; }
+	// エディタビュー用Get関数
+	static ID3D11RenderTargetView* GetEditorViewRenderTargetView() { return m_editorViewRenderTargetView; }
+	static ID3D11ShaderResourceView* GetEditorShaderResourceView() { return m_editorViewShaderresourceView; }
+	// ゲームビュー用Get関数
+	static ID3D11RenderTargetView* GetGameViewRenderTargetView() { return m_gameViewRenderTargetView; }
+	static ID3D11ShaderResourceView* GetGameShaderResourceView() { return m_gameViewShaderresourceView; }
 	static IDXGISwapChain* GetSwapChain() { return m_SwapChain; }
 	static UINT GetResizeWidth() { return m_ResizeWidth; }
 	static UINT GetResizeHeight() { return m_ResizeHeight; }

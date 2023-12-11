@@ -27,11 +27,17 @@ ID3D11DepthStencilState* Renderer::m_DepthStateDisable{};
 ID3D11BlendState*		Renderer::m_BlendState{};
 ID3D11BlendState*		Renderer::m_BlendStateATC{};
 
+// エディタビュー用テクスチャ
+ID3D11Texture2D*			Renderer::m_editorViewTexture{};
+ID3D11RenderTargetView*		Renderer::m_editorViewRenderTargetView{};
+ID3D11ShaderResourceView* Renderer::m_editorViewShaderresourceView{};
+ID3D11DepthStencilView*	Renderer::m_editorViewDepthStencilView{};
 // ゲームビュー用テクスチャ
-ID3D11Texture2D*			Renderer::m_GameViewTexture{};
-ID3D11RenderTargetView*		Renderer::m_GameViewRenderTargetView{};
-ID3D11ShaderResourceView* Renderer::m_GameViewShaderresourceView{};
-ID3D11DepthStencilView*	Renderer::m_GameViewDepthStencilView{};
+ID3D11Texture2D* Renderer::m_gameViewTexture{};
+ID3D11RenderTargetView* Renderer::m_gameViewRenderTargetView{};
+ID3D11ShaderResourceView* Renderer::m_gameViewShaderresourceView{};
+ID3D11DepthStencilView* Renderer::m_gameViewDepthStencilView{};
+
 
 UINT Renderer::m_ResizeWidth{};
 UINT Renderer::m_ResizeHeight{};
@@ -202,61 +208,118 @@ void Renderer::Init()
 	SetMaterial(material);
 
 
-	// ゲームビュー用のテクスチャの設定
-	D3D11_TEXTURE2D_DESC gameViewTextureDesc;
-	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
-	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+	// ------------------------------------
+	// エディタビュー用のテクスチャの設定
+	// ------------------------------------
+	D3D11_TEXTURE2D_DESC editorVTD;
+	D3D11_RENDER_TARGET_VIEW_DESC editorRTVD;
+	D3D11_SHADER_RESOURCE_VIEW_DESC editorSRVD;
 
 	// テクスチャの設定
-	ZeroMemory(&gameViewTextureDesc, sizeof(gameViewTextureDesc));
-	gameViewTextureDesc.Width = GAMESCREEN_WIDTH;
-	gameViewTextureDesc.Height = GAMESCREEN_HEIGHT;
-	gameViewTextureDesc.MipLevels = 1;
-	gameViewTextureDesc.ArraySize = 1;
-	gameViewTextureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	gameViewTextureDesc.SampleDesc.Count = 1;
-	gameViewTextureDesc.Usage = D3D11_USAGE_DEFAULT;
-	gameViewTextureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-	gameViewTextureDesc.CPUAccessFlags = 0;
-	gameViewTextureDesc.MiscFlags = 0;
-	gameViewTextureDesc.SampleDesc.Count = 1;
-	gameViewTextureDesc.SampleDesc.Quality = 0;
+	ZeroMemory(&editorVTD, sizeof(editorVTD));
+	editorVTD.Width = GAMESCREEN_WIDTH;
+	editorVTD.Height = GAMESCREEN_HEIGHT;
+	editorVTD.MipLevels = 1;
+	editorVTD.ArraySize = 1;
+	editorVTD.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	editorVTD.SampleDesc.Count = 1;
+	editorVTD.Usage = D3D11_USAGE_DEFAULT;
+	editorVTD.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	editorVTD.CPUAccessFlags = 0;
+	editorVTD.MiscFlags = 0;
+	editorVTD.SampleDesc.Count = 1;
+	editorVTD.SampleDesc.Quality = 0;
 
 	// テクスチャの作成
-	m_Device->CreateTexture2D(&gameViewTextureDesc, NULL, &m_GameViewTexture);
+	m_Device->CreateTexture2D(&editorVTD, NULL, &m_editorViewTexture);
 
 
 	// レンダーターゲットの設定
-	renderTargetViewDesc.Format = gameViewTextureDesc.Format;
-	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	renderTargetViewDesc.Texture2D.MipSlice = 0;
+	editorRTVD.Format = editorVTD.Format;
+	editorRTVD.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	editorRTVD.Texture2D.MipSlice = 0;
 
 	// レンダーターゲットの作成
-	m_Device->CreateRenderTargetView(m_GameViewTexture, &renderTargetViewDesc, &m_GameViewRenderTargetView);
+	m_Device->CreateRenderTargetView(m_editorViewTexture, &editorRTVD, &m_editorViewRenderTargetView);
 	
 
 	// シェーダーリソースビューの設定
-	shaderResourceViewDesc.Format = gameViewTextureDesc.Format;
-	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
-	shaderResourceViewDesc.Texture1D.MipLevels = 1;
+	editorSRVD.Format = editorVTD.Format;
+	editorSRVD.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	editorSRVD.Texture2D.MostDetailedMip = 0;
+	editorSRVD.Texture1D.MipLevels = 1;
 
 	// シェーダーリソースビューの作成
-	hr= m_Device->CreateShaderResourceView(m_GameViewTexture, &shaderResourceViewDesc, &m_GameViewShaderresourceView);
+	hr= m_Device->CreateShaderResourceView(m_editorViewTexture, &editorSRVD, &m_editorViewShaderresourceView);
 
 
 	// デプスステンシルバッファ作成
-	D3D11_TEXTURE2D_DESC dsd;
-	m_GameViewTexture->GetDesc(&dsd);
-	dsd.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	dsd.Usage = D3D11_USAGE_DEFAULT;
-	dsd.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	D3D11_TEXTURE2D_DESC editorTD;
+	m_editorViewTexture->GetDesc(&editorTD);
+	editorTD.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	editorTD.Usage = D3D11_USAGE_DEFAULT;
+	editorTD.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
-	m_Device->CreateTexture2D(&dsd, NULL, &m_GameViewTexture);
-	m_Device->CreateDepthStencilView(m_GameViewTexture, NULL, &m_GameViewDepthStencilView);
+	m_Device->CreateTexture2D(&editorTD, NULL, &m_editorViewTexture);
+	m_Device->CreateDepthStencilView(m_editorViewTexture, NULL, &m_editorViewDepthStencilView);
 
-	// デプスステンシルバッファをアクティブ化
-	m_DeviceContext->OMSetRenderTargets(1, &m_GameViewRenderTargetView, m_GameViewDepthStencilView);
+
+
+	// -------------------------------------------
+	// ゲームビュー用のテクスチャの設定
+	// -------------------------------------------
+	D3D11_TEXTURE2D_DESC gameVTD;
+	D3D11_RENDER_TARGET_VIEW_DESC gameRTVD;
+	D3D11_SHADER_RESOURCE_VIEW_DESC gameSRVD;
+
+	// テクスチャの設定
+	ZeroMemory(&gameVTD, sizeof(gameVTD));
+	gameVTD.Width = GAMESCREEN_WIDTH;
+	gameVTD.Height = GAMESCREEN_HEIGHT;
+	gameVTD.MipLevels = 1;
+	gameVTD.ArraySize = 1;
+	gameVTD.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	gameVTD.SampleDesc.Count = 1;
+	gameVTD.Usage = D3D11_USAGE_DEFAULT;
+	gameVTD.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	gameVTD.CPUAccessFlags = 0;
+	gameVTD.MiscFlags = 0;
+	gameVTD.SampleDesc.Count = 1;
+	gameVTD.SampleDesc.Quality = 0;
+
+	// テクスチャの作成
+	m_Device->CreateTexture2D(&gameVTD, NULL, &m_gameViewTexture);
+
+
+	// レンダーターゲットの設定
+	gameRTVD.Format = gameVTD.Format;
+	gameRTVD.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	gameRTVD.Texture2D.MipSlice = 0;
+
+	// レンダーターゲットの作成
+	m_Device->CreateRenderTargetView(m_gameViewTexture, &gameRTVD, &m_gameViewRenderTargetView);
+
+
+	// シェーダーリソースビューの設定
+	gameSRVD.Format = gameVTD.Format;
+	gameSRVD.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	gameSRVD.Texture2D.MostDetailedMip = 0;
+	gameSRVD.Texture1D.MipLevels = 1;
+
+	// シェーダーリソースビューの作成
+	hr = m_Device->CreateShaderResourceView(m_gameViewTexture, &gameSRVD, &m_gameViewShaderresourceView);
+
+
+	// デプスステンシルバッファ作成
+	D3D11_TEXTURE2D_DESC gameTD;
+	m_gameViewTexture->GetDesc(&gameTD);
+	gameTD.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	gameTD.Usage = D3D11_USAGE_DEFAULT;
+	gameTD.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	m_Device->CreateTexture2D(&gameTD, NULL, &m_gameViewTexture);
+	m_Device->CreateDepthStencilView(m_gameViewTexture, NULL, &m_gameViewDepthStencilView);
+
 }
 
 
@@ -277,10 +340,15 @@ void Renderer::Uninit()
 	m_DeviceContext->Release();
 	m_Device->Release();
 
-	m_GameViewTexture->Release();
-	m_GameViewRenderTargetView->Release();
-	m_GameViewDepthStencilView->Release();
-	m_GameViewShaderresourceView->Release();
+	m_editorViewTexture->Release();
+	m_editorViewRenderTargetView->Release();
+	m_editorViewDepthStencilView->Release();
+	m_editorViewShaderresourceView->Release();
+
+	m_gameViewTexture->Release();
+	m_gameViewRenderTargetView->Release();
+	m_gameViewDepthStencilView->Release();
+	m_gameViewShaderresourceView->Release();
 }
 
 
@@ -294,26 +362,32 @@ void Renderer::Begin()
 	m_DeviceContext->ClearDepthStencilView( m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
+void Renderer::EditorViewBegin()
+{
+	// ビューポートを変更
+	SetViewport(GAMESCREEN_WIDTH, GAMESCREEN_HEIGHT);
+	m_DeviceContext->OMSetRenderTargets(1, &m_editorViewRenderTargetView, m_editorViewDepthStencilView);
+	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	m_DeviceContext->ClearRenderTargetView(m_editorViewRenderTargetView, clearColor);
+	m_DeviceContext->ClearDepthStencilView(m_editorViewDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
 void Renderer::GameViewBegin()
 {
 	// ビューポートを変更
 	SetViewport(GAMESCREEN_WIDTH, GAMESCREEN_HEIGHT);
-	m_DeviceContext->OMSetRenderTargets(1, &m_GameViewRenderTargetView, m_GameViewDepthStencilView);
+	m_DeviceContext->OMSetRenderTargets(1, &m_gameViewRenderTargetView, m_gameViewDepthStencilView);
 	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	m_DeviceContext->ClearRenderTargetView(m_GameViewRenderTargetView, clearColor);
-	m_DeviceContext->ClearDepthStencilView(m_GameViewDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	m_DeviceContext->ClearRenderTargetView(m_gameViewRenderTargetView, clearColor);
+	m_DeviceContext->ClearDepthStencilView(m_gameViewDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
+
 
 
 
 void Renderer::End()
 {
 	m_SwapChain->Present( 1, 0 );
-}
-
-void Renderer::GameViewEnd()
-{
-	m_SwapChain->Present(1, 0);
 }
 
 

@@ -162,6 +162,7 @@
     <ClCompile Include="cameraObject.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="consoleGui.cpp" />
+    <ClCompile Include="editor.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyFactory.cpp" />
     <ClCompile Include="engineDebugGui.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="consoleGui.h" />
+    <ClInclude Include="editor.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyFactory.h" />
     <ClInclude Include="engineDebugGui.h" />

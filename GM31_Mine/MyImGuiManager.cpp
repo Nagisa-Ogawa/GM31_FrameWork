@@ -76,7 +76,7 @@ void MyImGuiManager::Init(HWND hwnd)
 	AddImGui<MainMenuBarGui>();
 	AddImGui<EngineDebugGui>();
 	AddImGui<SceneGui>();
-	// AddImGui<GameGui>();
+	AddImGui<GameGui>();
 	AddImGui<InspectorGui>();
 	AddImGui<HierarchyGui>();
 	AddImGui<ProjectGui>();

@@ -7,15 +7,17 @@ enum EDITOR_MODE
 };
 
 class Scene;	// 前方宣言
+class Editor;
 
 class Manager
 {
 private:
 	// シングルトン用インスタンス
-	static Manager* m_Instance;
-	Scene* m_Scene = nullptr;
-	Scene* m_NextScene = nullptr;
-	EDITOR_MODE editorMode;
+	static Manager* m_instance;
+	Scene* m_scene = nullptr;
+	Scene* m_nextScene = nullptr;
+	Scene* m_editor = nullptr;
+	EDITOR_MODE m_mode;
 	// コンストラクタ
 	Manager();
 	// コピーコンストラクタ
@@ -34,10 +36,18 @@ public:
 	void Draw();
 
 	static Manager* GetInstance();
-	Scene* GetScene() { return m_Scene; }
+	Scene* GetScene() { return m_scene; }
+	Scene* GetEditor() { return m_editor; }
+	EDITOR_MODE GetMode() { return m_mode; }
+
 	template <typename T>
 	void SetScene()
 	{
-		m_NextScene = new T();
+		m_nextScene = new T();
+	}
+
+	void SetEditorMode(EDITOR_MODE mode) 
+	{
+		m_mode = mode;
 	}
 };
