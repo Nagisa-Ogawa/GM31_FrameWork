@@ -47,7 +47,7 @@ Manager* Manager::GetInstance()
 
 void Manager::Init()
 {
-	m_mode = EDITOR_MODE::EDIT;
+	m_mode = ENGINE_MODE::EDIT;
 
 	Renderer::Init();
 	m_editor = new Editor();
@@ -82,24 +82,28 @@ void Manager::Update()
 	case RUN:
 		// 実行中の時はエディタとゲームの更新処理をどちらも呼び出す
 		m_editor->Update();
-
-		if (m_nextScene)
-		{
-			if (m_scene)
-			{
-				m_scene->Uninit();
-				delete m_scene;
-			}
-			m_scene = m_nextScene;
-			m_scene->Init();
-			m_nextScene = nullptr;
-		}
 		m_scene->Update();
 
+		break;
+	case PAUSE:
+		// 一時停止中は何もしない
 		break;
 	default:
 		break;
 	}
+
+	if (m_nextScene)
+	{
+		if (m_scene)
+		{
+			m_scene->Uninit();
+			delete m_scene;
+		}
+		m_scene = m_nextScene;
+		m_scene->Init();
+		m_nextScene = nullptr;
+	}
+	// GUIの更新処理
 	MyImGuiManager::GetInstance()->Update();
 
 }

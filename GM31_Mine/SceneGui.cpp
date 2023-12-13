@@ -89,23 +89,24 @@ void SceneGui::Update()
 		}
 	}
 
-	ImGui::End();
-
 	ImVec2 mousePos;
 	mousePos.x = 0;
 	mousePos.y = 0;
 	// シーン用ウィンドウ内で右クリックしたことを検知
-	if (ImGui::GetIO().MouseDown[0]) {
+	if (ImGui::GetIO().MouseDown[0] && ImGui::IsWindowFocused()) {
 		mousePos = ImGui::GetMousePos();
 		POINT pos = ScreenToGameScreenPoint(mousePos, imgPos, imgSize);
 		auto obj = GetMousePosObject(pos);
 		if (obj) {
 			m_selectedObject = obj;
 			InspectorGui* inspector = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>();
-			inspector->SetForcusObject(obj);
+			inspector->SetSelectedObject(obj);
 		}
 			
 	}
+
+	ImGui::End();
+
 }
 
 

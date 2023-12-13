@@ -26,6 +26,7 @@ private:
 
 	// 初期化処理
 	void Init();
+
 	// 投影線分の半分の長さを取得する関数
 	float CreateHalfProjectionLine(D3DXVECTOR3* sAxis, D3DXVECTOR3* vecX, D3DXVECTOR3* vecY, D3DXVECTOR3* vecZ = 0);
 	// OBBとOBBが衝突した際のOBBがもう一方のOBBのどの面と衝突しているかを検知し
@@ -35,6 +36,9 @@ public:
 	// デストラクタ
 	virtual ~CollisionManager();
 	static CollisionManager* GetInstance();
+
+	// 終了処理
+	void Uninit();
 
 	// コリジョンコンポーネントを取得する関数
 	void AddBoxCollision(BoxCollision* coll);

@@ -21,6 +21,7 @@
 #include "sphereCollisionFrame.h"
 #include "boxCollisionFrame.h"
 #include "meshField.h"
+#include "input.h"
 
 void Player::Init()
 {
@@ -43,44 +44,44 @@ void Player::Update()
 	D3DXVECTOR3 beforPos = m_transform->m_position;
 	bool move = false;
 	// ŽOlÌ—p
-	//if (Input::GetKeyPress('A'))
-	//{
-	//	m_Transform->m_Position -= m_Transform->GetRight()*0.1f;
-	//}
-	//if (Input::GetKeyPress('D'))
-	//{
-	//	m_Transform->m_Position += m_Transform->GetRight()*0.1f;
-	//}
-	//if (Input::GetKeyPress('S'))
-	//{
-	//	m_Transform->m_Position -= m_Transform->GetForward()*0.1f;
-	//}
-	//if (Input::GetKeyPress('W'))
-	//{
-	//	if (m_NextAnimationName != "Run") {
-	//		m_AnimationName = m_NextAnimationName;
-	//		m_NextAnimationName = "Run";
-	//		m_BlendRate = 0.0f;
-	//	}
+	if (Input::GetKeyPress('A'))
+	{
+		m_transform->m_position -= m_transform->GetRight()*0.1f;
+	}
+	if (Input::GetKeyPress('D'))
+	{
+		m_transform->m_position += m_transform->GetRight()*0.1f;
+	}
+	if (Input::GetKeyPress('S'))
+	{
+		m_transform->m_position -= m_transform->GetForward()*0.1f;
+	}
+	if (Input::GetKeyPress('W'))
+	{
+		if (m_NextAnimationName != "Run") {
+			m_AnimationName = m_NextAnimationName;
+			m_NextAnimationName = "Run";
+			m_BlendRate = 0.0f;
+		}
 
-	//	m_Transform->m_Position += m_Transform->GetForward()*0.1f;
-	//	move = true;
-	//}
-	//if (!move) {
-	//	if (m_NextAnimationName != "Idle") {
-	//		m_AnimationName = m_NextAnimationName;
-	//		m_NextAnimationName = "Idle";
-	//		m_BlendRate = 0.0f;
-	//	}
-	//}
-	//if (Input::GetKeyPress('Q'))
-	//{
-	//	m_Transform->m_Rotation.y -= 0.05f;
-	//}
-	//if (Input::GetKeyPress('E'))
-	//{
-	//	m_Transform->m_Rotation.y += 0.05f;
-	//}
+		m_transform->m_position += m_transform->GetForward()*0.1f;
+		move = true;
+	}
+	if (!move) {
+		if (m_NextAnimationName != "Idle") {
+			m_AnimationName = m_NextAnimationName;
+			m_NextAnimationName = "Idle";
+			m_BlendRate = 0.0f;
+		}
+	}
+	if (Input::GetKeyPress('Q'))
+	{
+		m_transform->m_rotation.y -= 0.05f;
+	}
+	if (Input::GetKeyPress('E'))
+	{
+		m_transform->m_rotation.y += 0.05f;
+	}
 
 	//if (Input::GetKeyTrigger('J')) {
 	//	Bullet* pBullet = BulletFactory::GetInstance()->ActiveObject();

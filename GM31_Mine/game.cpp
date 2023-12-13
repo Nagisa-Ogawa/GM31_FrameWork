@@ -3,6 +3,7 @@
 #include "renderer.h"
 #include "manager.h"
 
+#include "CollisionManager.h"
 #include "cameraObject.h"
 #include "field.h"
 #include "player.h"
@@ -43,6 +44,7 @@ void Game::Uninit()
 	Scene::Uninit();
 	EnemyFactory::GetInstance()->Clear();
 	BulletFactory::GetInstance()->Clear();
+	CollisionManager::GetInstance()->Uninit();
 }
 
 void Game::Update()

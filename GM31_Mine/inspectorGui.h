@@ -11,8 +11,8 @@ public:
 	void Init() override;	// ‰Šú‰»ŠÖ”
 	void Update()override;	// –ˆƒtƒŒ[ƒ€ˆ—‚·‚éŠÖ”
 
-	GameObject* GetForcusObject() { return m_selectedObject; }
-	void SetForcusObject(GameObject* object) { m_selectedObject = object; }
+	GameObject* GetSelectedObject() { return m_selectedObject; }
+	void SetSelectedObject(GameObject* object) { m_selectedObject = object; }
 };
 
 

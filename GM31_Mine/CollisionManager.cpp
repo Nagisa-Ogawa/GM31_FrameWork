@@ -34,6 +34,13 @@ void CollisionManager::Init()
 {
 }
 
+void CollisionManager::Uninit()
+{
+	m_BoxCollList.clear();
+	m_SphereCollList.clear();
+	m_QuadCollList.clear();
+}
+
 
 CollisionManager::~CollisionManager()
 {

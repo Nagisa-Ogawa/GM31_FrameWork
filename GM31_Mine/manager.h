@@ -1,9 +1,10 @@
 #pragma once
 
-enum EDITOR_MODE
+enum ENGINE_MODE
 {
 	EDIT,
 	RUN,
+	PAUSE,
 };
 
 class Scene;	// 前方宣言
@@ -17,7 +18,7 @@ private:
 	Scene* m_scene = nullptr;
 	Scene* m_nextScene = nullptr;
 	Scene* m_editor = nullptr;
-	EDITOR_MODE m_mode;
+	ENGINE_MODE m_mode;
 	// コンストラクタ
 	Manager();
 	// コピーコンストラクタ
@@ -38,7 +39,7 @@ public:
 	static Manager* GetInstance();
 	Scene* GetScene() { return m_scene; }
 	Scene* GetEditor() { return m_editor; }
-	EDITOR_MODE GetMode() { return m_mode; }
+	ENGINE_MODE GetMode() { return m_mode; }
 
 	template <typename T>
 	void SetScene()
@@ -46,7 +47,7 @@ public:
 		m_nextScene = new T();
 	}
 
-	void SetEditorMode(EDITOR_MODE mode) 
+	void SetEngineMode(ENGINE_MODE mode) 
 	{
 		m_mode = mode;
 	}
