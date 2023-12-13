@@ -12,13 +12,14 @@
 #include "CollisionManager.h"
 #include "boxCollision.h"
 #include "boxCollisionFrame.h"
-#include "camera.h"
-#include "cameraObject.h"
+#include "editorCamera.h"
+#include "editorCameraObject.h"
 #include "Ray.h"
 
 
 void SceneGui::Init()
 {
+
 }
 
 void SceneGui::Update()
@@ -49,14 +50,14 @@ void SceneGui::Update()
 
 	// オブジェクトを選択していたならマニピュレーターを表示
 	if (m_selectedObject) {
-		Camera* camera;
+		EditorCamera* camera;
 		D3DXMATRIX* viewMatrix;
 		D3DXMATRIX* projectionMatrix;
 		D3DXMATRIX objectMatrix;
 		D3DXMatrixIdentity(&objectMatrix);
 
 		// カメラのビュー行列とプロジェクション行列を取得
-		camera = Manager::GetInstance()->GetEditor()->GetGameObject<CameraObject>()->GetComponent<Camera>();
+		camera = Manager::GetInstance()->GetEditor()->GetGameObject<EditorCameraObject>()->GetComponent<EditorCamera>();
 		viewMatrix = camera->GetViewMatrix();
 		projectionMatrix = camera->GetProjectionMatrix();
 		// オブジェクトのtransformの情報から行列を作成
@@ -128,8 +129,8 @@ POINT SceneGui::ScreenToGameScreenPoint(ImVec2 pos, ImVec2 imgPos, ImVec2 imgSiz
 	cPos.y -= cImgPos.y;
 	float ratioX = cPos.x / imgSize.x;
 	float ratioY = cPos.y / imgSize.y;
-	mousePos.x = GAMESCREEN_WIDTH * ratioX;
-	mousePos.y = GAMESCREEN_HEIGHT * ratioY;
+	mousePos.x = SCREEN_WIDTH * ratioX;
+	mousePos.y = SCREEN_HEIGHT * ratioY;
 	return mousePos;
 }
 
@@ -145,7 +146,7 @@ GameObject* SceneGui::GetMousePosObject(POINT mousePos)
 	float minT = -10.0f;
 	auto colls = CollisionManager::GetInstance()->GetBoxCollList();
 
-	auto camera = Manager::GetInstance()->GetEditor()->GetGameObject<CameraObject>()->GetComponent<Camera>();
+	auto camera = Manager::GetInstance()->GetEditor()->GetGameObject<EditorCameraObject>()->GetComponent<EditorCamera>();
 	// ゲーム内のゲームオブジェクトの数だけループ
 	for (auto coll : colls) {
 		D3DXVECTOR3 world1, world2;

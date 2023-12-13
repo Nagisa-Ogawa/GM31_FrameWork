@@ -5,6 +5,8 @@
 
 //#define _CRT_SECURE_NO_WARNINGS
 
+RENDER_TARGET			Renderer::m_renderTarget = RENDER_TARGET::ENGINE;
+
 D3D_FEATURE_LEVEL       Renderer::m_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
 
 ID3D11Device*           Renderer::m_Device{};
@@ -356,6 +358,8 @@ void Renderer::Uninit()
 
 void Renderer::Begin()
 {
+	m_renderTarget = RENDER_TARGET::ENGINE;
+	SetViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	m_DeviceContext->ClearRenderTargetView( m_RenderTargetView, clearColor );
@@ -364,6 +368,7 @@ void Renderer::Begin()
 
 void Renderer::EditorViewBegin()
 {
+	m_renderTarget = RENDER_TARGET::EDITOR;
 	// ビューポートを変更
 	SetViewport(GAMESCREEN_WIDTH, GAMESCREEN_HEIGHT);
 	m_DeviceContext->OMSetRenderTargets(1, &m_editorViewRenderTargetView, m_editorViewDepthStencilView);
@@ -374,6 +379,7 @@ void Renderer::EditorViewBegin()
 
 void Renderer::GameViewBegin()
 {
+	m_renderTarget = RENDER_TARGET::GAME;
 	// ビューポートを変更
 	SetViewport(GAMESCREEN_WIDTH, GAMESCREEN_HEIGHT);
 	m_DeviceContext->OMSetRenderTargets(1, &m_gameViewRenderTargetView, m_gameViewDepthStencilView);

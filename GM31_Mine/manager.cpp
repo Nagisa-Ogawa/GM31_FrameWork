@@ -113,7 +113,9 @@ void Manager::Draw()
 	m_scene->Draw();
 
 	// テクスチャに実行画面をレンダリング
+	Renderer::GameViewBegin();
 
+	m_scene->Draw();
 
 	// 画面全体をレンダリング
 	Renderer::Begin();

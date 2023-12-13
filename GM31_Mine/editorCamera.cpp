@@ -2,35 +2,32 @@
 #include "manager.h"
 #include "renderer.h"
 #include "scene.h"
-#include "camera.h"
+#include "editorCamera.h"
 #include "input.h"
 #include "cameraObject.h"
 #include "player.h"
 
 
-void Camera::Init(D3DXVECTOR3 position)
+void EditorCamera::Init(D3DXVECTOR3 position)
 {
 	m_position = position;
-	
+
 	m_up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 }
 
-void Camera::Uninit()
+void EditorCamera::Uninit()
 {
 }
 
-void Camera::Update()
+void EditorCamera::Update()
+{
+
+}
+
+
+void EditorCamera::Draw()
 {
 	
-}
-
-
-void Camera::Draw()
-{
-	// エディタに描画するときはゲームのカメラは行列を設定しない
-	if (Renderer::GetRenderTarget() != RENDER_TARGET::GAME) {
-		return;
-	}
 	// D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_target, &m_up);
 	// カメラの移動と回転行列をからカメラ行列を作成(拡大は使わない)
 	D3DXMATRIX rot, trans;

@@ -3,11 +3,11 @@
 #include "renderer.h"
 #include "manager.h"
 
-#include "cameraObject.h"
+#include "editorCameraObject.h"
 
 void Editor::Init()
 {
-	AddGameObject<CameraObject>(0, "Camera");
+	AddGameObject<EditorCameraObject>(0, "EditorCamera");
 }
 
 void Editor::Uninit()

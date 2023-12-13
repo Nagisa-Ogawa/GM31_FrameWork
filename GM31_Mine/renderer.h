@@ -1,7 +1,12 @@
 #pragma once
 
 
-
+enum RENDER_TARGET
+{
+	ENGINE,
+	EDITOR,
+	GAME,
+};
 
 
 struct VERTEX_3D
@@ -41,6 +46,8 @@ struct LIGHT
 class Renderer
 {
 private:
+
+	static RENDER_TARGET m_renderTarget;
 
 	static D3D_FEATURE_LEVEL       m_FeatureLevel;
 
@@ -103,6 +110,7 @@ public:
 	static ID3D11Device* GetDevice( void ){ return m_Device; }
 	static ID3D11DeviceContext* GetDeviceContext( void ){ return m_DeviceContext; }
 	static ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTargetView; }
+	static RENDER_TARGET GetRenderTarget() { return m_renderTarget; }
 	// エディタビュー用Get関数
 	static ID3D11RenderTargetView* GetEditorViewRenderTargetView() { return m_editorViewRenderTargetView; }
 	static ID3D11ShaderResourceView* GetEditorShaderResourceView() { return m_editorViewShaderresourceView; }

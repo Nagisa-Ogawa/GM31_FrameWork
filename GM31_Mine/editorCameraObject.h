@@ -3,7 +3,7 @@
 #include "gameObject.h"
 
 
-class CameraObject:public GameObject
+class EditorCameraObject :public GameObject
 {
 private:
 	bool	m_isRButton = false;	// 右クリックを押しているかのフラグ
@@ -11,5 +11,7 @@ private:
 public:
 	void Init() override;
 	void Update() override;
-	
+
+	void RotateCamera(D3DXVECTOR2 delta);	// カメラをカメラ自身を中心として回転させる関数
+
 };
