@@ -50,6 +50,7 @@ public:
 	Scene* GetScene() { return m_scene; }
 	Scene* GetEditor() { return m_editor; }
 	ENGINE_MODE GetMode() { return m_mode; }
+	GAME_MODE GetGameMode() { return m_gameMode; }
 
 	template <typename T>
 	void SetScene()
