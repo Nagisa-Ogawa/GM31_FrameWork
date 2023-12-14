@@ -1,6 +1,7 @@
 
 #include "main.h"
 #include "input.h"
+#include "MyImGuiManager.h"
 
 
 BYTE Input::m_OldKeyState[256];
@@ -32,12 +33,20 @@ void Input::Update()
 
 bool Input::GetKeyPress(BYTE KeyCode)
 {
-	return (m_KeyState[KeyCode] & 0x80);
+	if (MyImGuiManager::GetInstance()->GetFocusWindow() != nullptr &&
+		MyImGuiManager::GetInstance()->GetFocusWindow() == ImGui::FindWindowByName("Game")) {
+		return (m_KeyState[KeyCode] & 0x80);
+	}
+	return 0;
 }
 
 bool Input::GetKeyTrigger(BYTE KeyCode)
 {
-	return ((m_KeyState[KeyCode] & 0x80) && !(m_OldKeyState[KeyCode] & 0x80));
+	if (MyImGuiManager::GetInstance()->GetFocusWindow() != nullptr &&
+		MyImGuiManager::GetInstance()->GetFocusWindow() == ImGui::FindWindowByName("Game")) {
+		return ((m_KeyState[KeyCode] & 0x80) && !(m_OldKeyState[KeyCode] & 0x80));
+	}
+	return 0;
 }
 
 POINT Input::GetClientMousePos()

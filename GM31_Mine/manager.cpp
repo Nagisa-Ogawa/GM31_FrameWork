@@ -70,7 +70,6 @@ void Manager::Uninit()
 void Manager::Update()
 {
 
-	Input::Update();
 
 	//  ゲームエンジンの状態に合わせて分岐
 	switch (m_mode)
@@ -82,11 +81,13 @@ void Manager::Update()
 	case RUN:
 		// 実行中の時はエディタとゲームの更新処理をどちらも呼び出す
 		m_editor->Update();
+		Input::Update();
 		m_scene->Update();
 
 		break;
 	case PAUSE:
-		// 一時停止中は何もしない
+		// 一時停止中はエディタのみ更新処置を呼び出す
+		m_editor->Update();
 		break;
 	default:
 		break;

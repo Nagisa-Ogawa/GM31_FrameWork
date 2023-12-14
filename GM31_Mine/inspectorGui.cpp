@@ -1,4 +1,4 @@
-#include "ImGui/imgui.h"
+#include "MyImGuiManager.h"
 #include "main.h"
 #include "manager.h"
 #include "scene.h"
@@ -14,6 +14,7 @@ void InspectorGui::Update()
 {
 	
 	ImGui::Begin("Inspecter");
+	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
 	if (m_selectedObject) {
 		ImGui::Text("ObjectType : %s", typeid(*m_selectedObject).name());
 		ImGui::SeparatorText("Transform");

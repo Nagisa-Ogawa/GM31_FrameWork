@@ -1,5 +1,6 @@
 #include "main.h"
 #include "manager.h"
+#include "MyImGuiManager.h"
 #include "renderer.h"
 #include "editorCamera.h"
 #include "editorCameraObject.h"
@@ -19,7 +20,8 @@ void EditorCameraObject::Update()
 {
 	// カメラの操作
 	EditorCamera* camera = GetComponent<EditorCamera>();
-	if (Input::GetKeyPress(VK_RBUTTON)) {
+	if (ImGui::IsMouseDown(ImGuiMouseButton_Right)&&
+		MyImGuiManager::GetInstance()->GetFocusWindow()==ImGui::FindWindowByName("Scene")) {
 		// このフレームで初めて右クリックをしたとき
 		if (!m_isRButton) {
 			// フラグをONにし、座標を記録
@@ -27,28 +29,28 @@ void EditorCameraObject::Update()
 			m_isRButton = true;
 		}
 		// 右クリックしながらWASDキーで平行移動
-		if (Input::GetKeyPress('A'))
+		if (ImGui::IsKeyDown(ImGuiKey_A))
 		{
 			m_transform->m_position -= m_transform->GetRight() * MOVECAMERA_SPEED;
 		}
-		if (Input::GetKeyPress('D'))
+		if (ImGui::IsKeyDown(ImGuiKey_D))
 		{
 			m_transform->m_position += m_transform->GetRight() * MOVECAMERA_SPEED;
 		}
-		if (Input::GetKeyPress('S'))
+		if (ImGui::IsKeyDown(ImGuiKey_S))
 		{
 			m_transform->m_position -= m_transform->GetForward() * MOVECAMERA_SPEED;
 		}
-		if (Input::GetKeyPress('W'))
+		if (ImGui::IsKeyDown(ImGuiKey_W))
 		{
 			m_transform->m_position += m_transform->GetForward() * MOVECAMERA_SPEED;
 		}
 		// 右クリックしながらQEキーで上下移動
-		if (Input::GetKeyPress('Q'))
+		if (ImGui::IsKeyDown(ImGuiKey_Q))
 		{
 			m_transform->m_position -= m_transform->GetUp() * MOVECAMERA_SPEED;
 		}
-		if (Input::GetKeyPress('E'))
+		if (ImGui::IsKeyDown(ImGuiKey_E))
 		{
 			m_transform->m_position += m_transform->GetUp() * MOVECAMERA_SPEED;
 		}

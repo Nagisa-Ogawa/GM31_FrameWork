@@ -1,12 +1,10 @@
 #include <DirectXMath.h>
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_internal.h"
+#include "MyImGuiManager.h"
 #include "ImGui/ImGuizmo.h"
 #include "main.h"
 #include "manager.h"
 #include "scene.h"
 #include "renderer.h"
-#include "MyImGuiManager.h"
 #include "SceneGui.h"
 #include "inspectorGui.h"
 #include "CollisionManager.h"
@@ -43,11 +41,11 @@ void SceneGui::Update()
 	ImVec2 imgPos;
 
 	ImGui::Begin("Scene");
+	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
 	imgSize = ImGui::GetContentRegionAvail();
 	imgPos = ImGui::GetCursorScreenPos();
 	// シーン画面を画像としてレンダリング
 	ImGui::Image((void*)Renderer::GetEditorShaderResourceView(), imgSize);
-
 	// オブジェクトを選択していたならマニピュレーターを表示
 	if (m_selectedObject) {
 		EditorCamera* camera;

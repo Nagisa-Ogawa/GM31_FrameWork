@@ -1,4 +1,4 @@
-#include "ImGui/imgui.h"
+#include "MyImGuiManager.h"
 #include "main.h"
 #include "manager.h"
 #include "scene.h"
@@ -28,6 +28,7 @@ void HierarchyGui::Update()
     }
 
     ImGui::Begin("Hierarchy");
+    MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
     // オブジェクトの数だけループ
     for (auto i = m_gameObjecMap.begin(); i != m_gameObjecMap.end(); ++i)
     {

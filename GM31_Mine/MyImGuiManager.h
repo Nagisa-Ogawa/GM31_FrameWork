@@ -3,8 +3,10 @@
 #include <list>
 
 #include "ImGui/imgui.h"
+#include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_win32.h"
 #include "ImGui/imgui_impl_dx11.h"
+#include "main.h"
 #include <tchar.h>
 
 
@@ -20,7 +22,7 @@ private:
 	std::list<MyImGui*> m_myImGuiList;
 
 	bool		m_isShowColl{};
-
+	ImGuiWindow* m_focusWindow{};	// 現在フォーカスされているウィンドウ
 
 	MyImGuiManager();	// コンストラクタ
 	MyImGuiManager(const MyImGuiManager& manager);	// コピーコンストラクタ
@@ -68,5 +70,10 @@ public:
 
 
 	static MyImGuiManager* GetInstance();
+
+	ImGuiWindow* GetFocusWindow() { return m_focusWindow; }
+	void SetFocusWindow(ImGuiWindow* window);	// そのウィンドウにフォーカスがあっていたならセットする関数
+	
+
 };
 

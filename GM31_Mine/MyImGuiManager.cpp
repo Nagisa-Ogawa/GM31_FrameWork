@@ -150,3 +150,18 @@ MyImGuiManager* MyImGuiManager::GetInstance()
 	return m_instance;
 
 }
+
+
+/// <summary>
+/// そのウィンドウにフォーカスがあっているならセットする関数
+/// </summary>
+/// <param name="window"></param>
+void MyImGuiManager::SetFocusWindow(ImGuiWindow* window)
+{
+	if (ImGui::IsWindowFocused()) {
+		// すでにフォーカスされているかチェック
+		if (m_focusWindow==nullptr|| window->ID != m_focusWindow->ID) {
+			m_focusWindow = window;
+		}
+	}
+}
