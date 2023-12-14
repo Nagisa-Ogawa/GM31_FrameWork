@@ -202,6 +202,7 @@
     <ClCompile Include="sphereCollision.cpp" />
     <ClCompile Include="sphereCollisionFrame.cpp" />
     <ClCompile Include="sprite.cpp" />
+    <ClCompile Include="title.cpp" />
     <ClCompile Include="transform.cpp" />
     <ClCompile Include="tree.cpp" />
     <ClCompile Include="treeFactory.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="sphereCollision.h" />
     <ClInclude Include="sphereCollisionFrame.h" />
     <ClInclude Include="sprite.h" />
+    <ClInclude Include="title.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="tree.h" />
     <ClInclude Include="treeFactory.h" />

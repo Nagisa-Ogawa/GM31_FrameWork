@@ -33,20 +33,12 @@ void Input::Update()
 
 bool Input::GetKeyPress(BYTE KeyCode)
 {
-	if (MyImGuiManager::GetInstance()->GetFocusWindow() != nullptr &&
-		MyImGuiManager::GetInstance()->GetFocusWindow() == ImGui::FindWindowByName("Game")) {
-		return (m_KeyState[KeyCode] & 0x80);
-	}
-	return 0;
+	return (m_KeyState[KeyCode] & 0x80);
 }
 
 bool Input::GetKeyTrigger(BYTE KeyCode)
 {
-	if (MyImGuiManager::GetInstance()->GetFocusWindow() != nullptr &&
-		MyImGuiManager::GetInstance()->GetFocusWindow() == ImGui::FindWindowByName("Game")) {
-		return ((m_KeyState[KeyCode] & 0x80) && !(m_OldKeyState[KeyCode] & 0x80));
-	}
-	return 0;
+	return ((m_KeyState[KeyCode] & 0x80) && !(m_OldKeyState[KeyCode] & 0x80));
 }
 
 POINT Input::GetClientMousePos()

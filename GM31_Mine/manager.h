@@ -7,6 +7,13 @@ enum ENGINE_MODE
 	PAUSE,
 };
 
+enum GAME_MODE
+{
+	NONE,
+	TITLE,
+	INGAME,
+};
+
 class Scene;	// 前方宣言
 class Editor;
 
@@ -18,7 +25,10 @@ private:
 	Scene* m_scene = nullptr;
 	Scene* m_nextScene = nullptr;
 	Scene* m_editor = nullptr;
+	Scene* m_title = nullptr;
 	ENGINE_MODE m_mode;
+	GAME_MODE m_gameMode;
+	GAME_MODE m_nextMode;
 	// コンストラクタ
 	Manager();
 	// コピーコンストラクタ
@@ -50,5 +60,9 @@ public:
 	void SetEngineMode(ENGINE_MODE mode) 
 	{
 		m_mode = mode;
+	}
+
+	void SetGameMode(GAME_MODE mode) {
+		m_nextMode = mode;
 	}
 };

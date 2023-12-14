@@ -6,6 +6,7 @@
 #include "input.h"
 #include "game.h"
 #include "editor.h"
+#include "title.h"
 
 Manager* Manager::m_instance = NULL;
 
@@ -48,13 +49,15 @@ Manager* Manager::GetInstance()
 void Manager::Init()
 {
 	m_mode = ENGINE_MODE::EDIT;
-
+	m_gameMode = GAME_MODE::TITLE;
+	m_nextMode = GAME_MODE::NONE;
 	Renderer::Init();
 	m_editor = new Editor();
 	m_editor->Init();
 	m_scene = new Game();
 	m_scene->Init();
-	
+	m_title = new Title();
+	m_title->Init();
 	Input::Init();
 }
 
@@ -64,69 +67,99 @@ void Manager::Uninit()
 	delete m_scene;
 	m_editor->Uninit();
 	delete m_editor;
+	m_title->Uninit();
+	delete m_title;
 	Renderer::Uninit();
 }
 
 void Manager::Update()
 {
-
-
-	//  ゲームエンジンの状態に合わせて分岐
-	switch (m_mode)
+	if (m_nextMode!=GAME_MODE::NONE)
 	{
-	case EDIT:
-		// 編集モードの時はエディタのみ更新処理を呼び出す
-		m_editor->Update();
-		break;
-	case RUN:
-		// 実行中の時はエディタとゲームの更新処理をどちらも呼び出す
-		m_editor->Update();
+		m_gameMode = m_nextMode;
+		m_nextMode = GAME_MODE::NONE;
+	}
+	switch (m_gameMode)
+	{
+	case TITLE:
 		Input::Update();
-		m_scene->Update();
-
+		m_title->Update();
 		break;
-	case PAUSE:
-		// 一時停止中はエディタのみ更新処置を呼び出す
-		m_editor->Update();
+	case INGAME:
+
+		if (m_nextScene)
+		{
+			if (m_scene)
+			{
+				m_scene->Uninit();
+				delete m_scene;
+			}
+			m_scene = m_nextScene;
+			m_scene->Init();
+			m_nextScene = nullptr;
+		}
+
+		//  ゲームエンジンの状態に合わせて分岐
+		switch (m_mode)
+		{
+		case EDIT:
+			// 編集モードの時はエディタのみ更新処理を呼び出す
+			m_editor->Update();
+			break;
+		case RUN:
+			// 実行中の時はエディタとゲームの更新処理をどちらも呼び出す
+			m_editor->Update();
+			Input::Update();
+			m_scene->Update();
+
+			break;
+		case PAUSE:
+			// 一時停止中はエディタのみ更新処置を呼び出す
+			m_editor->Update();
+			break;
+		default:
+			break;
+		}
+
+		// GUIの更新処理
+		MyImGuiManager::GetInstance()->Update();
 		break;
 	default:
 		break;
 	}
 
-	if (m_nextScene)
-	{
-		if (m_scene)
-		{
-			m_scene->Uninit();
-			delete m_scene;
-		}
-		m_scene = m_nextScene;
-		m_scene->Init();
-		m_nextScene = nullptr;
-	}
-	// GUIの更新処理
-	MyImGuiManager::GetInstance()->Update();
-
 }
 
 void Manager::Draw()
 {
-	// テクスチャにエディタ画面をレンダリング
-	Renderer::EditorViewBegin();
+	switch (m_gameMode)
+	{
+	case TITLE:
+		Renderer::Begin();
+		m_title->Draw();
+		Renderer::End();
+		break;
+	case INGAME:
+		// テクスチャにエディタ画面をレンダリング
+		Renderer::EditorViewBegin();
 
-	m_editor->Draw();
-	m_scene->Draw();
+		m_editor->Draw();
+		m_scene->Draw();
 
-	// テクスチャに実行画面をレンダリング
-	Renderer::GameViewBegin();
+		// テクスチャに実行画面をレンダリング
+		Renderer::GameViewBegin();
 
-	m_scene->Draw();
+		m_scene->Draw();
 
-	// 画面全体をレンダリング
-	Renderer::Begin();
+		// 画面全体をレンダリング
+		Renderer::Begin();
 
-	MyImGuiManager::GetInstance()->Draw();
+		MyImGuiManager::GetInstance()->Draw();
 
-	Renderer::End();
+		Renderer::End();
+		break;
+	default:
+		break;
+	}
 
 }
