@@ -41,6 +41,16 @@ struct LIGHT
 	D3DXCOLOR	Ambient;
 };
 
+struct PARAMETER
+{
+	float		time;
+	float		waveRate;
+	float		waveLength;
+	D3DXVECTOR2	waveDirection;
+	D3DXVECTOR2 dropPos;
+	float		dummy;
+};
+
 
 
 class Renderer
@@ -62,6 +72,7 @@ private:
 	static ID3D11Buffer*			m_ProjectionBuffer;
 	static ID3D11Buffer*			m_MaterialBuffer;
 	static ID3D11Buffer*			m_LightBuffer;
+	static ID3D11Buffer*			m_ParameterBuffer;
 
 
 	static ID3D11DepthStencilState* m_DepthStateEnable;
@@ -102,6 +113,8 @@ public:
 	static void SetProjectionMatrix(D3DXMATRIX* ProjectionMatrix);
 	static void SetMaterial(MATERIAL Material);
 	static void SetLight(LIGHT Light);
+	static void SetParameter(PARAMETER param);
+
 	static void SetResizeWidth(UINT width) { m_ResizeWidth = width; }
 	static void SetResizeHeight(UINT height) { m_ResizeHeight = height; }
 	static void SetViewport(UINT width, UINT height);

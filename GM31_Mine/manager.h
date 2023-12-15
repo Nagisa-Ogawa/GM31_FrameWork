@@ -49,6 +49,7 @@ public:
 	static Manager* GetInstance();
 	Scene* GetScene() { return m_scene; }
 	Scene* GetEditor() { return m_editor; }
+	Scene* GetTitle() { return m_title; }
 	ENGINE_MODE GetMode() { return m_mode; }
 	GAME_MODE GetGameMode() { return m_gameMode; }
 

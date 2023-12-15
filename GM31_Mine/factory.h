@@ -27,7 +27,7 @@ private:
 	Factory(const Factory& singleton) = delete;
 	Factory& operator= (const Factory& singleton) = delete;
 public:
-	static Factory* GetInstance()
+	static TFactory* GetInstance()
 	{
 		if (m_Instance == nullptr) {
 			m_Instance = new TFactory();

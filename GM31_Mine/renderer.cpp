@@ -20,6 +20,7 @@ ID3D11Buffer*			Renderer::m_ViewBuffer{};
 ID3D11Buffer*			Renderer::m_ProjectionBuffer{};
 ID3D11Buffer*			Renderer::m_MaterialBuffer{};
 ID3D11Buffer*			Renderer::m_LightBuffer{};
+ID3D11Buffer*			Renderer::m_ParameterBuffer{};
 
 
 ID3D11DepthStencilState* Renderer::m_DepthStateEnable{};
@@ -188,7 +189,11 @@ void Renderer::Init()
 	m_DeviceContext->VSSetConstantBuffers( 4, 1, &m_LightBuffer );
 	m_DeviceContext->PSSetConstantBuffers( 4, 1, &m_LightBuffer );
 
+	bufferDesc.ByteWidth = sizeof(PARAMETER);
 
+	m_Device->CreateBuffer(&bufferDesc, nullptr, &m_ParameterBuffer);
+	m_DeviceContext->VSSetConstantBuffers(5, 1, &m_ParameterBuffer);
+	m_DeviceContext->PSSetConstantBuffers(5, 1, &m_ParameterBuffer);
 
 
 
@@ -514,6 +519,11 @@ void Renderer::SetMaterial( MATERIAL Material )
 void Renderer::SetLight( LIGHT Light )
 {
 	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &Light, 0, 0);
+}
+
+void Renderer::SetParameter(PARAMETER param)
+{
+	m_DeviceContext->UpdateSubresource(m_ParameterBuffer, 0, NULL, &param, 0, 0);
 }
 
 void Renderer::SetViewport(UINT width, UINT height)

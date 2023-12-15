@@ -50,6 +50,22 @@ cbuffer LightBuffer : register(b4)
 	LIGHT Light;
 }
 
+struct PARAMETER
+{
+    float time;
+    float waveRate;
+    float waveLength;
+    float2 waveDirection;
+    float2 dropPos;
+    float dummy;
+};
+
+cbuffer ParameterBuffer : register(b5)
+{
+    PARAMETER Param;
+}
+
+
 
 
 

@@ -34,4 +34,3 @@
 
 HWND GetWindow();
 
-
