@@ -28,8 +28,6 @@ private:
 public:
 	void Init() override;
 	void Update() override;
-	void UpdateGround();
-	void UpdateJump();
 
 	bool* GetIsHitEnemy() { return &m_IsHitEnemy; }
 	bool* GetIsHitWall() { return &m_IsHitWall; }

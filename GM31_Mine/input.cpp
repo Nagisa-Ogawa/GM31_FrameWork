@@ -35,6 +35,24 @@ bool Input::GetKeyPress(BYTE KeyCode)
 {
 	if (MyImGuiManager::GetInstance()->GetFocusWindow() != nullptr &&
 		MyImGuiManager::GetInstance()->GetFocusWindow() == ImGui::FindWindowByName("Game")) {
+		//switch (KeyCode)
+		//{
+		//case 1:
+		//	return (m_KeyState['W'] & 0x80);
+		//	break;
+		//case 2:
+		//	return (m_KeyState['A'] & 0x80);
+		//	break;
+		//case 3:
+		//	return (m_KeyState['S'] & 0x80);
+		//	break;
+		//case 4:
+		//	return (m_KeyState['D'] & 0x80);
+		//	break;
+		//default:
+		//	return 0;
+		//	break;
+		//}
 		return (m_KeyState[KeyCode] & 0x80);
 	}
 	return 0;

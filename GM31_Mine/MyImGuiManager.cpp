@@ -165,3 +165,9 @@ void MyImGuiManager::SetFocusWindow(ImGuiWindow* window)
 		}
 	}
 }
+
+void MyImGuiManager::DebugLog(std::string m)
+{
+	auto console = GetImGui<ConsoleGui>();
+	console->SetMessage(m);
+}

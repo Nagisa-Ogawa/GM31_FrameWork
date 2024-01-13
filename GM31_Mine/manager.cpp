@@ -1,6 +1,7 @@
 #include "main.h"
 #include "manager.h"
 #include "MyImGuiManager.h"
+#include "LuaManager.h"
 #include "renderer.h"
 #include "scene.h"
 #include "input.h"
@@ -50,6 +51,8 @@ void Manager::Init()
 	m_mode = ENGINE_MODE::EDIT;
 
 	Renderer::Init();
+	MyImGuiManager::GetInstance()->Init(GetWindow());
+	LuaManager::GetInstance()->Init();
 	m_editor = new Editor();
 	m_editor->Init();
 	m_scene = new Game();
@@ -64,12 +67,13 @@ void Manager::Uninit()
 	delete m_scene;
 	m_editor->Uninit();
 	delete m_editor;
+	LuaManager::GetInstance()->Uninit();
+	MyImGuiManager::GetInstance()->Uninit();
 	Renderer::Uninit();
 }
 
 void Manager::Update()
 {
-
 
 	//  ゲームエンジンの状態に合わせて分岐
 	switch (m_mode)
@@ -93,6 +97,9 @@ void Manager::Update()
 		break;
 	}
 
+	// GUIの更新処理
+	MyImGuiManager::GetInstance()->Update();
+
 	if (m_nextScene)
 	{
 		if (m_scene)
@@ -104,8 +111,6 @@ void Manager::Update()
 		m_scene->Init();
 		m_nextScene = nullptr;
 	}
-	// GUIの更新処理
-	MyImGuiManager::GetInstance()->Update();
 
 }
 

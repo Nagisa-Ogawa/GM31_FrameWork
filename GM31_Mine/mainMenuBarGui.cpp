@@ -77,6 +77,8 @@ void MainMenuBarGui::Update()
 				ImGui::SetWindowFocus("Game");
 				// 実行状態へ
 				Manager::GetInstance()->SetEngineMode(ENGINE_MODE::RUN);
+				// スクリプトのStart関数を呼び出す
+				Manager::GetInstance()->GetScene()->CallScriptStartFunc();
 				break;
 			case ENGINE_MODE::RUN:
 			{

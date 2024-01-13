@@ -8,52 +8,27 @@
 class Scene
 {
 protected:
-	std::list<GameObject*> m_GameObject[3]; 
+	std::list<GameObject*> m_GameObject[3];		// シーンに存在するオブジェクトのリスト
 public:
 	virtual void Init(){}
+	virtual void Uninit();
+	virtual void Update();
+	virtual void Draw();
 
-	virtual void Uninit() 
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			for (GameObject* gameObject : m_GameObject[i])
-			{
-				gameObject->Uninit();
-				delete gameObject;
-			}
-			m_GameObject[i].clear();
-		}
-	}
+	size_t GetGameObjectCount();	// シーンに存在するオブジェクトの個数を取得する関数
+	int GetActiveGameObjectCount();	// アクティブなオブジェクトの個数を取得する関数
+	std::list<GameObject*> GetAllGameObjects();		// すべてのオブジェクトをリストで取得する関数
+
+	void CallScriptStartFunc();		// シーンの実行時にアタッチされているスクリプトのStart関数を呼び出す関数
 
 
-	virtual void Update()
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			for (GameObject* gameObject : m_GameObject[i])
-			{
-				// アクティブフラグがONなら更新処理をする
-				if (gameObject->GetActive())
-							gameObject->Update();
-			}
-			m_GameObject[i].remove_if([](GameObject* object)
-			{return object->Destroy(); });	// ラムダ式
-		}
-	}
-
-	virtual void Draw()
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			for (GameObject* gameObject : m_GameObject[i])
-			{
-				// アクティブフラグがONなら描画する
-				if(gameObject->GetActive())
-							gameObject->Draw();
-			}
-		}
-	}
-
+	/// <summary>
+	/// オブジェクトをシーンに追加する関数
+	/// </summary>
+	/// <typeparam name="T">追加するオブジェクトのクラス名</typeparam>
+	/// <param name="layer">追加するオブジェクトのレイヤー（描画順）</param>
+	/// <param name="name">追加するオブジェクトの名前</param>
+	/// <returns>追加したオブジェクトのポインタ</returns>
 	template <typename T>
 	T* AddGameObject(int layer,std::string name)
 	{
@@ -68,6 +43,11 @@ public:
 		return (T*)gameObject;
 	}
 
+	/// <summary>
+	/// オブジェクトを取得する関数
+	/// </summary>
+	/// <typeparam name="T">取得するオブジェクト名</typeparam>
+	/// <returns>取得したオブジェクトのポインタ</returns>
 	template <typename T>
 	T* GetGameObject()
 	{
@@ -84,6 +64,11 @@ public:
 		return nullptr;
 	}
 
+	/// <summary>
+	/// アクティブな指定されたオブジェクトを取得する関数
+	/// </summary>
+	/// <typeparam name="T">取得するオブジェクトのクラス名</typeparam>
+	/// <returns>取得したオブジェクトのポインタ</returns>
 	template <typename T>
 	T* GetActiveGameObject()
 	{
@@ -103,7 +88,11 @@ public:
 		return nullptr;
 	}
 
-
+	/// <summary>
+	/// 複数のオブジェクトを取得する関数
+	/// </summary>
+	/// <typeparam name="T">取得するオブジェクトのクラス名</typeparam>
+	/// <returns>取得したオブジェクトのポインタ</returns>
 	template <typename T>
 	std::vector<T*> GetGameObjects()
 	{
@@ -121,7 +110,11 @@ public:
 		return objects;
 	}
 
-
+	/// <summary>
+	/// アクティブな複数のオブジェクトを取得する関数
+	/// </summary>
+	/// <typeparam name="T">取得するオブジェクトのクラス名</typeparam>
+	/// <returns>取得したオブジェクトのポインタ</returns>
 	template <typename T>
 	std::vector<T*> GetActiveGameObjects()
 	{
@@ -142,43 +135,5 @@ public:
 		return objects;
 	}
 
-	size_t GetGameObjectCount() 
-	{ 
-		size_t count = 0;
-		for (int i = 0; i < 3; i++) {
-			count += m_GameObject[i].size();
-		}
-		return count;
-	}
-
-	int GetActiveGameObjectCount()
-	{
-		int count = 0;
-		for (int i = 0; i < 3; i++) {
-			auto it = m_GameObject[i].begin();
-			// すべての要素を検索し終わるまでループ
-			while (true) {
-				it = std::find_if(it, m_GameObject[i].end(), [](GameObject* obj) {return obj->GetActive(); }); 
-				if (it == m_GameObject[i].end()) {
-					break;
-				}
-				count++;
-				it++;
-			}
-		}
-		return count;
-	}
-
-	std::list<GameObject*> GetAllGameObjects() {
-		std::list<GameObject*> objList;
-		for (int i = 0; i < 3; i++)
-		{
-			for (GameObject* gameObject : m_GameObject[i])
-			{
-				objList.push_back(gameObject);
-			}
-		}
-		return objList;
-	}
 
 };

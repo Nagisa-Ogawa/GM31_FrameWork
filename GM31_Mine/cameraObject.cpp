@@ -23,6 +23,8 @@ void CameraObject::Update()
 	D3DXVECTOR3 offset = (player->GetTransform()->GetForward()*-5.0f) + D3DXVECTOR3(0.0f, 3.0f, 0.0f);
 	camera->SetPosition(player->GetTransform()->m_position + offset);
 	camera->SetRotation(player->GetTransform()->m_rotation + D3DXVECTOR3(0.2f, 0.0f, 0.0f));
+
+	GameObject::Update();
 }
 
 

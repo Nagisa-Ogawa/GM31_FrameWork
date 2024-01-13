@@ -19,4 +19,6 @@ void Sky::Update()
 	Scene* scene = Manager::GetInstance()->GetScene();
 	CameraObject* camera = scene->GetGameObject<CameraObject>();
 	m_transform->m_position = camera->GetTransform()->m_position;
+
+	GameObject::Update();
 }

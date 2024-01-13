@@ -153,7 +153,7 @@ void MeshField::Uninit()
 
 void MeshField::Update()
 {
-
+	GameObject::Update();
 }
 
 

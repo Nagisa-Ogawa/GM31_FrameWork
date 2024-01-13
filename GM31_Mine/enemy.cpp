@@ -18,5 +18,6 @@ void Enemy::Init(MODEL* pModel)
 
 void Enemy::Update()
 {
+	GameObject::Update();
 }
 

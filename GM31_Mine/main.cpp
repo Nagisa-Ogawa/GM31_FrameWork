@@ -51,15 +51,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	}
 
 
-	Manager* manager = Manager::GetInstance();
-	MyImGuiManager* myImGuiManager = MyImGuiManager::GetInstance();
 
 
 	ShowWindow(g_Window, nCmdShow);
 	UpdateWindow(g_Window);
 
-
-
+	Manager* manager = Manager::GetInstance();
 
 	DWORD dwExecLastTime;
 	DWORD dwCurrentTime;
@@ -67,7 +64,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	dwExecLastTime = timeGetTime();
 	dwCurrentTime = 0;
 
-	myImGuiManager->Init(g_Window);
 
 
 	MSG msg;
@@ -104,7 +100,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	UnregisterClass(CLASS_NAME, wcex.hInstance);
 
-	myImGuiManager->Uninit();
 	manager->Uninit();
 
 	return (int)msg.wParam;

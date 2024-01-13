@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <string>
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
@@ -68,11 +69,12 @@ public:
 
 	}
 
-
 	static MyImGuiManager* GetInstance();
 
 	ImGuiWindow* GetFocusWindow() { return m_focusWindow; }
 	void SetFocusWindow(ImGuiWindow* window);	// そのウィンドウにフォーカスがあっていたならセットする関数
+
+	void DebugLog(std::string m);
 	
 
 };
