@@ -22,6 +22,8 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	void DispInspector() override;
+
 	D3DXVECTOR3 GetPosition()	{ return m_position; }
 	D3DXVECTOR3 GetRotation()	{ return m_rotation; }
 	D3DXVECTOR3 GetUp()			{ return m_up; };

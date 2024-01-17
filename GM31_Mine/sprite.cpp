@@ -1,9 +1,13 @@
 #include "main.h"
 #include "renderer.h"
 #include "sprite.h"
+#include "dispInspector.h"
 
 void Sprite::Init(D3DXVECTOR2 pos, D3DXVECTOR2 size, const char* textureName)
 {
+	m_position = pos;
+	m_size = size;
+	m_textureName = textureName;
 	VERTEX_3D vertex[4];
 
 	vertex[0].Position = D3DXVECTOR3(pos.x-size.x/2, pos.y-size.y/2, 0.0f);
@@ -52,6 +56,11 @@ void Sprite::Init(D3DXVECTOR2 pos, D3DXVECTOR2 size, const char* textureName)
 }
 
 void Sprite::Init(D3DXVECTOR2 pos, D3DXVECTOR2 size) {
+	m_position = pos;
+	m_size = size;
+	m_textureName = "None";
+
+
 	VERTEX_3D vertex[4];
 
 	vertex[0].Position = D3DXVECTOR3(pos.x - size.x / 2, pos.y - size.y / 2, 0.0f);
@@ -128,4 +137,9 @@ void Sprite::Draw()
 
 	// ƒ|ƒŠƒSƒ“•`‰æ
 	Renderer::GetDeviceContext()->Draw(4, 0);
+}
+
+void Sprite::DispInspector()
+{
+	DispComponent(this);
 }

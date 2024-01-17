@@ -5,18 +5,29 @@
 
 class Transform : public Component
 {
+private:
+	void SetChild(Transform* child) { m_childList.push_back(child); }	// 子供を設定する関数
+	void DeleteChild(Transform* child) { m_childList.remove(child); }	// 子供を削除する関数
 public:
-	D3DXVECTOR3 m_position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 m_rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 m_scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	Transform* m_parent = nullptr;
+	std::list<Transform*> m_childList;
+
+	D3DXVECTOR3 m_worldPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 m_worldRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 m_worldScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+	D3DXVECTOR3 m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 m_localRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 m_localScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	D3DXMATRIX  m_worldMatrix{};
+	D3DXMATRIX m_localMatrix{};
 
 	// 右方向ベクトル取得
 	D3DXVECTOR3 GetRight()
 	{
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, m_rotation.y, m_rotation.x, m_rotation.z);
+		D3DXMatrixRotationYawPitchRoll(&rot, m_localRotation.y, m_localRotation.x, m_localRotation.z);
 
 		D3DXVECTOR3 right;
 		right.x = rot._11;
@@ -30,7 +41,7 @@ public:
 	D3DXVECTOR3 GetUp()
 	{
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, m_rotation.y, m_rotation.x, m_rotation.z);
+		D3DXMatrixRotationYawPitchRoll(&rot, m_localRotation.y, m_localRotation.x, m_localRotation.z);
 
 		D3DXVECTOR3 up;
 		up.x = rot._21;
@@ -44,7 +55,7 @@ public:
 	D3DXVECTOR3 GetForward()
 	{
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, m_rotation.y, m_rotation.x, m_rotation.z);
+		D3DXMatrixRotationYawPitchRoll(&rot, m_localRotation.y, m_localRotation.x, m_localRotation.z);
 
 		D3DXVECTOR3 forward;
 		forward.x = rot._31;
@@ -54,15 +65,24 @@ public:
 		return forward;
 	}
 
-
-	void SetRotationFromDegree(D3DXVECTOR3 deg);
-	D3DXVECTOR3 GetRotationAsDegree();
-	D3DXMATRIX* GetWorldMatrix() { return &m_worldMatrix; }
-	void SetWorldMatrix(D3DXMATRIX* matrix) { m_worldMatrix = *matrix; }
-
 	void Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale);
-	void Uninit();
-	void Update();
-	void Draw();
+	void Uninit() override;
+	void Update() override;
+	void Draw() override;
+
+	D3DXVECTOR3 GetWorldRotationAsDegree();				// 回転値を度値で取得する関数
+	D3DXVECTOR3 GetLocalRotationAsDegree();				
+	D3DXMATRIX* GetWorldMatrix() { return &m_worldMatrix; }		// ワールド行列を取得する関数
+	Transform* GetParent() { return m_parent; }		// 親オブジェクトのTransformを取得
+	std::list<Transform*> GetChildList() { return m_childList; }	// 子オブジェクトのリストを取得
+
+	void SetWorldRotationFromDegree(D3DXVECTOR3 deg);	// 回転を度値からラジアン値に変換しセットする関数
+	void SetLocalRotationFromDegree(D3DXVECTOR3 deg);	// 回転を度値からラジアン値に変換しセットする関数
+	void SetWorldMatrix(D3DXMATRIX* matrix) { m_worldMatrix = *matrix; }	// ワールド行列をセットする関数
+	void SetParent(Transform* parent);		// 親を設定する関数
+
+	void MakeLocalMatrix();		// ローカル行列を作成する関数
+	void MakeWorldMatrix(D3DXMATRIX* parentWorldMatrix);	// ローカル行列と親のワールド行列からワールド行列を作成する関数
+	void DispInspector() override;
 
 };

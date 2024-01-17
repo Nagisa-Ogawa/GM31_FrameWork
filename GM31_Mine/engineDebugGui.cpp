@@ -15,11 +15,10 @@ void EngineDebugGui::Update()
 	ImGui::Begin("EngineDebug");
 	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
 	ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
-	bool isShow = false;
-	if (ImGui::Checkbox(" Show Collision", &isShow)) {
+	if (ImGui::Checkbox(" Show Collision", &m_isShow)) {
 		auto colls = Manager::GetInstance()->GetScene()->GetGameObjects<BoxCollisionFrame>();
 		for (auto coll : colls) {
-			coll->SetActive(isShow);
+			coll->SetActive(m_isShow);
 		}
 	}
 

@@ -12,23 +12,23 @@ function TestA.Update()
 
     -- 移動のキー入力
     if Input.GetKeyPress(KEY_A) then
-        transform.position = transform.position - transform:GetRight() * 0.1
+        transform.localPosition = transform.localPosition - transform:GetRight() * 0.1
     end
     if Input.GetKeyPress(KEY_D) then
-        transform.position = transform.position + transform:GetRight() * 0.1
+        transform.localPosition = transform.localPosition + transform:GetRight() * 0.1
     end
     if Input.GetKeyPress(KEY_S) then
-        transform.position = transform.position - transform:GetForward() * 0.1
+        transform.localPosition = transform.localPosition - transform:GetForward() * 0.1
     end
     if Input.GetKeyPress(KEY_W) then
-        transform.position = transform.position + transform:GetForward() * 0.1
+        transform.localPosition = transform.localPosition + transform:GetForward() * 0.1
     end
 
     if Input.GetKeyPress(KEY_Q) then
-        transform.rotation.y = transform.rotation.y - 0.05;
+        transform.localRotation.y = transform.localRotation.y - 0.05;
     end
     if Input.GetKeyPress(KEY_E) then
-        transform.rotation.y = transform.rotation.y + 0.05;
+        transform.localRotation.y = transform.localRotation.y + 0.05;
     end
 
 end

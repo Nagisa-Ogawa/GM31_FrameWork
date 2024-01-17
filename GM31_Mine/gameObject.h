@@ -65,6 +65,11 @@ public:
 		return nullptr;
 	}
 
+	std::list<Component*> GetAllComponent()
+	{
+		return m_component;
+	}
+
 	virtual void Init() 
 	{
 		for (Component* component : m_component) {

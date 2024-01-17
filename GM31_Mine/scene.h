@@ -8,7 +8,8 @@
 class Scene
 {
 protected:
-	std::list<GameObject*> m_GameObject[3];		// シーンに存在するオブジェクトのリスト
+	std::list<GameObject*> m_sceneObjectList[3];		// シーンに存在するオブジェクトのリスト
+	std::list<Transform*> m_parentObjectList;		// シーンに直接配置されている親のいないゲームオブジェクトのtransform
 public:
 	virtual void Init(){}
 	virtual void Uninit();
@@ -20,7 +21,8 @@ public:
 	std::list<GameObject*> GetAllGameObjects();		// すべてのオブジェクトをリストで取得する関数
 
 	void CallScriptStartFunc();		// シーンの実行時にアタッチされているスクリプトのStart関数を呼び出す関数
-
+	void AddParentObject(Transform* transform) { m_parentObjectList.push_back(transform); }
+	void DeleteParentObject(Transform* transform) { m_parentObjectList.remove(transform); }
 
 	/// <summary>
 	/// オブジェクトをシーンに追加する関数
@@ -33,11 +35,13 @@ public:
 	T* AddGameObject(int layer,std::string name)
 	{
 		GameObject* gameObject = new T();
-		m_GameObject[layer].push_back(gameObject);
+		m_sceneObjectList[layer].push_back(gameObject);
 		// transformコンポーネントは必須なためここでAddComponent
 		gameObject->SetTransform(gameObject->AddComponent<Transform>());
 		// オブジェクトの名前を設定
 		gameObject->SetName(name);
+		// 追加したオブジェクトは親を持たないのでシーンのオブジェクトとして登録
+		m_parentObjectList.push_back(gameObject->GetTransform());
 		gameObject->Init();
 
 		return (T*)gameObject;
@@ -53,7 +57,7 @@ public:
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			for (GameObject* object : m_GameObject[i])
+			for (GameObject* object : m_sceneObjectList[i])
 			{
 				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
 				{
@@ -74,7 +78,7 @@ public:
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			for (GameObject* object : m_GameObject[i])
+			for (GameObject* object : m_sceneObjectList[i])
 			{
 				if (object->GetActive() == false) {
 					continue;
@@ -99,7 +103,7 @@ public:
 		std::vector<T*> objects;
 		for (int i = 0; i < 3; i++)
 		{
-			for (GameObject* object : m_GameObject[i])
+			for (GameObject* object : m_sceneObjectList[i])
 			{
 				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
 				{
@@ -121,7 +125,7 @@ public:
 		std::vector<T*> objects;
 		for (int i = 0; i < 3; i++)
 		{
-			for (GameObject* object : m_GameObject[i])
+			for (GameObject* object : m_sceneObjectList[i])
 			{
 				if (object->GetActive() == false) {
 					continue;

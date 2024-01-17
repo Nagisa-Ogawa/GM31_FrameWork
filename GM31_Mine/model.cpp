@@ -7,7 +7,7 @@
 #include "main.h"
 #include "renderer.h"
 #include "model.h"
-
+#include "dispInspector.h"
 
 
 void Model::Init(const char* FileName)
@@ -15,7 +15,7 @@ void Model::Init(const char* FileName)
 	MODEL model;
 	LoadObj(FileName, &model);
 
-
+	m_fileName = FileName;
 
 	// 頂点バッファ生成
 	{
@@ -197,6 +197,11 @@ void Model::Draw()
 		Renderer::GetDeviceContext()->DrawIndexed(m_SubsetArray[i].IndexNum, m_SubsetArray[i].StartIndex, 0);
 	}
 
+}
+
+void Model::DispInspector()
+{
+	DispComponent(this);
 }
 
 

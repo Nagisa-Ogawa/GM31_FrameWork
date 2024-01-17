@@ -26,8 +26,8 @@
 
 void Player::Init()
 {
-	m_transform->m_scale = D3DXVECTOR3(0.01f, 0.01f, 0.01f);
-	m_transform->m_position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_transform->m_localScale = D3DXVECTOR3(0.01f, 0.01f, 0.01f);
+	m_transform->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	AddComponent<BoxCollision>()->Init(D3DXVECTOR3(0.5f, 1.0f, 0.5f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
 	// AddComponent<SphereCollision>()->Init(1.0f, D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
@@ -44,7 +44,7 @@ void Player::Init()
 
 void Player::Update()
 {
-	D3DXVECTOR3 beforPos = m_transform->m_position;
+	D3DXVECTOR3 beforPos = m_transform->m_localPosition;
 	bool move = false;
 	// ŽOlÌ—p
 	//if (Input::GetKeyPress('A'))
@@ -78,15 +78,6 @@ void Player::Update()
 		}
 	}
 
-	//if (Input::GetKeyTrigger('J')) {
-	//	Bullet* pBullet = BulletFactory::GetInstance()->ActiveObject();
-	//	pBullet->SetDirection(m_Transform->GetForward());
-	//	pBullet->GetTransform()->m_Position = m_Transform->m_Position;
-	//	pBullet->GetTransform()->m_Position.y += 0.5f;
-	//	pBullet->SetPlayerVec(m_Transform->GetForward());
-	//	pBullet->Set();
-	//}
-
 	m_Model->Update(m_AnimationName.c_str(), m_Time, m_NextAnimationName.c_str(), m_Time, m_BlendRate);
 	m_Time++;
 	if(m_BlendRate<1.0f)
@@ -94,9 +85,9 @@ void Player::Update()
 
 	float groundHeight;
 	auto meshField = Manager::GetInstance()->GetScene()->GetGameObject<MeshField>();
-	groundHeight = meshField->GetHeight(m_transform->m_position);
+	groundHeight = meshField->GetHeight(m_transform->m_localPosition);
 
-	m_transform->m_position.y = groundHeight;
+	m_transform->m_localPosition.y = groundHeight;
 
 	//---------------------------------
 	// ‰¼
@@ -113,7 +104,7 @@ void Player::Update()
 			m_IsHitEnemy = true;
 		}
 		if (m_IsHitEnemy) {
-			m_transform->m_position += dir * l;
+			m_transform->m_localPosition += dir * l;
 		}
 	}
 
@@ -128,7 +119,7 @@ void Player::Update()
 			m_IsHitWall = true;
 		}
 		if (m_IsHitWall) {
-			m_transform->m_position += dir * l;
+			m_transform->m_localPosition += dir * l;
 		}
 	}
 

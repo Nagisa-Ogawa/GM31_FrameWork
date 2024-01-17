@@ -163,6 +163,7 @@
     <ClCompile Include="cameraObject.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="consoleGui.cpp" />
+    <ClCompile Include="dispInspector.cpp" />
     <ClCompile Include="editor.cpp" />
     <ClCompile Include="editorCamera.cpp" />
     <ClCompile Include="editorCameraObject.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="consoleGui.h" />
+    <ClInclude Include="dispInspector.h" />
     <ClInclude Include="editor.h" />
     <ClInclude Include="editorCamera.h" />
     <ClInclude Include="editorCameraObject.h" />

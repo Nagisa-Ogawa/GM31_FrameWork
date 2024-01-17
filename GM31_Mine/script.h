@@ -11,10 +11,13 @@ private:
 	std::string m_fileName;
 public:
 	void Init(std::string fileName);
-	void Uninit();
-	void Update();
-	void Draw();
+	void Uninit() override;
+	void Update() override;
+	void Draw() override;
+	void DispInspector() override;
 
 	void Start();	// シーンの実行時に最初に一度だけ呼ばれる関数
 	void CompileLua();	// Luaファイルをコンパイルする関数
+
+	std::string GetFileName() { return m_fileName; }
 };

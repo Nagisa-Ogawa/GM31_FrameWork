@@ -59,9 +59,9 @@ void SceneGui::Update()
 		viewMatrix = camera->GetViewMatrix();
 		projectionMatrix = camera->GetProjectionMatrix();
 		// オブジェクトのtransformの情報から行列を作成
-		D3DXVECTOR3 pos = m_selectedObject->GetTransform()->m_position;
-		D3DXVECTOR3 rot = m_selectedObject->GetTransform()->GetRotationAsDegree();
-		D3DXVECTOR3 scale = m_selectedObject->GetTransform()->m_scale;
+		D3DXVECTOR3 pos = m_selectedObject->GetTransform()->m_localPosition;
+		D3DXVECTOR3 rot = m_selectedObject->GetTransform()->GetLocalRotationAsDegree();
+		D3DXVECTOR3 scale = m_selectedObject->GetTransform()->m_localScale;
 		float transArray[3] = { pos.x,pos.y,pos.z };
 		float	rotArray[3] = { rot.x,rot.y,rot.z };
 		float	scaleArray[3] = { scale.x,scale.y,scale.z };
@@ -81,9 +81,9 @@ void SceneGui::Update()
 			ImGuizmo::DecomposeMatrixToComponents(&objectMatrix.m[0][0], transArray, rotArray, scaleArray);
 
 			// transformへ送信
-			m_selectedObject->GetTransform()->m_position = D3DXVECTOR3(transArray[0], transArray[1], transArray[2]);
-			m_selectedObject->GetTransform()->SetRotationFromDegree(D3DXVECTOR3(rotArray[0], rotArray[1], rotArray[2]));
-			m_selectedObject->GetTransform()->m_scale = D3DXVECTOR3(scaleArray[0], scaleArray[1], scaleArray[2]);
+			m_selectedObject->GetTransform()->m_localPosition = D3DXVECTOR3(transArray[0], transArray[1], transArray[2]);
+			m_selectedObject->GetTransform()->SetLocalRotationFromDegree(D3DXVECTOR3(rotArray[0], rotArray[1], rotArray[2]));
+			m_selectedObject->GetTransform()->m_localScale = D3DXVECTOR3(scaleArray[0], scaleArray[1], scaleArray[2]);
 		}
 	}
 
@@ -100,7 +100,7 @@ void SceneGui::Update()
 			InspectorGui* inspector = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>();
 			inspector->SetSelectedObject(obj);
 		}
-			
+		
 	}
 
 	ImGui::End();
@@ -151,9 +151,9 @@ GameObject* SceneGui::GetMousePosObject(POINT mousePos)
 		D3DXVECTOR3 world1, world2;
 		// レイを判定を取るオブジェクトのローカル座標系に変換
 		auto worldMatrix = coll->GetWorldMatrix();
-		CollisionManager::GetInstance()->ScreenToLocalPosition(&worldMatrix,
+		CollisionManager::GetInstance()->ScreenToLocalPosition(worldMatrix,
 			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 0.0f, &world1);
-		CollisionManager::GetInstance()->ScreenToLocalPosition(&worldMatrix,
+		CollisionManager::GetInstance()->ScreenToLocalPosition(worldMatrix,
 			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 1.0f, &world2);
 		// レイを作成
 		D3DXVECTOR3 vec = world2 - world1;

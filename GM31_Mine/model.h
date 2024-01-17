@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "component.h"
 
 // マテリアル構造体
@@ -44,6 +45,8 @@ private:
 	ID3D11Buffer*	m_VertexBuffer;
 	ID3D11Buffer*	m_IndexBuffer;
 
+	std::string m_fileName;
+
 	SUBSET*	m_SubsetArray;
 	unsigned int	m_SubsetNum;
 
@@ -53,9 +56,11 @@ public:
 
 	void Init(const char* FileName);
 	void Init(MODEL* pModel);
-	void Uninit();
-	void Update();
-	void Draw();
+	void Uninit() override;
+	void Update() override;
+	void Draw() override;
+	void DispInspector() override;
 
 	void LoadObj( const char *FileName, MODEL *Model );
+	std::string GetFileName() { return m_fileName; }
 };

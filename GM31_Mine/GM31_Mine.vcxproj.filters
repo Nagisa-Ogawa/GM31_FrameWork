@@ -225,8 +225,11 @@
     <ClCompile Include="script.cpp">
       <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
+    <ClCompile Include="dispInspector.cpp">
+      <Filter>ソース ファイル\MyImGui</Filter>
+    </ClCompile>
     <ClCompile Include="scene.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -427,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="script.h">
       <Filter>ヘッダー ファイル\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="dispInspector.h">
+      <Filter>ヘッダー ファイル\MyImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

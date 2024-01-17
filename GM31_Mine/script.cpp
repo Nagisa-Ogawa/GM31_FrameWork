@@ -7,6 +7,7 @@
 #include "LuaManager.h"
 #include "MyImGuiManager.h"
 #include "script.h"
+#include "dispInspector.h"
 
 
 void Script::Init(std::string fileName)
@@ -82,6 +83,11 @@ void Script::Update()
 void Script::Draw()
 {
 	// ‰½‚à‚µ‚È‚¢
+}
+
+void Script::DispInspector()
+{
+	DispComponent(this);
 }
 
 /// <summary>

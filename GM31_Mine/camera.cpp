@@ -6,6 +6,7 @@
 #include "input.h"
 #include "cameraObject.h"
 #include "player.h"
+#include "dispInspector.h"
 
 
 void Camera::Init(D3DXVECTOR3 position)
@@ -48,6 +49,11 @@ void Camera::Draw()
 		(float)GAMESCREEN_WIDTH / GAMESCREEN_HEIGHT, 1.0f, 1000.0f);
 
 	Renderer::SetProjectionMatrix(&m_projectionMatrix);
+}
+
+void Camera::DispInspector()
+{
+	DispComponent(this);
 }
 
 

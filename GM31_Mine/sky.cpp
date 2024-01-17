@@ -9,7 +9,7 @@
 
 void Sky::Init()
 {
-	m_transform->m_scale=D3DXVECTOR3(100.0f, 100.0f, 100.0f);
+	m_transform->m_localScale=D3DXVECTOR3(100.0f, 100.0f, 100.0f);
 	AddComponent<Shader>()->Init("Shader\\unlitTextureVS.cso", "Shader\\unlitTexturePS.cso");
 	AddComponent<Model>()->Init("asset\\model\\Sky.obj");
 }
@@ -18,7 +18,7 @@ void Sky::Update()
 {
 	Scene* scene = Manager::GetInstance()->GetScene();
 	CameraObject* camera = scene->GetGameObject<CameraObject>();
-	m_transform->m_position = camera->GetTransform()->m_position;
+	m_transform->m_localPosition = camera->GetTransform()->m_localPosition;
 
 	GameObject::Update();
 }

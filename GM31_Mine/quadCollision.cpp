@@ -3,6 +3,7 @@
 #include "scene.h"
 #include "quadCollision.h"
 #include "CollisionManager.h"
+#include "dispInspector.h"
 
 
 void QuadCollision::Init(D3DXVECTOR3 normal, D3DXVECTOR2 size, bool isTrigger)
@@ -23,4 +24,9 @@ void QuadCollision::Update()
 
 void QuadCollision::Draw()
 {
+}
+
+void QuadCollision::DispInspector()
+{
+	DispComponent(this);
 }

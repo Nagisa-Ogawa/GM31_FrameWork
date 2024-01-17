@@ -14,12 +14,16 @@ private:
 
 public:
 	void Init(D3DXVECTOR3 size,D3DXVECTOR3 offset, bool isTrigger);
-	void Uninit();
-	void Update();
-	void Draw();
+	void Uninit() override;
+	void Update() override;
+	void Draw() override;
+	void DispInspector() override;
 
-	bool GetIsTrigger() { return m_IsTrigger; }
+	bool* GetIsTrigger() { return &m_IsTrigger; }
 	D3DXVECTOR3 GetSize() { return m_Size; }
 	D3DXVECTOR3 GetOffset() { return m_Offset; }
-	D3DXMATRIX GetWorldMatrix();
+	void SetSize(D3DXVECTOR3 size) { m_Size = size; }
+	void SetOffset(D3DXVECTOR3 offset) { m_Offset = offset; }
+	void SetIsTrigger(bool flag) { m_IsTrigger = flag; }
+	D3DXMATRIX* GetWorldMatrix();
 };

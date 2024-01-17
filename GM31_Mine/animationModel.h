@@ -33,6 +33,8 @@ struct BONE
 class AnimationModel : public Component
 {
 private:
+	std::string m_fileName;
+
 	const aiScene* m_AiScene = nullptr;
 	std::unordered_map<std::string, const aiScene*> m_Animation;
 
@@ -53,7 +55,10 @@ public:
 	void Unload();
 
 	void Init(const char* FileName);
-	void Uninit();
+	void Uninit() override;
 	void Update(const char *AnimationName1, int Frame1, const char* AnimationName2, int Frame2,float BlendRate);
-	void Draw();
+	void Draw() override;
+
+	std::string GetFileName() { return m_fileName; }
+	void DispInspector() override;
 };

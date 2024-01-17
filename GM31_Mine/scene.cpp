@@ -6,12 +6,12 @@ void Scene::Uninit()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		for (GameObject* gameObject : m_GameObject[i])
+		for (GameObject* gameObject : m_sceneObjectList[i])
 		{
 			gameObject->Uninit();
 			delete gameObject;
 		}
-		m_GameObject[i].clear();
+		m_sceneObjectList[i].clear();
 	}
 }
 
@@ -19,22 +19,28 @@ void Scene::Update()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		for (GameObject* gameObject : m_GameObject[i])
+		for (GameObject* gameObject : m_sceneObjectList[i])
 		{
 			// アクティブフラグがONなら更新処理をする
 			if (gameObject->GetActive())
 				gameObject->Update();
 		}
-		m_GameObject[i].remove_if([](GameObject* object)
+		m_sceneObjectList[i].remove_if([](GameObject* object)
 		{return object->Destroy(); });	// ラムダ式
 	}
 }
 
 void Scene::Draw()
 {
+	// 描画をする前にローカル行列からワールド行列を作成
+	for (Transform* transform : m_parentObjectList)
+	{
+		// 親のないオブジェクトのワールド行列作成関数を呼び子オブジェクトへ連鎖させる
+		transform->MakeWorldMatrix(nullptr);
+	}
 	for (int i = 0; i < 3; i++)
 	{
-		for (GameObject* gameObject : m_GameObject[i])
+		for (GameObject* gameObject : m_sceneObjectList[i])
 		{
 			// アクティブフラグがONなら描画する
 			if (gameObject->GetActive())
@@ -52,7 +58,7 @@ size_t Scene::GetGameObjectCount()
 {
 	size_t count = 0;
 	for (int i = 0; i < 3; i++) {
-		count += m_GameObject[i].size();
+		count += m_sceneObjectList[i].size();
 	}
 	return count;
 }
@@ -66,11 +72,11 @@ int Scene::GetActiveGameObjectCount()
 {
 	int count = 0;
 	for (int i = 0; i < 3; i++) {
-		auto it = m_GameObject[i].begin();
+		auto it = m_sceneObjectList[i].begin();
 		// すべての要素を検索し終わるまでループ
 		while (true) {
-			it = std::find_if(it, m_GameObject[i].end(), [](GameObject* obj) {return obj->GetActive(); });
-			if (it == m_GameObject[i].end()) {
+			it = std::find_if(it, m_sceneObjectList[i].end(), [](GameObject* obj) {return obj->GetActive(); });
+			if (it == m_sceneObjectList[i].end()) {
 				break;
 			}
 			count++;
@@ -90,13 +96,14 @@ std::list<GameObject*> Scene::GetAllGameObjects()
 	std::list<GameObject*> objList;
 	for (int i = 0; i < 3; i++)
 	{
-		for (GameObject* gameObject : m_GameObject[i])
+		for (GameObject* gameObject : m_sceneObjectList[i])
 		{
 			objList.push_back(gameObject);
 		}
 	}
 	return objList;
 }
+
 
 /// <summary>
 /// シーンの実行時にスクリプトのStart関数を呼び出す関数
@@ -110,3 +117,4 @@ void Scene::CallScriptStartFunc()
 		script->Start();
 	}
 }
+

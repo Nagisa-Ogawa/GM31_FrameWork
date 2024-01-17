@@ -1,10 +1,12 @@
 #include "main.h"
 #include "renderer.h"
 #include "animationModel.h"
+#include "dispInspector.h"
 
 
 void AnimationModel::Init(const char * FileName)
 {
+	m_fileName = FileName;
 	Load(FileName);
 }
 
@@ -69,6 +71,11 @@ void AnimationModel::Draw()
 		// ƒ|ƒŠƒSƒ“•`‰æ
 		Renderer::GetDeviceContext()->DrawIndexed(mesh->mNumFaces * 3, 0, 0);
 	}
+}
+
+void AnimationModel::DispInspector()
+{
+	DispComponent(this);
 }
 
 

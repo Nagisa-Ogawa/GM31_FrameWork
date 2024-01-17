@@ -87,9 +87,9 @@ void Tree::Draw()
 
 	// マトリクス設定
 	D3DXMATRIX world, scale, rot, trans;
-	D3DXMatrixScaling(&scale, m_transform->m_scale.x, m_transform->m_scale.y, m_transform->m_scale.z);
-	D3DXMatrixRotationYawPitchRoll(&rot, m_transform->m_rotation.y, m_transform->m_rotation.x, m_transform->m_rotation.z);
-	D3DXMatrixTranslation(&trans, m_transform->m_position.x, m_transform->m_position.y, m_transform->m_position.z);
+	D3DXMatrixScaling(&scale, m_transform->m_worldScale.x, m_transform->m_worldScale.y, m_transform->m_worldScale.z);
+	D3DXMatrixRotationYawPitchRoll(&rot, m_transform->m_worldRotation.y, m_transform->m_worldRotation.x, m_transform->m_worldRotation.z);
+	D3DXMatrixTranslation(&trans, m_transform->m_worldPosition.x, m_transform->m_worldPosition.y, m_transform->m_worldPosition.z);
 	world = scale * invView * trans;
 	Renderer::SetWorldMatrix(&world);
 

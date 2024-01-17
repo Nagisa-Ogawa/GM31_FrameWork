@@ -6,7 +6,7 @@
 
 void Box::Init()
 {
-	m_transform->m_position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_transform->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
 	AddComponent<Model>()->Init("asset\\model\\box.obj");
 }

@@ -11,9 +11,9 @@
 
 void EditorCameraObject::Init()
 {
-	m_transform->m_position = D3DXVECTOR3(0.0f, 5.0f, -10.0f);
-	m_transform->m_rotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	AddComponent<EditorCamera>()->Init(m_transform->m_position);
+	m_transform->m_localPosition = D3DXVECTOR3(0.0f, 5.0f, -10.0f);
+	m_transform->m_localRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	AddComponent<EditorCamera>()->Init(m_transform->m_localPosition);
 }
 
 void EditorCameraObject::Update()
@@ -31,35 +31,35 @@ void EditorCameraObject::Update()
 		// 右クリックしながらWASDキーで平行移動
 		if (ImGui::IsKeyDown(ImGuiKey_A))
 		{
-			m_transform->m_position -= m_transform->GetRight() * MOVECAMERA_SPEED;
+			m_transform->m_localPosition -= m_transform->GetRight() * MOVECAMERA_SPEED;
 		}
 		if (ImGui::IsKeyDown(ImGuiKey_D))
 		{
-			m_transform->m_position += m_transform->GetRight() * MOVECAMERA_SPEED;
+			m_transform->m_localPosition += m_transform->GetRight() * MOVECAMERA_SPEED;
 		}
 		if (ImGui::IsKeyDown(ImGuiKey_S))
 		{
-			m_transform->m_position -= m_transform->GetForward() * MOVECAMERA_SPEED;
+			m_transform->m_localPosition -= m_transform->GetForward() * MOVECAMERA_SPEED;
 		}
 		if (ImGui::IsKeyDown(ImGuiKey_W))
 		{
-			m_transform->m_position += m_transform->GetForward() * MOVECAMERA_SPEED;
+			m_transform->m_localPosition += m_transform->GetForward() * MOVECAMERA_SPEED;
 		}
 		// 右クリックしながらQEキーで上下移動
 		if (ImGui::IsKeyDown(ImGuiKey_Q))
 		{
-			m_transform->m_position -= m_transform->GetUp() * MOVECAMERA_SPEED;
+			m_transform->m_localPosition -= m_transform->GetUp() * MOVECAMERA_SPEED;
 		}
 		if (ImGui::IsKeyDown(ImGuiKey_E))
 		{
-			m_transform->m_position += m_transform->GetUp() * MOVECAMERA_SPEED;
+			m_transform->m_localPosition += m_transform->GetUp() * MOVECAMERA_SPEED;
 		}
 	}
 	else {
 		m_isRButton = false;
 	}
 
-	camera->SetPosition(m_transform->m_position);
+	camera->SetPosition(m_transform->m_localPosition);
 	// マウスホイールでズームイン・アウト
 	// if(Input::GetKeyPress(vk_m))
 
@@ -84,9 +84,9 @@ void EditorCameraObject::Update()
 void EditorCameraObject::RotateCamera(D3DXVECTOR2 delta)
 {
 	EditorCamera* camera = GetComponent<EditorCamera>();
-	m_transform->m_rotation.x += delta.y;
-	m_transform->m_rotation.y += delta.x;
+	m_transform->m_localRotation.x += delta.y;
+	m_transform->m_localRotation.y += delta.x;
 	// 回転量をカメラへ反映
-	camera->SetRotation(m_transform->m_rotation);
+	camera->SetRotation(m_transform->m_localRotation);
 
 }

@@ -12,6 +12,8 @@ public:
 	virtual void Update() {}
 	virtual void Draw() {}
 
+	virtual void DispInspector(){}
+
 	void SetGameObject(GameObject* gameObject) { m_gameObject = gameObject; }
 	GameObject* GetGameObject() { return m_gameObject; }
 };

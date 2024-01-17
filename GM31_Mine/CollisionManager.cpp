@@ -103,8 +103,8 @@ bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b, floa
 	D3DXVECTOR3 bVecY = b->GetGameObject()->GetTransform()->GetUp() *      (b->GetSize().y /*/ 2.0f*/);
 	D3DXVECTOR3 bVecZ = b->GetGameObject()->GetTransform()->GetForward() * (b->GetSize().z /*/ 2.0f*/);
 	// 2オブジェクト間の距離
-	D3DXVECTOR3 distance = ((b->GetGameObject()->GetTransform()->m_position + b->GetOffset()) -
-									(a->GetGameObject()->GetTransform()->m_position + a->GetOffset()));
+	D3DXVECTOR3 distance = ((b->GetGameObject()->GetTransform()->m_worldPosition + b->GetOffset()) -
+									(a->GetGameObject()->GetTransform()->m_worldPosition + a->GetOffset()));
 
 	// オブジェクトAのX軸が分離軸の場合
 	D3DXVECTOR3 nAVecX;
@@ -288,7 +288,7 @@ void CollisionManager::GetHitBoxSurface(BoxCollision* a, BoxCollision* b, float*
 {
 	// bを6個の平面として分解
 	// 各要素の変数を6個ずつ用意
-	D3DXVECTOR3 bPos = b->GetGameObject()->GetTransform()->m_position + b->GetOffset();
+	D3DXVECTOR3 bPos = b->GetGameObject()->GetTransform()->m_worldPosition + b->GetOffset();
 	D3DXVECTOR3 bPoss[6] = { bPos,bPos,bPos,bPos,bPos,bPos };
 	D3DXVECTOR2 bSizes[6];
 	D3DXVECTOR3 bVecs[6][2];
@@ -369,12 +369,12 @@ void CollisionManager::GetHitBoxSurface(BoxCollision* a, BoxCollision* b, float*
 //-------------------------------------
 bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, float* out_L, D3DXVECTOR3* out_Dir)
 {
-	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_position;
+	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_worldPosition;
 	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight()   * (a->GetSize().x);
 	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp()      * (a->GetSize().y);
 	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize().z);
 
-	D3DXVECTOR3 bPos = b->GetGameObject()->GetTransform()->m_position;
+	D3DXVECTOR3 bPos = b->GetGameObject()->GetTransform()->m_worldPosition;
 	D3DXVECTOR3 bVecX = b->GetGameObject()->GetTransform()->GetRight() * (b->GetSize()->x);
 	D3DXVECTOR3 bVecZ = b->GetGameObject()->GetTransform()->GetForward() * (b->GetSize()->y);
 
@@ -383,8 +383,8 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 	D3DXVec3Normalize(&n, b->GetNormal());
 
 	// 2オブジェクト間の距離
-	D3DXVECTOR3 distance = (b->GetGameObject()->GetTransform()->m_position -
-		a->GetGameObject()->GetTransform()->m_position);
+	D3DXVECTOR3 distance = (b->GetGameObject()->GetTransform()->m_worldPosition -
+		a->GetGameObject()->GetTransform()->m_worldPosition);
 
 	// ボックスがz方向以外で当たっているかをチェック
 	D3DXVECTOR3 nBVecX;
@@ -456,7 +456,7 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 bool CollisionManager::Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos, 
 		D3DXVECTOR2 bSize, D3DXVECTOR3 bVec[2], D3DXVECTOR3 bNormal, float* out_L, D3DXVECTOR3* out_Dir)
 {
-	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_position;
+	D3DXVECTOR3 aPos = a->GetGameObject()->GetTransform()->m_worldPosition;
 	D3DXVECTOR3 aVecX = a->GetGameObject()->GetTransform()->GetRight() * (a->GetSize().x);
 	D3DXVECTOR3 aVecY = a->GetGameObject()->GetTransform()->GetUp() * (a->GetSize().y);
 	D3DXVECTOR3 aVecZ = a->GetGameObject()->GetTransform()->GetForward() * (a->GetSize().z);
@@ -470,7 +470,7 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos,
 
 	// 2オブジェクト間の距離
 	D3DXVECTOR3 distance = (bPos -
-		a->GetGameObject()->GetTransform()->m_position);
+		a->GetGameObject()->GetTransform()->m_worldPosition);
 
 	// ボックスがz方向以外で当たっているかをチェック
 	D3DXVECTOR3 nBVecX;
