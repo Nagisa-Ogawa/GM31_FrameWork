@@ -58,14 +58,17 @@ void SceneGui::Update()
 		camera = Manager::GetInstance()->GetEditor()->GetGameObject<EditorCameraObject>()->GetComponent<EditorCamera>();
 		viewMatrix = camera->GetViewMatrix();
 		projectionMatrix = camera->GetProjectionMatrix();
-		// オブジェクトのtransformの情報から行列を作成
+		// オブジェクトのローカル情報から行列を作成
 		D3DXVECTOR3 pos = m_selectedObject->GetTransform()->m_localPosition;
 		D3DXVECTOR3 rot = m_selectedObject->GetTransform()->GetLocalRotationAsDegree();
 		D3DXVECTOR3 scale = m_selectedObject->GetTransform()->m_localScale;
-		float transArray[3] = { pos.x,pos.y,pos.z };
-		float	rotArray[3] = { rot.x,rot.y,rot.z };
-		float	scaleArray[3] = { scale.x,scale.y,scale.z };
-		ImGuizmo::RecomposeMatrixFromComponents(transArray, rotArray, scaleArray, &objectMatrix.m[0][0]);
+		float worldTransArray[3];
+		float worldRotArray[3];
+		float worldScaleArray[3];
+
+		// オブジェクトのワールド変換行列から
+		D3DXMATRIX* worldObjMatrix = m_selectedObject->GetTransform()->GetWorldMatrix();
+		ImGuizmo::DecomposeMatrixToComponents(*worldObjMatrix->m, worldTransArray, worldRotArray, worldScaleArray);
 
 		ImGuizmo::SetDrawlist();
 		ImGuiIO& io = ImGui::GetIO();
@@ -74,16 +77,25 @@ void SceneGui::Update()
 		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
 		// マニピュレーターを生成
-		ImGuizmo::Manipulate(*viewMatrix->m, *projectionMatrix->m, currentGuizmoOperation, currentGuizmoMode, &objectMatrix.m[0][0], NULL, NULL);
+		ImGuizmo::Manipulate(*viewMatrix->m, *projectionMatrix->m, currentGuizmoOperation, currentGuizmoMode, *worldObjMatrix->m, NULL, NULL);
 		// マニピュレーターが使用されていたなら
 		if (ImGuizmo::IsUsing()) {
+			float transArray[3];
+			float rotArray[3];
+			float scaleArray[3];
 			// マニピュレーターで変更されたtransform情報を取得
-			ImGuizmo::DecomposeMatrixToComponents(&objectMatrix.m[0][0], transArray, rotArray, scaleArray);
+			ImGuizmo::DecomposeMatrixToComponents(*worldObjMatrix->m, transArray, rotArray, scaleArray);
 
 			// transformへ送信
-			m_selectedObject->GetTransform()->m_localPosition = D3DXVECTOR3(transArray[0], transArray[1], transArray[2]);
-			m_selectedObject->GetTransform()->SetLocalRotationFromDegree(D3DXVECTOR3(rotArray[0], rotArray[1], rotArray[2]));
-			m_selectedObject->GetTransform()->m_localScale = D3DXVECTOR3(scaleArray[0], scaleArray[1], scaleArray[2]);
+			D3DXVECTOR3 pos, rot, scale;
+			// マニピュレーターを操作する前との差を調べて実際に動かした値を算出
+			pos = D3DXVECTOR3(transArray[0] - worldTransArray[0], transArray[1] - worldTransArray[1], transArray[2] - worldTransArray[2]);
+			rot = D3DXVECTOR3(rotArray[0] - worldRotArray[0], rotArray[1] - worldRotArray[1], rotArray[2] - worldRotArray[2]);
+			scale = D3DXVECTOR3(scaleArray[0] - worldScaleArray[0], scaleArray[1] - worldScaleArray[1], scaleArray[2] - worldScaleArray[2]);
+			// オブジェクトのローカル情報に動かした値を足す
+			m_selectedObject->GetTransform()->m_localPosition += pos;
+			m_selectedObject->GetTransform()->SetLocalRotationFromDegree(m_selectedObject->GetTransform()->GetLocalRotationAsDegree() + rot);
+			m_selectedObject->GetTransform()->m_localScale += scale;
 		}
 	}
 
@@ -91,7 +103,7 @@ void SceneGui::Update()
 	mousePos.x = 0;
 	mousePos.y = 0;
 	// シーン用ウィンドウ内で右クリックしたことを検知
-	if (ImGui::GetIO().MouseDown[0] && ImGui::IsWindowFocused()) {
+	if (!ImGuizmo::IsOver()&& ImGui::GetIO().MouseDown[0] && ImGui::IsWindowFocused()) {
 		mousePos = ImGui::GetMousePos();
 		POINT pos = ScreenToGameScreenPoint(mousePos, imgPos, imgSize);
 		auto obj = GetMousePosObject(pos);

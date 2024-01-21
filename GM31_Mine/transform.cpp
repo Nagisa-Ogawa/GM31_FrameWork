@@ -7,8 +7,6 @@
 
 
 
-
-
 void Transform::Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale)
 {
 	m_localPosition = position;
@@ -88,6 +86,34 @@ D3DXVECTOR3 Transform::GetLocalRotationAsDegree()
 	return deg;
 }
 
+D3DXMATRIX Transform::GetWorldScaleMatrix()
+{
+	D3DXVECTOR3 vec1, vec2, vec3;
+	vec1 = D3DXVECTOR3(m_worldMatrix._11, m_worldMatrix._12, m_worldMatrix._13);
+	vec2 = D3DXVECTOR3(m_worldMatrix._21, m_worldMatrix._22, m_worldMatrix._23);
+	vec3 = D3DXVECTOR3(m_worldMatrix._31, m_worldMatrix._32, m_worldMatrix._33);
+	D3DXMATRIX scaleMatrix;
+	D3DXMatrixScaling(&scaleMatrix,D3DXVec3Length(&vec1),D3DXVec3Length(&vec2),D3DXVec3Length(&vec3));
+	return scaleMatrix;
+}
+
+D3DXMATRIX Transform::GetWorldRotMatrix()
+{
+	D3DXMATRIX inverseScale = GetWorldScaleMatrix();
+	D3DXMATRIX inverseTrans = GetWorldTransMatrix();
+	D3DXMatrixInverse(&inverseScale, NULL, &inverseScale);
+	D3DXMatrixInverse(&inverseTrans, NULL, &inverseTrans);
+	D3DXMATRIX rotMatrix = inverseScale * m_worldMatrix * inverseTrans;
+	return rotMatrix;
+}
+
+D3DXMATRIX Transform::GetWorldTransMatrix()
+{
+	D3DXMATRIX transMatrix;
+	D3DXMatrixTranslation(&transMatrix, m_worldMatrix._41, m_worldMatrix._42, m_worldMatrix._43);
+	return transMatrix;
+}
+
 /// <summary>
 /// 回転を度値からラジアン値に変換しセットする関数
 /// </summary>
@@ -118,7 +144,7 @@ void Transform::MakeWorldMatrix(D3DXMATRIX* parentWorldMatrix)
 		m_worldMatrix = m_localMatrix;
 	}
 	else{
-		// 親オブジェクトがいる場合は掛け合わせる
+		// 親オブジェクトがいる場合は親のワールド変換行列と掛け合わせる
 		m_worldMatrix = m_localMatrix * (*parentWorldMatrix);
 	}
 	// 自分の子オブジェクトのワールド行列作成関数を呼び出す

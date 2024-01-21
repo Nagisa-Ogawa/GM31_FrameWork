@@ -10,7 +10,7 @@ private:
 	D3DXVECTOR3 m_Offset{};
 	bool		m_IsTrigger{};
 
-	Transform* m_Transform{};
+	D3DXMATRIX m_worldMatrix{};
 
 public:
 	void Init(D3DXVECTOR3 size,D3DXVECTOR3 offset, bool isTrigger);

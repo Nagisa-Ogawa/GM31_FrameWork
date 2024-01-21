@@ -20,7 +20,7 @@ public:
 	D3DXVECTOR3 m_localRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_localScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
-	D3DXMATRIX  m_worldMatrix{};
+	D3DXMATRIX m_worldMatrix{};
 	D3DXMATRIX m_localMatrix{};
 
 	// 右方向ベクトル取得
@@ -75,6 +75,10 @@ public:
 	D3DXMATRIX* GetWorldMatrix() { return &m_worldMatrix; }		// ワールド行列を取得する関数
 	Transform* GetParent() { return m_parent; }		// 親オブジェクトのTransformを取得
 	std::list<Transform*> GetChildList() { return m_childList; }	// 子オブジェクトのリストを取得
+	// ワールド変換行列の各成分を抜き出す関数
+	D3DXMATRIX GetWorldScaleMatrix();
+	D3DXMATRIX GetWorldRotMatrix();
+	D3DXMATRIX GetWorldTransMatrix();
 
 	void SetWorldRotationFromDegree(D3DXVECTOR3 deg);	// 回転を度値からラジアン値に変換しセットする関数
 	void SetLocalRotationFromDegree(D3DXVECTOR3 deg);	// 回転を度値からラジアン値に変換しセットする関数

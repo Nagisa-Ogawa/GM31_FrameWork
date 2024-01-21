@@ -21,6 +21,10 @@ void EngineDebugGui::Update()
 			coll->SetActive(m_isShow);
 		}
 	}
+	auto a = Manager::GetInstance()->GetScene()->GetGameObject<BoxCollisionFrame>();
+	if (a) {
+		ImGui::Text("pos : %d %d %d", a->GetTransform()->m_localPosition.x, a->GetTransform()->m_localPosition.y, a->GetTransform()->m_localPosition.z);
+	}
 
 	ImGui::Text("FocusWindowName : %s", MyImGuiManager::GetInstance()->GetFocusWindow()->Name);
 	ImGui::End();

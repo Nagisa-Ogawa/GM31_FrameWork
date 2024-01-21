@@ -9,6 +9,7 @@
 
 void InspectorGui::Init()
 {
+
 }
 
 void InspectorGui::Update()
@@ -17,6 +18,9 @@ void InspectorGui::Update()
 	ImGui::Begin("Inspecter");
 	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
 	if (m_selectedObject) {
+		ImGui::Separator();
+		ImGui::Text("ObjectName : %s", m_selectedObject->GetName().c_str());
+		ImGui::Separator();
 		// 選択されているオブジェクトにコンポーネントされているクラスを取得
 		auto componentList = m_selectedObject->GetAllComponent();
 		// コンポーネントのクラスに応じてインスペクターを表示する関数を呼ぶ

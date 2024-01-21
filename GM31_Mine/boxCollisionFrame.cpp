@@ -7,6 +7,7 @@
 #include "boxCollision.h"
 #include "model.h"
 
+
 void BoxCollisionFrame::Init(BoxCollision* collision)
 {
 	m_collision = collision;
@@ -14,8 +15,10 @@ void BoxCollisionFrame::Init(BoxCollision* collision)
 	AddComponent<Model>()->Init("asset\\model\\boxCollision.obj");
 }
 
+
 void BoxCollisionFrame::Draw()
 {
 	GetTransform()->SetWorldMatrix(m_collision->GetWorldMatrix());
+	GameObject::Draw();
 }
 
