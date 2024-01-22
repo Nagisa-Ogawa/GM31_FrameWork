@@ -10,7 +10,7 @@ class GameObject
 {
 protected:
 	Transform* m_transform = nullptr;	// オブジェクトのトランスフォーム情報(座標、回転)
-	std::list<Component*> m_component;	// オブジェクトのコンポーネントリスト
+	std::list<std::shared_ptr<Component>> m_componentList;	// オブジェクトのコンポーネントリスト
 	bool m_destroy = false;				// オブジェクトの死亡フラグ
 	bool m_active = true;				// オブジェクトの表示フラグ
 	std::string m_name{};				// オブジェクトの名前
@@ -40,26 +40,26 @@ public:
 		}
 	}
 
-	template <typename TFactory>
-	TFactory* AddComponent()
+	template <typename T>
+	T* AddComponent()
 	{
-		Component* component = new TFactory();
+		std::shared_ptr<Component> component = std::make_shared<T>();
 		// コンポーネントが付いているゲームオブジェクトを格納
-		m_component.push_back(component);
+		m_componentList.push_back(component);
 		component->SetGameObject(this);
 		component->Init();
 
-		return (TFactory*)component;
+		return (T*)component.get();
 	}
 
 	template <typename T>
 	T* GetComponent() 
 	{
-		for (Component* pComp : m_component)
+		for (auto pComp : m_componentList)
 		{
 			if (typeid(*pComp) == typeid(T))// 型を調べる(RTTI動的型情報)
 			{
-				return (T*)pComp;
+				return (T*)pComp.get();
 			}
 		}
 		return nullptr;
@@ -67,32 +67,35 @@ public:
 
 	std::list<Component*> GetAllComponent()
 	{
-		return m_component;
+		std::list<Component*> list;
+		for (auto component : m_componentList) {
+			list.push_back(component.get());
+		}
+		return list;
 	}
 
 	virtual void Init() 
 	{
-		for (Component* component : m_component) {
+		for (auto component : m_componentList) {
 			component->Init();
 		}
 	}
 	virtual void Uninit()
 	{
-		for (Component* component : m_component) {
+		for (auto component : m_componentList) {
 			component->Uninit();
-			delete component;
 		}
-		m_component.clear();
+		m_componentList.clear();
 	}
 	virtual void Update()
 	{
-		for (Component* component : m_component) {
+		for (auto component : m_componentList) {
 			component->Update();
 		}
 	}
 	virtual void Draw()
 	{
-		for (Component* component : m_component) {
+		for (auto component : m_componentList) {
 			component->Draw();
 		}
 	}

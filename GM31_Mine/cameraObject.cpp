@@ -18,7 +18,7 @@ void CameraObject::Update()
 {
 	// ƒJƒƒ‰‚Ì‘€ì
 	Camera* camera = GetComponent<Camera>();
-	Player* player = Manager::GetInstance()->GetScene()->GetGameObject<Player>();
+	auto player = Manager::GetInstance()->GetScene()->GetGameObject<Player>();
 
 	D3DXVECTOR3 offset = (player->GetTransform()->GetForward()*-5.0f) + D3DXVECTOR3(0.0f, 3.0f, 0.0f);
 	camera->SetPosition(player->GetTransform()->m_localPosition + offset);

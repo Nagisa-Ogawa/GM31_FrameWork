@@ -17,7 +17,7 @@ void Sky::Init()
 void Sky::Update() 
 {
 	Scene* scene = Manager::GetInstance()->GetScene();
-	CameraObject* camera = scene->GetGameObject<CameraObject>();
+	auto camera = scene->GetGameObject<CameraObject>();
 	m_transform->m_localPosition = camera->GetTransform()->m_localPosition;
 
 	GameObject::Update();

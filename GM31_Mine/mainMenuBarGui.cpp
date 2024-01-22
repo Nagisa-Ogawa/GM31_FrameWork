@@ -36,6 +36,10 @@ void MainMenuBarGui::Update()
 {
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
+			if (ImGui::MenuItem("Save")) {
+				// シーンをセーブ
+				Manager::GetInstance()->SaveScene();
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("GameObject")) {
@@ -75,6 +79,13 @@ void MainMenuBarGui::Update()
 			case ENGINE_MODE::EDIT:
 				// ゲームウィンドウにフォーカスを設定
 				ImGui::SetWindowFocus("Game");
+				//-------------------------------
+				// 仮
+				// ------------------------------
+				// 現在のシーンをファイルに保存
+
+
+
 				// 実行状態へ
 				Manager::GetInstance()->SetEngineMode(ENGINE_MODE::RUN);
 				// スクリプトのStart関数を呼び出す
@@ -89,8 +100,14 @@ void MainMenuBarGui::Update()
 				auto inspectorGui = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>();
 				sceneGui->SetSelectedObject(NULL);
 				inspectorGui->SetSelectedObject(NULL);
-				// シーンを作り直してリセット
-				Manager::GetInstance()->SetScene<Game>();
+				// 現在のシーンをもう一度作り直す
+				// ------------------------------------------
+				// 仮
+				//--------------------------------------------
+				// ファイルからシーンをロード 
+				 
+				
+				// Manager::GetInstance()->SetScene<Scene>();
 				// 実行終了
 				Manager::GetInstance()->SetEngineMode(ENGINE_MODE::EDIT);
 				break;

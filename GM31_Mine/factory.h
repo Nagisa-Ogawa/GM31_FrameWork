@@ -2,6 +2,7 @@
 
 #include <list>
 #include <string>
+#include <memory>
 
 // ファクトリーのインターフェース
 template<class TFactory,class TObject>
@@ -16,7 +17,6 @@ protected:
 	// デストラクタの使用を禁止
 	virtual ~Factory() 
 	{
-		delete m_Instance;
 		m_Instance = nullptr;
 	}
 

@@ -15,7 +15,7 @@ private:
 	void Init();
 public:
 	Tree* ActiveObject(std::string name) override;
-	void HideObject(Tree* bullet) override;
+	void HideObject(Tree* tree) override;
 	void Uninit() override;
 	void Clear() override;
 };

@@ -51,10 +51,10 @@ Tree* TreeFactory::ActiveObject(std::string name)
 	}
 }
 
-void TreeFactory::HideObject(Tree* bullet)
+void TreeFactory::HideObject(Tree* tree)
 {
 	// 弾のアクティブフラグをOFF
-	bullet->SetActive(false);
+	tree->SetActive(false);
 }
 
 void TreeFactory::Uninit()

@@ -24,7 +24,7 @@ void EnemyFactory::Init()
 	model.LoadObj("asset\\model\\enemyBox.obj", m_pModel);
 }
 
-Enemy * EnemyFactory::ActiveObject(std::string name)
+Enemy* EnemyFactory::ActiveObject(std::string name)
 {
 	// リストから現在使われていない弾があるか探す
     auto iEnemy = std::find_if(m_ObjectList.begin(), m_ObjectList.end(),
@@ -46,7 +46,7 @@ Enemy * EnemyFactory::ActiveObject(std::string name)
     }
 }
 
-void EnemyFactory::HideObject(Enemy * enemy)
+void EnemyFactory::HideObject(Enemy* enemy)
 {
 	// 弾のアクティブフラグをOFF
     enemy->SetActive(false);

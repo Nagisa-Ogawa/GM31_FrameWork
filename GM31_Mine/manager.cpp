@@ -8,6 +8,8 @@
 #include "game.h"
 #include "editor.h"
 
+
+
 Manager* Manager::m_instance = NULL;
 
 Manager::Manager()
@@ -53,12 +55,21 @@ void Manager::Init()
 	Renderer::Init();
 	MyImGuiManager::GetInstance()->Init(GetWindow());
 	LuaManager::GetInstance()->Init();
-	m_editor = new Editor();
-	m_editor->Init();
-	m_scene = new Game();
-	m_scene->Init();
 	
-	Input::Init();
+	// Sceneファイルの中を確認
+	if (CheckSceneFile()) {
+		// Sceneのデータがあったなら読み込み処理
+		LoadScene();
+	}
+	else {
+		// Sceneのデータがないならシーンを作成
+		m_scene = new Scene();
+		m_editor = new Editor();
+		m_sceneList.push_back(m_scene);
+		m_scene->Init();
+		m_editor->Init();
+	}
+
 }
 
 void Manager::Uninit()
@@ -134,4 +145,18 @@ void Manager::Draw()
 
 	Renderer::End();
 
+}
+
+bool Manager::CheckSceneFile()
+{
+	return false;
+}
+
+void Manager::SaveScene()
+{
+}
+
+void Manager::LoadScene()
+{
+	// ファイルからシーンをロード
 }

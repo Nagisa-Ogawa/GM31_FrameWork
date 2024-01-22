@@ -2,14 +2,41 @@
 #include "scene.h"
 #include "script.h"
 
+#include "renderer.h"
+#include "cameraObject.h"
+#include "player.h"
+#include "box.h"
+#include "meshField.h"
+#include "sky.h"
+
+
+void Scene::Init()
+{
+	// ---------------------
+	// デバッグ用
+	// ---------------------
+	AddGameObject<CameraObject>(0, "Camera");
+	auto player = AddGameObject<Player>(1, "Player");
+	auto box = AddGameObject<Box>(1, "box");
+	box->GetTransform()->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 15.0f);
+	auto box1 = AddGameObject<Box>(1, "box1");
+	box1->GetTransform()->m_localPosition = D3DXVECTOR3(3.0f, 0.0f, 0.0f);
+	box1->GetTransform()->SetParent(box->GetTransform());
+
+	AddGameObject<Sky>(1, "Sky");
+
+
+	auto meshField = AddGameObject<MeshField>(1, "Filed");
+
+}
+
 void Scene::Uninit()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		for (GameObject* gameObject : m_sceneObjectList[i])
+		for (auto gameObject : m_sceneObjectList[i])
 		{
 			gameObject->Uninit();
-			delete gameObject;
 		}
 		m_sceneObjectList[i].clear();
 	}
@@ -19,13 +46,13 @@ void Scene::Update()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		for (GameObject* gameObject : m_sceneObjectList[i])
+		for (auto gameObject : m_sceneObjectList[i])
 		{
 			// アクティブフラグがONなら更新処理をする
 			if (gameObject->GetActive())
 				gameObject->Update();
 		}
-		m_sceneObjectList[i].remove_if([](GameObject* object)
+		m_sceneObjectList[i].remove_if([](std::shared_ptr<GameObject> object)
 		{return object->Destroy(); });	// ラムダ式
 	}
 }
@@ -40,7 +67,7 @@ void Scene::Draw()
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		for (GameObject* gameObject : m_sceneObjectList[i])
+		for (auto gameObject : m_sceneObjectList[i])
 		{
 			// アクティブフラグがONなら描画する
 			if (gameObject->GetActive())
@@ -75,7 +102,7 @@ int Scene::GetActiveGameObjectCount()
 		auto it = m_sceneObjectList[i].begin();
 		// すべての要素を検索し終わるまでループ
 		while (true) {
-			it = std::find_if(it, m_sceneObjectList[i].end(), [](GameObject* obj) {return obj->GetActive(); });
+			it = std::find_if(it, m_sceneObjectList[i].end(), [](std::shared_ptr<GameObject> obj) {return obj->GetActive(); });
 			if (it == m_sceneObjectList[i].end()) {
 				break;
 			}
@@ -96,9 +123,9 @@ std::list<GameObject*> Scene::GetAllGameObjects()
 	std::list<GameObject*> objList;
 	for (int i = 0; i < 3; i++)
 	{
-		for (GameObject* gameObject : m_sceneObjectList[i])
+		for (auto gameObject : m_sceneObjectList[i])
 		{
-			objList.push_back(gameObject);
+			objList.push_back(gameObject.get());
 		}
 	}
 	return objList;

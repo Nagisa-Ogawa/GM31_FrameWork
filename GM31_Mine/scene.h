@@ -2,16 +2,17 @@
 
 #include "gameObject.h"
 #include <list>
+#include <memory>
 #include <vector>
 #include <typeinfo>
 
 class Scene
 {
 protected:
-	std::list<GameObject*> m_sceneObjectList[3];		// シーンに存在するオブジェクトのリスト
+	std::list<std::shared_ptr<GameObject>> m_sceneObjectList[3];		// シーンに存在するオブジェクトのリスト
 	std::list<Transform*> m_parentObjectList;		// シーンに直接配置されている親のいないゲームオブジェクトのtransform
 public:
-	virtual void Init(){}
+	virtual void Init();
 	virtual void Uninit();
 	virtual void Update();
 	virtual void Draw();
@@ -34,7 +35,7 @@ public:
 	template <typename T>
 	T* AddGameObject(int layer,std::string name)
 	{
-		GameObject* gameObject = new T();
+		std::shared_ptr<GameObject> gameObject = std::make_shared<T>();
 		m_sceneObjectList[layer].push_back(gameObject);
 		// transformコンポーネントは必須なためここでAddComponent
 		gameObject->SetTransform(gameObject->AddComponent<Transform>());
@@ -44,7 +45,7 @@ public:
 		m_parentObjectList.push_back(gameObject->GetTransform());
 		gameObject->Init();
 
-		return (T*)gameObject;
+		return (T*)gameObject.get();
 	}
 
 	/// <summary>
@@ -57,11 +58,11 @@ public:
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			for (GameObject* object : m_sceneObjectList[i])
+			for (auto object : m_sceneObjectList[i])
 			{
 				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
 				{
-					return (T*)object;
+					return (T*)object.get();
 				}
 			}
 		}
@@ -78,14 +79,14 @@ public:
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			for (GameObject* object : m_sceneObjectList[i])
+			for (auto object : m_sceneObjectList[i])
 			{
 				if (object->GetActive() == false) {
 					continue;
 				}
 				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
 				{
-					return (T*)object;
+					return (T*)object.get();
 				}
 			}
 		}
@@ -103,11 +104,11 @@ public:
 		std::vector<T*> objects;
 		for (int i = 0; i < 3; i++)
 		{
-			for (GameObject* object : m_sceneObjectList[i])
+			for (auto object : m_sceneObjectList[i])
 			{
 				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
 				{
-					objects.push_back((T*)object);
+					objects.push_back((T*)object.get());
 				}
 			}
 		}
@@ -125,14 +126,14 @@ public:
 		std::vector<T*> objects;
 		for (int i = 0; i < 3; i++)
 		{
-			for (GameObject* object : m_sceneObjectList[i])
+			for (auto object : m_sceneObjectList[i])
 			{
 				if (object->GetActive() == false) {
 					continue;
 				}
 				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
 				{
-					objects.push_back((T*)object);
+					objects.push_back((T*)object.get());
 				}
 			}
 		}

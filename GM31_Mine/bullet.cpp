@@ -36,7 +36,7 @@ void Bullet::Update()
 	// ’e‚Æ“G‚Ì“–‚½‚è”»’è
 	BoxCollision* pPCollision = GetComponent<BoxCollision>();
 	auto pEnemies = Manager::GetInstance()->GetScene()->GetGameObjects<Enemy>();
-	for (Enemy* pEnemy : pEnemies) {
+	for (auto pEnemy : pEnemies) {
 		bool isHit = false;
 		BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
 		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision,NULL,NULL)) {

@@ -42,7 +42,7 @@ void HierarchyGui::Update()
     static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow  | ImGuiTreeNodeFlags_SpanAvailWidth;
     static int selection_mask = (1 << 2);
     int node_clicked = -1;
-    std::list<GameObject*> gameobjectList = Manager::GetInstance()->GetScene()->GetAllGameObjects();
+    auto gameobjectList = Manager::GetInstance()->GetScene()->GetAllGameObjects();
     int i = 0;
     for (auto gameObject : gameobjectList)
     {

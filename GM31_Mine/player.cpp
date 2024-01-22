@@ -96,7 +96,7 @@ void Player::Update()
 	m_IsHitEnemy = false;
 	BoxCollision* pPCollision = GetComponent<BoxCollision>();
 	auto pEnemies = Manager::GetInstance()->GetScene()->GetActiveGameObjects<Enemy>();
-	for (Enemy* pEnemy : pEnemies) {
+	for (auto pEnemy : pEnemies) {
 		BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
 		float l = 0.0f;
 		D3DXVECTOR3 dir{};
@@ -112,7 +112,7 @@ void Player::Update()
 
 	// ƒvƒŒƒCƒ„[‚Æ•Ç‚Ì“–‚½‚è”»’è
 	auto pWalls = Manager::GetInstance()->GetScene()->GetGameObjects<Wall>();
-	for (Wall* pWall : pWalls) {
+	for (auto pWall : pWalls) {
 		float l = 0.0f;
 		D3DXVECTOR3 dir{};
 		if (CollisionManager::GetInstance()->Collision_BoxToQuad(pPCollision, pWall->GetComponent<QuadCollision>(), &l, &dir)) {
