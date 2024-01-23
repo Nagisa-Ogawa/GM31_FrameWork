@@ -23,4 +23,24 @@ public:
 	void Draw() override;
 
 	float GetHeight(D3DXVECTOR3 pos);
+
+	template <class Archive>
+	void save(Archive& archive)
+	{
+		archive(
+			cereal::base_class<GameObject>(this)
+		);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		archive(
+			cereal::base_class<GameObject>(this)
+		);
+	}
+
+
 };
+
+CEREAL_REGISTER_TYPE(MeshField);

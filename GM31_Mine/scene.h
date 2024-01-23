@@ -1,25 +1,36 @@
 #pragma once
 
-#include "gameObject.h"
 #include <list>
 #include <memory>
 #include <vector>
 #include <typeinfo>
+
+#include "cereal/cereal.hpp"
+#include "cereal/archives/json.hpp"
+#include "cereal/types/list.hpp"
+#include "cereal/types/array.hpp"
+#include "cereal/types/string.hpp"
+
+#include "gameObject.h"
 
 class Scene
 {
 protected:
 	std::list<std::shared_ptr<GameObject>> m_sceneObjectList[3];		// シーンに存在するオブジェクトのリスト
 	std::list<Transform*> m_parentObjectList;		// シーンに直接配置されている親のいないゲームオブジェクトのtransform
+	std::string m_name;		// シーンの名前
 public:
 	virtual void Init();
 	virtual void Uninit();
 	virtual void Update();
 	virtual void Draw();
 
+	std::string GetName() { return m_name; }
 	size_t GetGameObjectCount();	// シーンに存在するオブジェクトの個数を取得する関数
 	int GetActiveGameObjectCount();	// アクティブなオブジェクトの個数を取得する関数
 	std::list<GameObject*> GetAllGameObjects();		// すべてのオブジェクトをリストで取得する関数
+
+	void SetName(std::string name) { m_name = name; }
 
 	void CallScriptStartFunc();		// シーンの実行時にアタッチされているスクリプトのStart関数を呼び出す関数
 	void AddParentObject(Transform* transform) { m_parentObjectList.push_back(transform); }
@@ -140,5 +151,22 @@ public:
 		return objects;
 	}
 
+	template <class Archive>
+	void save(Archive& archive)
+	{
+		archive(
+			CEREAL_NVP(m_name),
+			CEREAL_NVP(m_sceneObjectList)
+		);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		archive(
+			CEREAL_NVP(m_name),
+			CEREAL_NVP(m_sceneObjectList)
+		);
+	}
 
 };

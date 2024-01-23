@@ -61,4 +61,25 @@ public:
 
 	std::string GetFileName() { return m_fileName; }
 	void DispInspector() override;
+
+	template <class Archive>
+	void save(Archive& archive)
+	{
+		archive(
+			cereal::base_class<Component>(this),
+			CEREAL_NVP(m_fileName);
+		)
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		archive(
+			cereal::base_class<Component>(this),
+			CEREAL_NVP(m_fileName);
+		)
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(AnimationModel);

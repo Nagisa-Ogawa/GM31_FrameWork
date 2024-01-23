@@ -1,6 +1,11 @@
 #pragma once
 #include <memory>
 
+#include "cereal/cereal.hpp"
+#include "cereal/archives/json.hpp"
+#include "cereal/types/memory.hpp"
+#include "cereal/types/string.hpp"
+
 class GameObject;
 
 class Component
@@ -17,4 +22,15 @@ public:
 
 	void SetGameObject(GameObject* gameObject) { m_gameObject = gameObject; }
 	GameObject* GetGameObject() { return m_gameObject; }
+
+	template <class Archive>
+	void save(Archive& archive)
+	{
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+	}
+
 };

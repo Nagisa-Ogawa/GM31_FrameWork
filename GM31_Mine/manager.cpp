@@ -1,3 +1,7 @@
+#include <fstream>
+
+#include "cereal/archives/json.hpp"
+
 #include "main.h"
 #include "manager.h"
 #include "MyImGuiManager.h"
@@ -63,9 +67,11 @@ void Manager::Init()
 	}
 	else {
 		// Sceneのデータがないならシーンを作成
-		m_scene = new Scene();
+		auto scene = std::make_shared<Scene>();
+		m_scene = scene.get();
+		m_scene->SetName("Test");
+		m_sceneList.push_back(scene);
 		m_editor = new Editor();
-		m_sceneList.push_back(m_scene);
 		m_scene->Init();
 		m_editor->Init();
 	}
@@ -152,10 +158,26 @@ bool Manager::CheckSceneFile()
 	return false;
 }
 
+/// <summary>
+/// シーンをファイルに保存する関数
+/// </summary>
+/// <param name="fileName">保存するファイル名</param>
 void Manager::SaveScene()
 {
+	// 現在あるシーンをすべて保存する
+	for (auto scene : m_sceneList) {
+		// Scenesフォルダにシーンファイルを作成
+		std::string filePath = "Scenes\\"+scene->GetName() + ".json";
+		std::ofstream file(filePath);
+		// シーン情報をシリアライズ
+		cereal::JSONOutputArchive archive(file);
+		archive(scene);
+	}
 }
 
+/// <summary>
+/// シーンをロードする関数
+/// </summary>
 void Manager::LoadScene()
 {
 	// ファイルからシーンをロード

@@ -36,8 +36,8 @@ void Player::Init()
 	m_Model->LoadAnimation("asset\\model\\Bot_Run.fbx", "Run");
 	m_Model->LoadAnimation("asset\\model\\Bot_Idle.fbx", "Idle");
 
-	m_AnimationName = "Idle";
-	m_NextAnimationName = "Idle";
+	//m_AnimationName = "Idle";
+	//m_NextAnimationName = "Idle";
 
 	AddComponent<Script>()->Init("testA.lua");
 }
@@ -45,43 +45,19 @@ void Player::Init()
 void Player::Update()
 {
 	D3DXVECTOR3 beforPos = m_transform->m_localPosition;
-	bool move = false;
-	// ŽOlÌ—p
-	//if (Input::GetKeyPress('A'))
-	//{
-	//	m_transform->m_position -= m_transform->GetRight()*0.1f;
-	//}
-	//if (Input::GetKeyPress('D'))
-	//{
-	//	m_transform->m_position += m_transform->GetRight()*0.1f;
-	//}
-	//if (Input::GetKeyPress('S'))
-	//{
-	//	m_transform->m_position -= m_transform->GetForward()*0.1f;
-	//}
-	//if (Input::GetKeyPress('W'))
-	//{
-	//	if (m_NextAnimationName != "Run") {
+	//bool move = false;
+	//if (!move) {
+	//	if (m_NextAnimationName != "Idle") {
 	//		m_AnimationName = m_NextAnimationName;
-	//		m_NextAnimationName = "Run";
+	//		m_NextAnimationName = "Idle";
 	//		m_BlendRate = 0.0f;
 	//	}
-
-	//	m_transform->m_position += m_transform->GetForward()*0.1f;
-	//	move = true;
 	//}
-	if (!move) {
-		if (m_NextAnimationName != "Idle") {
-			m_AnimationName = m_NextAnimationName;
-			m_NextAnimationName = "Idle";
-			m_BlendRate = 0.0f;
-		}
-	}
 
-	m_Model->Update(m_AnimationName.c_str(), m_Time, m_NextAnimationName.c_str(), m_Time, m_BlendRate);
-	m_Time++;
-	if(m_BlendRate<1.0f)
-		m_BlendRate += 0.1f;
+	//m_Model->Update(m_AnimationName.c_str(), m_Time, m_NextAnimationName.c_str(), m_Time, m_BlendRate);
+	//m_Time++;
+	//if(m_BlendRate<1.0f)
+	//	m_BlendRate += 0.1f;
 
 	float groundHeight;
 	auto meshField = Manager::GetInstance()->GetScene()->GetGameObject<MeshField>();

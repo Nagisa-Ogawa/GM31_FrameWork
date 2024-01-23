@@ -3,6 +3,12 @@
 #include <list>
 #include <string>
 
+#include "cereal/cereal.hpp"
+#include "cereal/archives/json.hpp"
+#include "cereal/types/list.hpp"
+#include "cereal/types/memory.hpp"
+#include "cereal/types/string.hpp"
+
 #include "component.h"
 #include "transform.h"
 
@@ -99,4 +105,27 @@ public:
 			component->Draw();
 		}
 	}
+
+	template <class Archive>
+	void save(Archive& archive)
+	{
+		archive(
+			CEREAL_NVP(m_name),
+			CEREAL_NVP(m_active),
+			CEREAL_NVP(m_destroy),
+			CEREAL_NVP(m_componentList)
+		);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		archive(
+			CEREAL_NVP(m_name),
+			CEREAL_NVP(m_active),
+			CEREAL_NVP(m_destroy),
+			CEREAL_NVP(m_componentList)
+		);
+	}
+
 };

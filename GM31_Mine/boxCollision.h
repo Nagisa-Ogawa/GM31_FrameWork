@@ -26,4 +26,23 @@ public:
 	void SetOffset(D3DXVECTOR3 offset) { m_Offset = offset; }
 	void SetIsTrigger(bool flag) { m_IsTrigger = flag; }
 	D3DXMATRIX* GetWorldMatrix();
+
+	template <class Archive>
+	void save(Archive& archive)
+	{
+		archive(
+			cereal::base_class<Component>(this),
+			CEREAL_NVP(m_fileName);
+		)
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		archive(
+			cereal::base_class<Component>(this),
+			CEREAL_NVP(m_fileName);
+		)
+	}
+
 };
