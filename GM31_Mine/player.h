@@ -33,7 +33,7 @@ public:
 	bool* GetIsHitWall() { return &m_IsHitWall; }
 
 	template <class Archive>
-	void save(Archive& archive)
+	void save(Archive& archive) const
 	{
 		archive(
 			cereal::base_class<GameObject>(this)

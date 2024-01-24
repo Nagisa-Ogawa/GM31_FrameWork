@@ -152,7 +152,7 @@ public:
 	}
 
 	template <class Archive>
-	void save(Archive& archive)
+	void save(Archive& archive) const
 	{
 		archive(
 			CEREAL_NVP(m_name),

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "SerializableClass.h"
 #include "component.h"
 
 class Sprite :public Component
@@ -28,4 +29,33 @@ public:
 	void SetSize(D3DXVECTOR2 size) { m_size = size; }
 	void SetTextureName(std::string texName) { m_textureName = texName; }
 
+	template <class Archive>
+	void save(Archive& archive) const
+	{
+		Vector2 position = m_position;
+		Vector2 size = m_size;
+		archive(
+			CEREAL_NVP(position),
+			CEREAL_NVP(size),
+			CEREAL_NVP(m_textureName)
+		);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		Vector2 position,size;
+		archive(
+			position,
+			size,
+			m_textureName
+		);
+		m_position = D3DXVECTOR2(position.x, position.y);
+		m_size = D3DXVECTOR2(size.x, size.y);
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(Sprite);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Sprite);
+

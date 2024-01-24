@@ -63,23 +63,24 @@ public:
 	void DispInspector() override;
 
 	template <class Archive>
-	void save(Archive& archive)
+	void save(Archive& archive) const
 	{
 		archive(
-			cereal::base_class<Component>(this),
-			CEREAL_NVP(m_fileName);
-		)
+			CEREAL_NVP(m_fileName)
+		);
 	}
 
 	template <class Archive>
 	void load(Archive& archive)
 	{
 		archive(
-			cereal::base_class<Component>(this),
-			CEREAL_NVP(m_fileName);
-		)
+			CEREAL_NVP(m_fileName)
+		);
 	}
 
 };
 
+// cerealÇ…ÉNÉâÉXÇìoò^
 CEREAL_REGISTER_TYPE(AnimationModel);
+// cerealÇ…åpè≥ÇµÇƒÇ¢ÇÈÇ±Ç∆Çìoò^
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, AnimationModel);

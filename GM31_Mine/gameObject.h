@@ -8,6 +8,7 @@
 #include "cereal/types/list.hpp"
 #include "cereal/types/memory.hpp"
 #include "cereal/types/string.hpp"
+#include "cereal/types/polymorphic.hpp"
 
 #include "component.h"
 #include "transform.h"
@@ -107,7 +108,7 @@ public:
 	}
 
 	template <class Archive>
-	void save(Archive& archive)
+	void save(Archive& archive) const
 	{
 		archive(
 			CEREAL_NVP(m_name),

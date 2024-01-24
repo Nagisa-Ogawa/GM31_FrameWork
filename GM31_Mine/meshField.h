@@ -25,7 +25,7 @@ public:
 	float GetHeight(D3DXVECTOR3 pos);
 
 	template <class Archive>
-	void save(Archive& archive)
+	void save(Archive& archive) const
 	{
 		archive(
 			cereal::base_class<GameObject>(this)

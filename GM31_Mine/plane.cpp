@@ -5,7 +5,7 @@
 void Plane::Init(D3DXVECTOR3 pos, D3DXVECTOR2 size, const char* fileName)
 {
 	
-
+	m_fileName = fileName;
 	VERTEX_3D vertex[4];
 
 	vertex[0].Position = D3DXVECTOR3(pos.x - size.x, pos.y, pos.z + (size.y));

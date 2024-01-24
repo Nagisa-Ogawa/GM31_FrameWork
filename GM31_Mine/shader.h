@@ -22,4 +22,27 @@ public:
 
 	std::string GetVSFile() { return m_fileNameVS; }
 	std::string GetPSFile() { return m_fileNamePS; }
+
+	template <class Archive>
+	void save(Archive& archive) const
+	{
+		archive(
+			CEREAL_NVP(m_fileNameVS),
+			CEREAL_NVP(m_fileNamePS)
+			);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		archive(
+			m_fileNameVS,
+			m_fileNamePS
+			);
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(Shader);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Shader);
+

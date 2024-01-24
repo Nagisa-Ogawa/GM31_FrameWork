@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SerializableClass.h"
 #include "component.h"
 
 
@@ -34,5 +35,33 @@ public:
 	void SetPosition(D3DXVECTOR3 position)	{ m_position = position; }
 	void SetRotation(D3DXVECTOR3 rotation)	{ m_rotation = rotation; }
 	void SetUp(D3DXVECTOR3 up)				{ m_up = up; }
+
+
+	template <class Archive>
+	void save(Archive& archive) const
+	{
+		Vector3 position = m_position;
+		Vector3 rotation = m_rotation;
+		archive(
+			CEREAL_NVP(position),
+			CEREAL_NVP(rotation)
+		);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		Vector3 position, rotation;
+		archive(
+			position,
+			rotation
+		);
+		m_position = D3DXVECTOR3(position.x, position.y, position.z);
+		m_rotation = D3DXVECTOR3(rotation.x, rotation.y, rotation.z);
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(Camera);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Camera);
 

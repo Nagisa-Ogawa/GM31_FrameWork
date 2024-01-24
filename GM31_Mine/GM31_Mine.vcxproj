@@ -271,6 +271,7 @@
     <ClInclude Include="SceneGui.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="script.h" />
+    <ClInclude Include="SerializableClass.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sky.h" />
     <ClInclude Include="sphereCollision.h" />

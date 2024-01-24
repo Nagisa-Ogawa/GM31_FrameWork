@@ -8,9 +8,9 @@
 
 void QuadCollision::Init(D3DXVECTOR3 normal, D3DXVECTOR2 size, bool isTrigger)
 {
-	m_Normal = normal;
-	m_Size = size;
-	m_IsTrigger = isTrigger;
+	m_normal = normal;
+	m_size = size;
+	m_isTrigger = isTrigger;
 	CollisionManager::GetInstance()->AddQuadCollision(this);
 }
 

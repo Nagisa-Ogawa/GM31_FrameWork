@@ -63,4 +63,24 @@ public:
 
 	void LoadObj( const char *FileName, MODEL *Model );
 	std::string GetFileName() { return m_fileName; }
+
+	template <class Archive>
+	void save(Archive& archive) const
+	{
+		archive(
+			CEREAL_NVP(m_fileName)
+		);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		archive(
+			m_fileName
+		);
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(Model);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Model);

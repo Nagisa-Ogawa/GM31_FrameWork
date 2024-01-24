@@ -20,4 +20,25 @@ public:
 	void CompileLua();	// Luaファイルをコンパイルする関数
 
 	std::string GetFileName() { return m_fileName; }
+
+	template <class Archive>
+	void save(Archive& archive) const
+	{
+		archive(
+			CEREAL_NVP(m_fileName)
+			);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		archive(
+			m_fileName
+			);
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(Script);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Script);
+

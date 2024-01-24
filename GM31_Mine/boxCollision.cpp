@@ -9,9 +9,9 @@
 
 void BoxCollision::Init(D3DXVECTOR3 size, D3DXVECTOR3 offset,bool isTrigger)
 {
-	m_Size = size;
-	m_Offset = offset;
-	m_IsTrigger = isTrigger;
+	m_size = size;
+	m_offset = offset;
+	m_isTrigger = isTrigger;
 	std::string name = m_gameObject->GetName() + "BoxCollisionFrame";
 	auto m_CollFrame = Manager::GetInstance()->GetEditor()->AddGameObject<BoxCollisionFrame>(1,name);
 	m_CollFrame->Init(this);
@@ -41,8 +41,8 @@ D3DXMATRIX* BoxCollision::GetWorldMatrix()
 {
 	// マトリクス設定
 	D3DXMATRIX scale, trans, world;
-	D3DXMatrixScaling(&scale, m_Size.x, m_Size.y, m_Size.z);
-	D3DXMatrixTranslation(&trans, m_Offset.x, m_Offset.y, m_Offset.z);
+	D3DXMatrixScaling(&scale, m_size.x, m_size.y, m_size.z);
+	D3DXMatrixTranslation(&trans, m_offset.x, m_offset.y, m_offset.z);
 	world = scale * trans;
 	Transform* transform = m_gameObject->GetTransform();
 	D3DXMATRIX worldRot = transform->GetWorldRotMatrix();

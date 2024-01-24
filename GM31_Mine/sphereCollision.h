@@ -1,4 +1,5 @@
 #pragma once
+#include "SerializableClass.h"
 #include "component.h"
 
 class SphereCollisionFrame;
@@ -27,4 +28,32 @@ public:
 	void SetIsTrigger(bool flag) { m_isTrigger = flag; }
 	void SetRadius(float r) { m_radius = r; }
 	void SetOffset(D3DXVECTOR3 offset) { m_offset = offset; }
+
+	template <class Archive>
+	void save(Archive& archive) const
+	{
+		Vector3 offset = m_offset;
+		archive(
+			CEREAL_NVP(m_radius),
+			CEREAL_NVP(offset),
+			CEREAL_NVP(m_isTrigger)
+		);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		Vector3 offset;
+		archive(
+			m_radius,
+			offset,
+			m_isTrigger
+		);
+		m_offset = D3DXVECTOR3(offset.x, offset.y, offset.z);
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(SphereCollision);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, SphereCollision);
+

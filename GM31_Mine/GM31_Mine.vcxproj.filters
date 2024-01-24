@@ -434,6 +434,9 @@
     <ClInclude Include="dispInspector.h">
       <Filter>ヘッダー ファイル\MyImGui</Filter>
     </ClInclude>
+    <ClInclude Include="SerializableClass.h">
+      <Filter>ヘッダー ファイル\Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\common.hlsl">

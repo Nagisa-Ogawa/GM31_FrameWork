@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SerializableClass.h"
 #include "component.h"
 
 
@@ -89,4 +90,49 @@ public:
 	void MakeWorldMatrix(D3DXMATRIX* parentWorldMatrix);	// ローカル行列と親のワールド行列からワールド行列を作成する関数
 	void DispInspector() override;
 
+	template <class Archive>
+	void save(Archive& archive) const
+	{
+		Vector3 worldPostion = m_worldPosition;
+		Vector3 worldRotation = m_worldRotation;
+		Vector3 worldScale = m_worldScale;
+		Vector3 localPostion = m_localPosition;
+		Vector3 localRotation = m_localRotation;
+		Vector3 localScale = m_localScale;
+
+		archive(
+			CEREAL_NVP(worldPostion),
+			CEREAL_NVP(worldRotation),
+			CEREAL_NVP(worldScale),
+			CEREAL_NVP(localPostion),
+			CEREAL_NVP(localRotation),
+			CEREAL_NVP(localScale)
+		);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		Vector3 worldPostion, worldRotation, worldScale, localPosition, localRotation, localScale;
+
+		archive(
+			worldPostion,
+			worldRotation,
+			worldScale,
+			localPosition,
+			localRotation,
+			localScale
+		);
+		m_worldPosition = D3DXVECTOR3(worldPostion.x, worldPostion.y, worldPostion.z);
+		m_worldRotation = D3DXVECTOR3(worldRotation.x, worldRotation.y, worldRotation.z);
+		m_worldScale = D3DXVECTOR3(worldScale.x, worldScale.y, worldScale.z);
+		m_localPosition = D3DXVECTOR3(localPosition.x, localPosition.y, localPosition.z);
+		m_localRotation = D3DXVECTOR3(localRotation.x, localRotation.y, localRotation.z);
+		m_localScale = D3DXVECTOR3(localScale.x, localScale.y, localScale.z);
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(Transform);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Transform);
+

@@ -13,7 +13,7 @@ public:
 	void Update() override;
 	
 	template <class Archive>
-	void save(Archive& archive)
+	void save(Archive& archive) const
 	{
 		archive(
 			cereal::base_class<GameObject>(this)

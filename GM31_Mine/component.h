@@ -5,6 +5,7 @@
 #include "cereal/archives/json.hpp"
 #include "cereal/types/memory.hpp"
 #include "cereal/types/string.hpp"
+#include "cereal/types/polymorphic.hpp"
 
 class GameObject;
 
@@ -24,7 +25,7 @@ public:
 	GameObject* GetGameObject() { return m_gameObject; }
 
 	template <class Archive>
-	void save(Archive& archive)
+	void save(Archive& archive) const
 	{
 	}
 
