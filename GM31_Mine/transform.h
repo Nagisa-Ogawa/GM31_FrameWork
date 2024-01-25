@@ -7,11 +7,15 @@
 class Transform : public Component
 {
 private:
+	std::list<Transform*> m_childList;
+
+	D3DXMATRIX m_worldMatrix{};
+	D3DXMATRIX m_localMatrix{};
+
 	void SetChild(Transform* child) { m_childList.push_back(child); }	// 子供を設定する関数
 	void DeleteChild(Transform* child) { m_childList.remove(child); }	// 子供を削除する関数
 public:
 	Transform* m_parent = nullptr;
-	std::list<Transform*> m_childList;
 
 	D3DXVECTOR3 m_worldPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_worldRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -21,8 +25,6 @@ public:
 	D3DXVECTOR3 m_localRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_localScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
-	D3DXMATRIX m_worldMatrix{};
-	D3DXMATRIX m_localMatrix{};
 
 	// 右方向ベクトル取得
 	D3DXVECTOR3 GetRight()

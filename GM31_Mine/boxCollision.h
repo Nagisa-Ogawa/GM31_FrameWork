@@ -2,7 +2,6 @@
 #include "SerializableClass.h"
 #include "component.h"
 
-class BoxCollisionFrame;
 
 class BoxCollision :public Component
 {

@@ -4,6 +4,7 @@
 
 class Box : public GameObject
 {
+public:
 	void Init() override;
 
 	template <class Archive>

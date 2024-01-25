@@ -40,17 +40,17 @@ void LuaManager::BindClass()
 		[
 			luabind::class_<MyImGuiManager>("MyImGuiManager")
 				.def("DebugLog", &MyImGuiManager::DebugLog),
-				luabind::class_<D3DVECTOR>("Vector")
+			luabind::class_<D3DVECTOR>("Vector")
 				.def_readwrite("x", &D3DVECTOR::x)
 				.def_readwrite("y", &D3DVECTOR::y)
 				.def_readwrite("z", &D3DVECTOR::z),
-				luabind::class_<D3DXVECTOR3, D3DVECTOR>("Vector3")
+			luabind::class_<D3DXVECTOR3, D3DVECTOR>("Vector3")
 				.def(luabind::constructor<>())
 				.def(luabind::constructor<FLOAT, FLOAT, FLOAT>())
 				.def(luabind::const_self + D3DXVECTOR3())
 				.def(luabind::const_self - D3DXVECTOR3())
 				.def(luabind::const_self * float()),
-				luabind::class_<Transform>("Transform")
+			luabind::class_<Transform>("Transform")
 				.def("GetRight", &Transform::GetRight)
 				.def("GetUp", &Transform::GetUp)
 				.def("GetForward", &Transform::GetForward)
@@ -60,14 +60,14 @@ void LuaManager::BindClass()
 				.def_readwrite("localPosition",&Transform::m_localPosition)
 				.def_readwrite("localRotation", &Transform::m_localRotation)
 				.def_readwrite("localScale", &Transform::m_localScale),
-				luabind::class_<GameObject>("GameObject")
+			luabind::class_<GameObject>("GameObject")
 				.def("GetActive", &GameObject::GetActive)
 				.def("GetName", &GameObject::GetName)
 				.def("SetDestroy", &GameObject::SetDestroy)
 				.def("SetActive", &GameObject::SetActive)
 				.def("SetName", &GameObject::SetName)
 				.def("GetTransform", &GameObject::GetTransform),
-				luabind::class_<Input>("Input")
+			luabind::class_<Input>("Input")
 				.scope
 				[
 					luabind::def("GetKeyPress", &Input::GetKeyPress),

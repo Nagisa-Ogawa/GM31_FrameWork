@@ -1,5 +1,6 @@
 #include <fstream>
 
+#include "cereal/cereal.hpp"
 #include "cereal/archives/json.hpp"
 
 #include "main.h"
@@ -9,7 +10,6 @@
 #include "renderer.h"
 #include "scene.h"
 #include "input.h"
-#include "game.h"
 #include "editor.h"
 
 
@@ -81,7 +81,6 @@ void Manager::Init()
 void Manager::Uninit()
 {
 	m_scene->Uninit();
-	delete m_scene;
 	m_editor->Uninit();
 	delete m_editor;
 	LuaManager::GetInstance()->Uninit();
@@ -171,7 +170,12 @@ void Manager::SaveScene()
 		std::ofstream file(filePath);
 		// シーン情報をシリアライズ
 		cereal::JSONOutputArchive archive(file);
-		archive(scene);
+		try {
+			archive(scene);
+		}
+		catch (std::exception& e) {
+			MyImGuiManager::GetInstance()->DebugLog(e.what());
+		}
 	}
 }
 
