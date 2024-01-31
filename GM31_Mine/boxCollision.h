@@ -14,6 +14,7 @@ private:
 
 public:
 	void Init(D3DXVECTOR3 size,D3DXVECTOR3 offset, bool isTrigger);
+	void Load() override;
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;
@@ -33,6 +34,7 @@ public:
 		Vector3 size = m_size;
 		Vector3 offset = m_offset;
 		archive(
+			cereal::base_class<Component>(this),
 			CEREAL_NVP(size),
 			CEREAL_NVP(offset),
 			CEREAL_NVP(m_isTrigger)
@@ -44,6 +46,7 @@ public:
 	{
 		Vector3 size, offset;
 		archive(
+			cereal::base_class<Component>(this),
 			size,
 			offset,
 			m_isTrigger

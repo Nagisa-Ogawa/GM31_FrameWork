@@ -16,7 +16,7 @@ private:
 
 	PLAYER_STATE m_PlayerState = GROUND;
 
-	class AnimationModel* m_Model{};
+	// class AnimationModel* m_Model{};
 	//int m_Time{};
 	//float m_BlendRate{};
 	//std::string m_AnimationName{};

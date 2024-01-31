@@ -15,8 +15,15 @@ void BoxCollision::Init(D3DXVECTOR3 size, D3DXVECTOR3 offset,bool isTrigger)
 	std::string name = m_gameObject->GetName() + "BoxCollisionFrame";
 	auto m_CollFrame = Manager::GetInstance()->GetEditor()->AddGameObject<BoxCollisionFrame>(1,name);
 	m_CollFrame->Init(this);
-	// m_CollFrame->SetActive(false);
 
+	CollisionManager::GetInstance()->AddBoxCollision(this);
+}
+
+void BoxCollision::Load()
+{
+	std::string name = m_gameObject->GetName() + "BoxCollisionFrame";
+	auto m_CollFrame = Manager::GetInstance()->GetEditor()->AddGameObject<BoxCollisionFrame>(1, name);
+	m_CollFrame->Init(this);
 	CollisionManager::GetInstance()->AddBoxCollision(this);
 }
 
@@ -44,7 +51,7 @@ D3DXMATRIX* BoxCollision::GetWorldMatrix()
 	D3DXMatrixScaling(&scale, m_size.x, m_size.y, m_size.z);
 	D3DXMatrixTranslation(&trans, m_offset.x, m_offset.y, m_offset.z);
 	world = scale * trans;
-	Transform* transform = m_gameObject->GetTransform();
+	auto transform = m_gameObject->GetTransform();
 	D3DXMATRIX worldRot = transform->GetWorldRotMatrix();
 	D3DXMATRIX worldTrans = transform->GetWorldTransMatrix();
 	m_worldMatrix = world * (worldRot * worldTrans);

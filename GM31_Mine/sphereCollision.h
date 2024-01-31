@@ -34,6 +34,7 @@ public:
 	{
 		Vector3 offset = m_offset;
 		archive(
+			cereal::base_class<Component>(this),
 			CEREAL_NVP(m_radius),
 			CEREAL_NVP(offset),
 			CEREAL_NVP(m_isTrigger)
@@ -45,6 +46,7 @@ public:
 	{
 		Vector3 offset;
 		archive(
+			cereal::base_class<Component>(this),
 			m_radius,
 			offset,
 			m_isTrigger

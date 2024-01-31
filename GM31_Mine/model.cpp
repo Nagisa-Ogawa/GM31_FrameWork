@@ -271,6 +271,8 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 		{
 			in = 0;
 
+			// ポリゴンを形成している頂点の数だけループ
+			// 例)1/1/1 : 頂点/テクスチャ/法線
 			do
 			{
 				fscanf( file, "%s", str );
@@ -289,7 +291,7 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 	}
 
 
-	//メモリ確保
+	//カウントした要素数分メモリ確保
 	positionArray = new D3DXVECTOR3[ positionNum ];
 	normalArray = new D3DXVECTOR3[ normalNum ];
 	texcoordArray = new D3DXVECTOR2[ texcoordNum ];
@@ -402,14 +404,16 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 			{
 				fscanf( file, "%s", str );
 
+				// 位置情報を取得
 				s = strtok( str, "/" );	
 				Model->VertexArray[vc].Position = positionArray[ atoi( s ) - 1 ];
 				if( s[ strlen( s ) + 1 ] != '/' )
 				{
-					//テクスチャ座標が存在しない場合もある
+					//テクスチャ座標が存在するならテクスチャ座標を取得
 					s = strtok( NULL, "/" );
 					Model->VertexArray[vc].TexCoord = texcoordArray[ atoi( s ) - 1 ];
 				}
+				// 法線情報を取得
 				s = strtok( NULL, "/" );	
 				Model->VertexArray[vc].Normal = normalArray[ atoi( s ) - 1 ];
 

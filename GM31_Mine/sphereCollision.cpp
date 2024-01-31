@@ -13,11 +13,11 @@ void SphereCollision::Init(float radius, D3DXVECTOR3 offset, bool isTrigger)
 	std::string name = m_gameObject->GetName() + "SphereCollisionFram";
 	auto m_CollFrame = Manager::GetInstance()->GetScene()->AddGameObject<SphereCollisionFrame>(1,name);
 	m_CollFrame->Init(m_radius, offset);
-	m_CollFrame->SetCollTransform(m_gameObject->GetTransform());
+	m_CollFrame->SetCollTransform(m_gameObject->GetTransform().get());
 	m_CollFrame->SetActive(false);
 
 	CollisionManager::GetInstance()->AddSphereCollision(this);
-	m_transform = m_gameObject->GetTransform();
+	m_transform = m_gameObject->GetTransform().get();
 }
 
 void SphereCollision::Uninit()

@@ -157,8 +157,6 @@
     <ClCompile Include="box.cpp" />
     <ClCompile Include="boxCollision.cpp" />
     <ClCompile Include="boxCollisionFrame.cpp" />
-    <ClCompile Include="bullet.cpp" />
-    <ClCompile Include="bulletFactory.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraObject.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -168,9 +166,7 @@
     <ClCompile Include="editorCamera.cpp" />
     <ClCompile Include="editorCameraObject.cpp" />
     <ClCompile Include="enemy.cpp" />
-    <ClCompile Include="enemyFactory.cpp" />
     <ClCompile Include="engineDebugGui.cpp" />
-    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameGui.cpp" />
@@ -209,15 +205,12 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="transform.cpp" />
     <ClCompile Include="tree.cpp" />
-    <ClCompile Include="treeFactory.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animationModel.h" />
     <ClInclude Include="box.h" />
     <ClInclude Include="boxCollisionFrame.h" />
-    <ClInclude Include="bullet.h" />
-    <ClInclude Include="bulletFactory.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraObject.h" />
     <ClInclude Include="boxCollision.h" />
@@ -229,9 +222,7 @@
     <ClInclude Include="editorCamera.h" />
     <ClInclude Include="editorCameraObject.h" />
     <ClInclude Include="enemy.h" />
-    <ClInclude Include="enemyFactory.h" />
     <ClInclude Include="engineDebugGui.h" />
-    <ClInclude Include="Explosion.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameGui.h" />
@@ -279,7 +270,6 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="tree.h" />
-    <ClInclude Include="treeFactory.h" />
     <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>

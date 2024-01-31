@@ -21,6 +21,7 @@ public:
 	void save(Archive& archive) const
 	{
 		archive(
+			cereal::base_class<Component>(this),
 			CEREAL_NVP(m_fileName)
 			);
 	}
@@ -29,6 +30,7 @@ public:
 	void load(Archive& archive)
 	{
 		archive(
+			cereal::base_class<Component>(this),
 			m_fileName
 			);
 	}

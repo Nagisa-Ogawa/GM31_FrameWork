@@ -66,7 +66,7 @@ void LuaManager::BindClass()
 				.def("SetDestroy", &GameObject::SetDestroy)
 				.def("SetActive", &GameObject::SetActive)
 				.def("SetName", &GameObject::SetName)
-				.def("GetTransform", &GameObject::GetTransform),
+				.def("GetTransform", &GameObject::GetTransformWithRaw),
 			luabind::class_<Input>("Input")
 				.scope
 				[

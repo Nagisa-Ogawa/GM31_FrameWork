@@ -60,6 +60,8 @@ void Manager::Init()
 	MyImGuiManager::GetInstance()->Init(GetWindow());
 	LuaManager::GetInstance()->Init();
 	
+	m_editor = new Editor();
+	m_editor->Init();
 	// Sceneファイルの中を確認
 	if (CheckSceneFile()) {
 		// Sceneのデータがあったなら読み込み処理
@@ -71,12 +73,12 @@ void Manager::Init()
 		m_scene = scene.get();
 		m_scene->SetName("Test");
 		m_sceneList.push_back(scene);
-		m_editor = new Editor();
 		m_scene->Init();
-		m_editor->Init();
 	}
 
+
 }
+
 
 void Manager::Uninit()
 {
@@ -152,10 +154,6 @@ void Manager::Draw()
 
 }
 
-bool Manager::CheckSceneFile()
-{
-	return false;
-}
 
 /// <summary>
 /// シーンをファイルに保存する関数
@@ -169,8 +167,8 @@ void Manager::SaveScene()
 		std::string filePath = "Scenes\\"+scene->GetName() + ".json";
 		std::ofstream file(filePath);
 		// シーン情報をシリアライズ
-		cereal::JSONOutputArchive archive(file);
 		try {
+			cereal::JSONOutputArchive archive(file);
 			archive(scene);
 		}
 		catch (std::exception& e) {
@@ -185,4 +183,63 @@ void Manager::SaveScene()
 void Manager::LoadScene()
 {
 	// ファイルからシーンをロード
+	std::list<std::string> nameList = GetAllFiles("Scenes");
+	for (auto fileName : nameList) {
+		std::shared_ptr<Scene> scene;
+		try {
+			std::ifstream file("Scenes\\" + fileName);
+			cereal::JSONInputArchive archive(file);
+			archive(scene);
+		}
+		catch (std::exception& e) {
+			MyImGuiManager::GetInstance()->DebugLog(e.what());
+		}
+		// ファイルから読み込んだ後に読み込み後関数を呼び出し
+		scene->Load();
+		m_sceneList.push_back(scene);
+		// 仮
+		m_scene = scene.get();
+	}
+}
+
+bool Manager::CheckSceneFile()
+{
+	HANDLE h;
+	WIN32_FIND_DATA win32FindData;
+	std::string searchName = "Scenes//*";
+
+	h = FindFirstFile(searchName.c_str(), &win32FindData);
+
+	if (h == INVALID_HANDLE_VALUE) {
+		return false;
+	}
+	return true;
+}
+
+
+std::list<std::string> Manager::GetAllFiles(std::string dirPath)
+{
+	HANDLE h;
+	WIN32_FIND_DATA win32FindData;
+	std::list<std::string> nameList;
+	std::string searchName = dirPath + "//*";
+
+	h = FindFirstFile(searchName.c_str(), &win32FindData);
+
+	if (h == INVALID_HANDLE_VALUE) {
+		return nameList;
+	}
+
+	do {
+		if (win32FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			// 取得したものがディレクトリなら無視
+		}
+		else {
+			nameList.push_back(win32FindData.cFileName);
+		}
+	} while (FindNextFile(h, &win32FindData));
+
+	FindClose(h);
+
+	return nameList;
 }

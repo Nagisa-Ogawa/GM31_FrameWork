@@ -30,6 +30,15 @@ void Scene::Init()
 
 }
 
+void Scene::Load()
+{
+	for (int i = 0; i < 3; i++) {
+		for (auto gameObject : m_sceneObjectList[i]){
+			gameObject->Load();
+		}
+	}
+}
+
 void Scene::Uninit()
 {
 	for (int i = 0; i < 3; i++)
@@ -75,6 +84,7 @@ void Scene::Draw()
 		}
 	}
 }
+
 
 
 /// <summary>

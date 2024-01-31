@@ -43,6 +43,7 @@ public:
 		Vector3 position = m_position;
 		Vector3 rotation = m_rotation;
 		archive(
+			cereal::base_class<Component>(this),
 			CEREAL_NVP(position),
 			CEREAL_NVP(rotation)
 		);
@@ -53,6 +54,7 @@ public:
 	{
 		Vector3 position, rotation;
 		archive(
+			cereal::base_class<Component>(this),
 			position,
 			rotation
 		);

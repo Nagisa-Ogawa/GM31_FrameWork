@@ -31,6 +31,7 @@ public:
 		Vector3 normal = m_normal;
 
 		archive(
+			cereal::base_class<Component>(this),
 			CEREAL_NVP(size),
 			CEREAL_NVP(normal),
 			CEREAL_NVP(m_isTrigger)
@@ -43,6 +44,7 @@ public:
 		Vector2 size;
 		Vector3 normal;
 		archive(
+			cereal::base_class<Component>(this),
 			size,
 			normal,
 			m_isTrigger

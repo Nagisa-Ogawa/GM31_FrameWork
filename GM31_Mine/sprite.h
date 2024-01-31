@@ -35,6 +35,7 @@ public:
 		Vector2 position = m_position;
 		Vector2 size = m_size;
 		archive(
+			cereal::base_class<Component>(this),
 			CEREAL_NVP(position),
 			CEREAL_NVP(size),
 			CEREAL_NVP(m_textureName)
@@ -46,6 +47,7 @@ public:
 	{
 		Vector2 position,size;
 		archive(
+			cereal::base_class<Component>(this),
 			position,
 			size,
 			m_textureName

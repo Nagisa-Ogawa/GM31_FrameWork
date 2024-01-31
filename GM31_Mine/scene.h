@@ -19,11 +19,14 @@ protected:
 	std::list<std::shared_ptr<GameObject>> m_sceneObjectList[3];		// シーンに存在するオブジェクトのリスト
 	std::list<Transform*> m_parentObjectList;		// シーンに直接配置されている親のいないゲームオブジェクトのtransform
 	std::string m_name;		// シーンの名前
+	int m_registerID = 0;
 public:
 	virtual void Init();
+	void Load();	// シーンを読み込んだ際に呼ばれる関数
 	virtual void Uninit();
 	virtual void Update();
 	virtual void Draw();
+
 
 	std::string GetName() { return m_name; }
 	size_t GetGameObjectCount();	// シーンに存在するオブジェクトの個数を取得する関数
@@ -44,7 +47,7 @@ public:
 	/// <param name="name">追加するオブジェクトの名前</param>
 	/// <returns>追加したオブジェクトのポインタ</returns>
 	template <typename T>
-	T* AddGameObject(int layer,std::string name)
+	std::shared_ptr<T> AddGameObject(int layer,std::string name)
 	{
 		std::shared_ptr<GameObject> gameObject = std::make_shared<T>();
 		m_sceneObjectList[layer].push_back(gameObject);
@@ -52,11 +55,14 @@ public:
 		gameObject->SetTransform(gameObject->AddComponent<Transform>());
 		// オブジェクトの名前を設定
 		gameObject->SetName(name);
+		// IDを設定
+		gameObject->SetID(m_registerID);
+		m_registerID++;
 		// 追加したオブジェクトは親を持たないのでシーンのオブジェクトとして登録
-		m_parentObjectList.push_back(gameObject->GetTransform());
+		m_parentObjectList.push_back(gameObject->GetTransform().get());
 		gameObject->Init();
 
-		return (T*)gameObject.get();
+		return std::dynamic_pointer_cast<T>(gameObject);
 	}
 
 	/// <summary>

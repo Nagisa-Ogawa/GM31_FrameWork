@@ -8,6 +8,8 @@ class Transform : public Component
 {
 private:
 	std::list<Transform*> m_childList;
+	Transform* m_parent = nullptr;
+	int m_parentID = -1;
 
 	D3DXMATRIX m_worldMatrix{};
 	D3DXMATRIX m_localMatrix{};
@@ -15,7 +17,6 @@ private:
 	void SetChild(Transform* child) { m_childList.push_back(child); }	// éqãüÇê›íËÇ∑ÇÈä÷êî
 	void DeleteChild(Transform* child) { m_childList.remove(child); }	// éqãüÇçÌèúÇ∑ÇÈä÷êî
 public:
-	Transform* m_parent = nullptr;
 
 	D3DXVECTOR3 m_worldPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_worldRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -103,6 +104,8 @@ public:
 		Vector3 localScale = m_localScale;
 
 		archive(
+			cereal::base_class<Component>(this),
+			CEREAL_NVP(m_parentID),
 			CEREAL_NVP(worldPostion),
 			CEREAL_NVP(worldRotation),
 			CEREAL_NVP(worldScale),
@@ -118,6 +121,8 @@ public:
 		Vector3 worldPostion, worldRotation, worldScale, localPosition, localRotation, localScale;
 
 		archive(
+			cereal::base_class<Component>(this),
+			m_parentID,
 			worldPostion,
 			worldRotation,
 			worldScale,

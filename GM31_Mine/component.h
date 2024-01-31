@@ -12,12 +12,14 @@ class GameObject;
 class Component
 {
 protected:
-	GameObject* m_gameObject = nullptr;
+	GameObject* m_gameObject;
 public:
 	virtual void Init() {}
+	virtual void Load() {}	// “Ç‚İ‚İ‚Ìˆ—
 	virtual void Uninit() {}
 	virtual void Update() {}
 	virtual void Draw() {}
+
 
 	virtual void DispInspector(){}
 

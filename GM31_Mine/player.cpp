@@ -6,8 +6,6 @@
 #include "player.h"
 #include "model.h"
 #include "shader.h"
-#include "bulletFactory.h"
-#include "bullet.h"
 #include "enemy.h"
 #include "wall.h"
 #include "CollisionManager.h"
@@ -23,18 +21,20 @@
 #include "meshField.h"
 #include "input.h"
 #include "script.h"
+#include "model.h"
 
 void Player::Init()
 {
-	m_transform->m_localScale = D3DXVECTOR3(0.01f, 0.01f, 0.01f);
+	m_transform->m_localScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	m_transform->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	AddComponent<BoxCollision>()->Init(D3DXVECTOR3(0.5f, 1.0f, 0.5f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
 	// AddComponent<SphereCollision>()->Init(1.0f, D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
-	m_Model = AddComponent<AnimationModel>();
-	m_Model->Init("asset\\model\\Bot.fbx");
-	m_Model->LoadAnimation("asset\\model\\Bot_Run.fbx", "Run");
-	m_Model->LoadAnimation("asset\\model\\Bot_Idle.fbx", "Idle");
+	AddComponent<Model>()->Init("asset\\model\\Bot.obj");
+	//m_Model = AddComponent<AnimationModel>();
+	//m_Model->Init("asset\\model\\Bot.fbx");
+	//m_Model->LoadAnimation("asset\\model\\Bot_Run.fbx", "Run");
+	//m_Model->LoadAnimation("asset\\model\\Bot_Idle.fbx", "Idle");
 
 	//m_AnimationName = "Idle";
 	//m_NextAnimationName = "Idle";

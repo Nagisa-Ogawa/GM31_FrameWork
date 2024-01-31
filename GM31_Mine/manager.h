@@ -31,6 +31,7 @@ private:
 	Manager& operator=(const Manager& manager);		// 代入演算子
 
 	void Init();	// 初期化処理
+	std::list<std::string> GetAllFiles(std::string dirPath);
 public:
 	virtual ~Manager();		// デストラクタ
 

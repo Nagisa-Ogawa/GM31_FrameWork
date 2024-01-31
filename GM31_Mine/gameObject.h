@@ -16,22 +16,26 @@
 class GameObject
 {
 protected:
-	Transform* m_transform = nullptr;	// オブジェクトのトランスフォーム情報(座標、回転)
+	std::shared_ptr<Transform> m_transform = nullptr;	// オブジェクトのトランスフォーム情報(座標、回転)
 	std::list<std::shared_ptr<Component>> m_componentList;	// オブジェクトのコンポーネントリスト
 	bool m_destroy = false;				// オブジェクトの死亡フラグ
 	bool m_active = true;				// オブジェクトの表示フラグ
 	std::string m_name{};				// オブジェクトの名前
+	int m_ID = -1;		// オブジェクトのID
 
 public:
 	// Get系関数
-	Transform* GetTransform() { return m_transform; }
+	std::shared_ptr<Transform> GetTransform() { return m_transform; }
+	Transform* GetTransformWithRaw() { return m_transform.get(); }
 	bool GetActive() { return m_active; }
 	std::string GetName() { return m_name; }
+	int GetID() { return m_ID; }
 	// Set系関数
-	void SetTransform(Transform* transform) { m_transform = transform; }
+	void SetTransform(std::shared_ptr<Transform> transform) { m_transform = transform; }
 	void SetDestroy() { m_destroy = true; }
 	void SetActive(bool active) { m_active = active; }
 	void SetName(std::string name) { m_name = name; }
+	void SetID(int ID) { m_ID = ID; }
 
 	bool Destroy()
 	{
@@ -48,7 +52,7 @@ public:
 	}
 
 	template <typename T>
-	T* AddComponent()
+	std::shared_ptr<T> AddComponent()
 	{
 		std::shared_ptr<Component> component = std::make_shared<T>();
 		// コンポーネントが付いているゲームオブジェクトを格納
@@ -56,7 +60,7 @@ public:
 		component->SetGameObject(this);
 		component->Init();
 
-		return (T*)component.get();
+		return std::dynamic_pointer_cast<T>(component);
 	}
 
 	template <typename T>
@@ -87,6 +91,13 @@ public:
 			component->Init();
 		}
 	}
+	virtual void Load()
+	{
+		for (auto component : m_componentList) {
+			component->SetGameObject(this);
+			component->Load();
+		}
+	}
 	virtual void Uninit()
 	{
 		for (auto component : m_componentList) {
@@ -107,14 +118,17 @@ public:
 		}
 	}
 
+
 	template <class Archive>
 	void save(Archive& archive) const
 	{
 		archive(
 			CEREAL_NVP(m_name),
+			CEREAL_NVP(m_ID),
+			CEREAL_NVP(m_componentList),
+			CEREAL_NVP(m_transform),
 			CEREAL_NVP(m_active),
-			CEREAL_NVP(m_destroy),
-			CEREAL_NVP(m_componentList)
+			CEREAL_NVP(m_destroy)
 		);
 	}
 
@@ -123,11 +137,12 @@ public:
 	{
 		archive(
 			CEREAL_NVP(m_name),
+			CEREAL_NVP(m_ID),
+			CEREAL_NVP(m_componentList),
+			CEREAL_NVP(m_transform),
 			CEREAL_NVP(m_active),
-			CEREAL_NVP(m_destroy),
-			CEREAL_NVP(m_componentList)
+			CEREAL_NVP(m_destroy)
 		);
 	}
-
 };
 
