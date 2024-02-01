@@ -14,6 +14,11 @@ void QuadCollision::Init(D3DXVECTOR3 normal, D3DXVECTOR2 size, bool isTrigger)
 	CollisionManager::GetInstance()->AddQuadCollision(this);
 }
 
+void QuadCollision::Load()
+{
+	CollisionManager::GetInstance()->AddQuadCollision(this);
+}
+
 void QuadCollision::Uninit()
 {
 }

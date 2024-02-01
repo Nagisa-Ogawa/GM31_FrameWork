@@ -7,7 +7,6 @@
 #include "model.h"
 #include "shader.h"
 #include "enemy.h"
-#include "wall.h"
 #include "CollisionManager.h"
 #include "boxCollision.h"
 #include "quadCollision.h"
@@ -87,17 +86,17 @@ void Player::Update()
 	m_IsHitWall = false;
 
 	// ƒvƒŒƒCƒ„[‚Æ•Ç‚Ì“–‚½‚è”»’è
-	auto pWalls = Manager::GetInstance()->GetScene()->GetGameObjects<Wall>();
-	for (auto pWall : pWalls) {
-		float l = 0.0f;
-		D3DXVECTOR3 dir{};
-		if (CollisionManager::GetInstance()->Collision_BoxToQuad(pPCollision, pWall->GetComponent<QuadCollision>(), &l, &dir)) {
-			m_IsHitWall = true;
-		}
-		if (m_IsHitWall) {
-			m_transform->m_localPosition += dir * l;
-		}
-	}
+	//auto pWalls = Manager::GetInstance()->GetScene()->GetGameObjects<Wall>();
+	//for (auto pWall : pWalls) {
+	//	float l = 0.0f;
+	//	D3DXVECTOR3 dir{};
+	//	if (CollisionManager::GetInstance()->Collision_BoxToQuad(pPCollision, pWall->GetComponent<QuadCollision>(), &l, &dir)) {
+	//		m_IsHitWall = true;
+	//	}
+	//	if (m_IsHitWall) {
+	//		m_transform->m_localPosition += dir * l;
+	//	}
+	//}
 
 	GameObject::Update();
 

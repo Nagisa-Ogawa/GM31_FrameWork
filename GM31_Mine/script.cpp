@@ -14,13 +14,19 @@ void Script::Init(std::string fileName)
 {
 	// 初期化処理
 	m_fileName = fileName;
-	// とりあえず最初にLuaファイルをコンパイル
+	// 最初にLuaファイルをコンパイル
 	CompileLua();
 
 	// ゲーム中に初期化処理が呼ばれた場合はStart関数を呼び出す
 	if (Manager::GetInstance()->GetMode() == ENGINE_MODE::RUN) {
 		Start();
 	}
+}
+
+void Script::Load()
+{
+	// Luaファイルをコンパイル
+	CompileLua();
 }
 
 /// <summary>

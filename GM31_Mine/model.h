@@ -56,6 +56,7 @@ public:
 
 	void Init(const char* FileName);
 	void Init(MODEL* pModel);
+	void Load() override;
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;

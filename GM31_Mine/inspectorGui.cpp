@@ -19,7 +19,7 @@ void InspectorGui::Update()
 	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
 	if (m_selectedObject) {
 		ImGui::Separator();
-		ImGui::Text("ObjectName : %s", m_selectedObject->GetName().c_str());
+		ImGui::Text("ObjectName : %s         ID : %d", m_selectedObject->GetName().c_str(),m_selectedObject->GetID());
 		ImGui::Separator();
 		// 選択されているオブジェクトにコンポーネントされているクラスを取得
 		auto componentList = m_selectedObject->GetAllComponent();

@@ -193,10 +193,8 @@
     <ClCompile Include="projectGui.cpp" />
     <ClCompile Include="quadCollision.cpp" />
     <ClCompile Include="renderer.cpp" />
-    <ClCompile Include="rock.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="SceneGui.cpp" />
-    <ClCompile Include="score.cpp" />
     <ClCompile Include="script.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sky.cpp" />
@@ -204,7 +202,6 @@
     <ClCompile Include="sphereCollisionFrame.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="transform.cpp" />
-    <ClCompile Include="tree.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -257,10 +254,8 @@
     <ClInclude Include="quadCollision.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="renderer.h" />
-    <ClInclude Include="rock.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="SceneGui.h" />
-    <ClInclude Include="score.h" />
     <ClInclude Include="script.h" />
     <ClInclude Include="SerializableClass.h" />
     <ClInclude Include="shader.h" />
@@ -269,7 +264,6 @@
     <ClInclude Include="sphereCollisionFrame.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="transform.h" />
-    <ClInclude Include="tree.h" />
     <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>

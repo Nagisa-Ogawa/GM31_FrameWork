@@ -16,6 +16,7 @@ private:
 public:
 	void Init(D3DXVECTOR2 pos, D3DXVECTOR2 size,const char* textureName);
 	void Init(D3DXVECTOR2 pos, D3DXVECTOR2 size);
+	void Load() override;
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;

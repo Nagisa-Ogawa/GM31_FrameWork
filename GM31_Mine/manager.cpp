@@ -175,6 +175,8 @@ void Manager::SaveScene()
 			MyImGuiManager::GetInstance()->DebugLog(e.what());
 		}
 	}
+	// 終了したら成功したことを通知
+	MyImGuiManager::GetInstance()->DebugLog("Save Successful !!");
 }
 
 /// <summary>
@@ -195,11 +197,12 @@ void Manager::LoadScene()
 			MyImGuiManager::GetInstance()->DebugLog(e.what());
 		}
 		// ファイルから読み込んだ後に読み込み後関数を呼び出し
-		scene->Load();
-		m_sceneList.push_back(scene);
-		// 仮
 		m_scene = scene.get();
+		m_sceneList.push_back(scene);
+		scene->Load();
 	}
+	// 終了したら成功したことを通知
+	MyImGuiManager::GetInstance()->DebugLog("Load Successful !!");
 }
 
 bool Manager::CheckSceneFile()

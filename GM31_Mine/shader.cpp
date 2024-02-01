@@ -11,6 +11,12 @@ void Shader::Init(const char* VSFileName, const char* PSFileName)
 	Renderer::CreatePixelShader(&m_PixelShader,PSFileName);
 }
 
+void Shader::Load()
+{
+	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, m_fileNameVS.c_str());
+	Renderer::CreatePixelShader(&m_PixelShader, m_fileNamePS.c_str());
+}
+
 void Shader::Uninit()
 {
 	m_VertexLayout->Release();

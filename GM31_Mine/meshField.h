@@ -18,6 +18,7 @@ private:
 
 public:
 	void Init() override;
+	void Load() override;
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;

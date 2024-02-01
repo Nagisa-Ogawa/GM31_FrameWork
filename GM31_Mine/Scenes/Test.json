@@ -15,6 +15,7 @@
                                 "data": {
                                     "value0": {
                                         "m_name": "Camera",
+                                        "m_ID": 0,
                                         "m_componentList": [
                                             {
                                                 "polymorphic_id": 2147483650,
@@ -23,9 +24,7 @@
                                                     "id": 2147483651,
                                                     "data": {
                                                         "value0": {},
-                                                        "m_parent": {
-                                                            "polymorphic_id": 0
-                                                        },
+                                                        "m_parentID": -1,
                                                         "worldPostion": {
                                                             "x": 0.0,
                                                             "y": 0.0,
@@ -67,25 +66,19 @@
                                                     "data": {
                                                         "value0": {},
                                                         "position": {
-                                                            "x": 0.0,
-                                                            "y": 5.0,
-                                                            "z": -10.0
+                                                            "x": -0.5313660502433777,
+                                                            "y": 3.0444204807281496,
+                                                            "z": 22.0078125
                                                         },
                                                         "rotation": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
+                                                            "x": 0.20000000298023225,
+                                                            "y": 3.0499982833862306,
                                                             "z": 0.0
                                                         }
                                                     }
                                                 }
                                             }
                                         ],
-                                        "m_transform": {
-                                            "polymorphic_id": 1073741824,
-                                            "ptr_wrapper": {
-                                                "id": 3
-                                            }
-                                        },
                                         "m_active": true,
                                         "m_destroy": false
                                     }
@@ -102,6 +95,7 @@
                                 "data": {
                                     "value0": {
                                         "m_name": "Player",
+                                        "m_ID": 1,
                                         "m_componentList": [
                                             {
                                                 "polymorphic_id": 2,
@@ -109,9 +103,7 @@
                                                     "id": 2147483654,
                                                     "data": {
                                                         "value0": {},
-                                                        "m_parent": {
-                                                            "polymorphic_id": 0
-                                                        },
+                                                        "m_parentID": -1,
                                                         "worldPostion": {
                                                             "x": 0.0,
                                                             "y": 0.0,
@@ -201,12 +193,6 @@
                                                 }
                                             }
                                         ],
-                                        "m_transform": {
-                                            "polymorphic_id": 1073741824,
-                                            "ptr_wrapper": {
-                                                "id": 6
-                                            }
-                                        },
                                         "m_active": true,
                                         "m_destroy": false
                                     }
@@ -221,6 +207,7 @@
                                 "data": {
                                     "value0": {
                                         "m_name": "box",
+                                        "m_ID": 2,
                                         "m_componentList": [
                                             {
                                                 "polymorphic_id": 2,
@@ -228,9 +215,7 @@
                                                     "id": 2147483660,
                                                     "data": {
                                                         "value0": {},
-                                                        "m_parent": {
-                                                            "polymorphic_id": 0
-                                                        },
+                                                        "m_parentID": -1,
                                                         "worldPostion": {
                                                             "x": 0.0,
                                                             "y": 0.0,
@@ -247,8 +232,8 @@
                                                             "z": 1.0
                                                         },
                                                         "localPostion": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
+                                                            "x": -5.962515830993652,
+                                                            "y": 4.38534688949585,
                                                             "z": 15.0
                                                         },
                                                         "localRotation": {
@@ -306,12 +291,6 @@
                                                 }
                                             }
                                         ],
-                                        "m_transform": {
-                                            "polymorphic_id": 1073741824,
-                                            "ptr_wrapper": {
-                                                "id": 12
-                                            }
-                                        },
                                         "m_active": true,
                                         "m_destroy": false
                                     }
@@ -325,6 +304,7 @@
                                 "data": {
                                     "value0": {
                                         "m_name": "box1",
+                                        "m_ID": 3,
                                         "m_componentList": [
                                             {
                                                 "polymorphic_id": 2,
@@ -332,12 +312,7 @@
                                                     "id": 2147483665,
                                                     "data": {
                                                         "value0": {},
-                                                        "m_parent": {
-                                                            "polymorphic_id": 1073741824,
-                                                            "ptr_wrapper": {
-                                                                "id": 12
-                                                            }
-                                                        },
+                                                        "m_parentID": 2,
                                                         "worldPostion": {
                                                             "x": 0.0,
                                                             "y": 0.0,
@@ -354,8 +329,8 @@
                                                             "z": 1.0
                                                         },
                                                         "localPostion": {
-                                                            "x": 7.06097412109375,
-                                                            "y": 5.498517990112305,
+                                                            "x": 2.0445430278778078,
+                                                            "y": 0.0,
                                                             "z": 0.0
                                                         },
                                                         "localRotation": {
@@ -413,12 +388,6 @@
                                                 }
                                             }
                                         ],
-                                        "m_transform": {
-                                            "polymorphic_id": 1073741824,
-                                            "ptr_wrapper": {
-                                                "id": 17
-                                            }
-                                        },
                                         "m_active": true,
                                         "m_destroy": false
                                     }
@@ -433,6 +402,7 @@
                                 "data": {
                                     "value0": {
                                         "m_name": "Sky",
+                                        "m_ID": 4,
                                         "m_componentList": [
                                             {
                                                 "polymorphic_id": 2,
@@ -440,9 +410,7 @@
                                                     "id": 2147483670,
                                                     "data": {
                                                         "value0": {},
-                                                        "m_parent": {
-                                                            "polymorphic_id": 0
-                                                        },
+                                                        "m_parentID": -1,
                                                         "worldPostion": {
                                                             "x": 0.0,
                                                             "y": 0.0,
@@ -460,8 +428,8 @@
                                                         },
                                                         "localPostion": {
                                                             "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
+                                                            "y": 5.0,
+                                                            "z": -10.0
                                                         },
                                                         "localRotation": {
                                                             "x": 0.0,
@@ -498,12 +466,6 @@
                                                 }
                                             }
                                         ],
-                                        "m_transform": {
-                                            "polymorphic_id": 1073741824,
-                                            "ptr_wrapper": {
-                                                "id": 22
-                                            }
-                                        },
                                         "m_active": true,
                                         "m_destroy": false
                                     }
@@ -518,6 +480,7 @@
                                 "data": {
                                     "value0": {
                                         "m_name": "Filed",
+                                        "m_ID": 5,
                                         "m_componentList": [
                                             {
                                                 "polymorphic_id": 2,
@@ -525,9 +488,7 @@
                                                     "id": 2147483674,
                                                     "data": {
                                                         "value0": {},
-                                                        "m_parent": {
-                                                            "polymorphic_id": 0
-                                                        },
+                                                        "m_parentID": -1,
                                                         "worldPostion": {
                                                             "x": 0.0,
                                                             "y": 0.0,
@@ -562,12 +523,6 @@
                                                 }
                                             }
                                         ],
-                                        "m_transform": {
-                                            "polymorphic_id": 1073741824,
-                                            "ptr_wrapper": {
-                                                "id": 26
-                                            }
-                                        },
                                         "m_active": true,
                                         "m_destroy": false
                                     }

@@ -12,10 +12,11 @@ private:
 	ID3D11ShaderResourceView* m_Texture = nullptr;
 
 public:
-	void Init(D3DXVECTOR3 pos,D3DXVECTOR2 size,const char* fileName);
-	void Uninit();
-	void Update();
-	void Draw();
+	void Init(const char* fileName);
+	void Load() override;
+	void Uninit() override;
+	void Update() override;
+	void Draw() override;
 
 	template <class Archive>
 	void save(Archive& archive) const

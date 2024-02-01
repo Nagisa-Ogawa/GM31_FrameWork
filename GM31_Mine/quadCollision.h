@@ -11,6 +11,7 @@ private:
 	bool	m_isTrigger = false;
 public:
 	void Init(D3DXVECTOR3 normal, D3DXVECTOR2 size, bool isTrigger);
+	void Load() override;
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;

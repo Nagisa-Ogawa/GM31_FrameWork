@@ -87,6 +87,41 @@ void Scene::Draw()
 
 
 
+GameObject* Scene::GetGameObjectWithID(int ID)
+{	
+	// IDが-1なら無効
+	if (ID == -1) return nullptr;
+	// オブジェクトのリストからIDが同じオブジェクトを探す
+	for (int i = 0; i < 3; i++) {
+		auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(), 
+			[&ID](std::shared_ptr<GameObject> obj) {return obj->GetID() == ID; });
+		if (it != m_sceneObjectList[i].end()) {
+			// 一致したオブジェクトがあったなら返す
+			return it->get();
+		}
+	}
+	// ないならnullを返す
+	return nullptr;
+}
+
+GameObject* Scene::GetGameObjectWithName(std::string name)
+{
+	// 名前が空なら無効
+	if (name == "") return nullptr;
+	// オブジェクトのリストからIDが同じオブジェクトを探す
+	for (int i = 0; i < 3; i++) {
+		auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(),
+			[&name](std::shared_ptr<GameObject> obj) {return obj->GetName() == name; });
+		if (it != m_sceneObjectList[i].end()) {
+			// 一致したオブジェクトがあったなら返す
+			return it->get();
+		}
+	}
+	// ないならnullを返す
+	return nullptr;
+
+}
+
 /// <summary>
 /// シーンに存在するオブジェクトの個数を取得する関数
 /// </summary>

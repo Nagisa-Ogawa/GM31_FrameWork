@@ -14,6 +14,26 @@ void Transform::Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 sca
 	m_localScale = scale;
 }
 
+void Transform::Load()
+{
+	// 親IDが-1でないなら親にセット
+	if (m_parentID != -1)
+	{	
+		// 親IDから親オブジェクトを取得
+		auto parentObject = Manager::GetInstance()->GetScene()->GetGameObjectWithID(m_parentID);
+		auto parent = parentObject->GetTransform();
+		// 親として登録
+		m_parent = parent;
+		// 親側にも子供として登録
+		parent->SetChild(this);
+		
+	}
+	else {
+		// 親がいないのなら一番上の親として登録
+		Manager::GetInstance()->GetScene()->AddParentObject(this);
+	}
+}
+
 
 void Transform::Uninit()
 {
@@ -43,6 +63,11 @@ void Transform::MakeLocalMatrix()
 	m_localMatrix = scale * rot * trans;
 }
 
+/// <summary>
+/// 親をセットする関数
+/// 引数がからなら一番上の親になる
+/// </summary>
+/// <param name="parent"></param>
 void Transform::SetParent(Transform* parent)
 {
 	if (m_parent == nullptr) {
@@ -56,12 +81,16 @@ void Transform::SetParent(Transform* parent)
 	if (parent == nullptr) {
 		// 引数の親がnullptrなら親のいないオブジェクトになる
 		Manager::GetInstance()->GetScene()->AddParentObject(this);
+		// IDを親なしにする
+		m_parentID = -1;
 	}
 	else {
 		// 新しい親の子供として登録
 		parent->SetChild(this);
 		// 新しい親を親として登録
 		m_parent = parent;
+		// IDを親のIDにする
+		m_parentID = parent->m_gameObject->GetID();
 	}
 }
 

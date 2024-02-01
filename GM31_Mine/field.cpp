@@ -11,7 +11,7 @@ void Field::Init()
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
 	for (int y = 0; y < 5; y++) {
 		for (int x = 0; x < 5; x++) {
-			AddComponent<Plane>()->Init(D3DXVECTOR3(basePos.x-x*20.0f, 0.0f, basePos.z-y*20.0f), D3DXVECTOR2(10.0f, 10.0f), "asset/texture/floor01.jpg");
+			AddComponent<Plane>()->Init("asset/texture/floor01.jpg");
 		}
 	}
 }

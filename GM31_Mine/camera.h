@@ -19,6 +19,7 @@ public:
 
 
 	void Init(D3DXVECTOR3 position); 
+	void Load() override;
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;

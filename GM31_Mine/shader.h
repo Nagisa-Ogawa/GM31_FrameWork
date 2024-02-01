@@ -15,6 +15,7 @@ private:
 
 public:
 	void Init(const char* VSFileName,const char* PSFileName);
+	void Load() override;
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;

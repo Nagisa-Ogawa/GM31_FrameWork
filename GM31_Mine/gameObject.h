@@ -16,7 +16,7 @@
 class GameObject
 {
 protected:
-	std::shared_ptr<Transform> m_transform = nullptr;	// オブジェクトのトランスフォーム情報(座標、回転)
+	Transform* m_transform = nullptr;	// オブジェクトのトランスフォーム情報(座標、回転)
 	std::list<std::shared_ptr<Component>> m_componentList;	// オブジェクトのコンポーネントリスト
 	bool m_destroy = false;				// オブジェクトの死亡フラグ
 	bool m_active = true;				// オブジェクトの表示フラグ
@@ -25,13 +25,12 @@ protected:
 
 public:
 	// Get系関数
-	std::shared_ptr<Transform> GetTransform() { return m_transform; }
-	Transform* GetTransformWithRaw() { return m_transform.get(); }
+	Transform* GetTransform() { return m_transform; }
 	bool GetActive() { return m_active; }
 	std::string GetName() { return m_name; }
 	int GetID() { return m_ID; }
 	// Set系関数
-	void SetTransform(std::shared_ptr<Transform> transform) { m_transform = transform; }
+	void SetTransform(Transform* transform) { m_transform = transform; }
 	void SetDestroy() { m_destroy = true; }
 	void SetActive(bool active) { m_active = active; }
 	void SetName(std::string name) { m_name = name; }
@@ -52,7 +51,7 @@ public:
 	}
 
 	template <typename T>
-	std::shared_ptr<T> AddComponent()
+	T* AddComponent()
 	{
 		std::shared_ptr<Component> component = std::make_shared<T>();
 		// コンポーネントが付いているゲームオブジェクトを格納
@@ -60,7 +59,7 @@ public:
 		component->SetGameObject(this);
 		component->Init();
 
-		return std::dynamic_pointer_cast<T>(component);
+		return (T*)component.get();
 	}
 
 	template <typename T>
@@ -91,13 +90,19 @@ public:
 			component->Init();
 		}
 	}
+
+	/// <summary>
+	/// オブジェクトロード時に呼び出される関数
+	/// </summary>
 	virtual void Load()
 	{
+		m_transform = GetComponent<Transform>();
 		for (auto component : m_componentList) {
 			component->SetGameObject(this);
 			component->Load();
 		}
 	}
+
 	virtual void Uninit()
 	{
 		for (auto component : m_componentList) {
@@ -105,12 +110,14 @@ public:
 		}
 		m_componentList.clear();
 	}
+
 	virtual void Update()
 	{
 		for (auto component : m_componentList) {
 			component->Update();
 		}
 	}
+
 	virtual void Draw()
 	{
 		for (auto component : m_componentList) {
@@ -126,7 +133,6 @@ public:
 			CEREAL_NVP(m_name),
 			CEREAL_NVP(m_ID),
 			CEREAL_NVP(m_componentList),
-			CEREAL_NVP(m_transform),
 			CEREAL_NVP(m_active),
 			CEREAL_NVP(m_destroy)
 		);
@@ -139,7 +145,6 @@ public:
 			CEREAL_NVP(m_name),
 			CEREAL_NVP(m_ID),
 			CEREAL_NVP(m_componentList),
-			CEREAL_NVP(m_transform),
 			CEREAL_NVP(m_active),
 			CEREAL_NVP(m_destroy)
 		);
