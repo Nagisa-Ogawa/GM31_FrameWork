@@ -15,35 +15,15 @@ void HierarchyGui::Update()
 {
 
     ImGui::Begin("Hierarchy");
-    //MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
-    //// オブジェクトの数だけループ
-    //for (auto i = m_gameObjecMap.begin(); i != m_gameObjecMap.end(); ++i)
-    //{
-    //    //char buf[32];
-    //    //sprintf(buf, "Object %d", n);
-    //    if (ImGui::Selectable(i->first.c_str(), i->second))
-    //    {
-    //        for (auto j = m_gameObjecMap.begin(); j != m_gameObjecMap.end(); ++j)
-    //        {
-    //            j->second = false;
-    //        }
-    //        // ダブルクリック時の処理
-    //        if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
-    //            // カメラをクリックされたオブジェクトへ
-
-    //        }
-    //        // Ctrlキーを押しながらで複数選択を可能にする
-    //            //if (!ImGui::GetIO().KeyCtrl)
-    //            //    memset(selection, 0, sizeof(selection));
-    //        i->second ^= true;
-    //    }
-    //}
     // ツリーノードUIの設定フラグ（矢印をクリックでノード展開、選択状態の大きさ）
     static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow  | ImGuiTreeNodeFlags_SpanAvailWidth;
     static int selection_mask = (1 << 2);
     int node_clicked = -1;
+    // シーンにある全てのゲームオブジェクト
     auto gameobjectList = Manager::GetInstance()->GetScene()->GetAllGameObjects();
     int i = 0;
+    // マウスで選択されたオブジェクト
+    auto selectObj = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>()->GetSelectedObject();
     for (auto gameObject : gameobjectList)
     {
         // デフォルトの「シングルクリックで開く」のを無効にする
@@ -67,9 +47,9 @@ void HierarchyGui::Update()
             node_clicked = i;
             SetSelect(gameObject);
         }
-        if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
-            // カメラをクリックされたオブジェクトへ
-            SetSelect(gameObject);
+        // マウスで選択されたオブジェクトがあるなら選択扱いにする
+        if (selectObj && selectObj->GetID() == gameObject->GetID()) {
+            node_clicked = i;
         }
         i++;
     }

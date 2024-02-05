@@ -75,6 +75,18 @@ public:
 		return nullptr;
 	}
 
+	template <typename T>
+	bool DeleteComponent(T* comp)
+	{
+		for (auto pComp : m_componentList) {
+			if (*(pComp).get()==comp)// Œ^‚ğ’²‚×‚é(RTTI“®“IŒ^î•ñ)
+			{
+				
+			}
+		}
+		return false;
+	}
+
 	std::list<Component*> GetAllComponent()
 	{
 		std::list<Component*> list;

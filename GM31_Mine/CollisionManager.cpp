@@ -8,6 +8,7 @@
 #include "boxCollision.h"
 #include "quadCollision.h"
 #include "sphereCollision.h"
+#include "polygonCollision.h"
 #include "Ray.h"
 
 CollisionManager* CollisionManager::m_Instance = NULL;
@@ -62,23 +63,26 @@ CollisionManager * CollisionManager::GetInstance()
 
 void CollisionManager::AddBoxCollision(BoxCollision * coll)
 {
-	if (coll == nullptr)
-		return;
+	if (coll == nullptr) return;
 	m_BoxCollList.push_back(coll);
 }
 
 void CollisionManager::AddQuadCollision(QuadCollision * coll)
 {
-	if (coll == nullptr)
-		return;
+	if (coll == nullptr) return;
 	m_QuadCollList.push_back(coll);
 }
 
 void CollisionManager::AddSphereCollision(SphereCollision* coll)
 {
-	if (coll == nullptr)
-		return;
+	if (coll == nullptr) return;
 	m_SphereCollList.push_back(coll);
+}
+
+void CollisionManager::AddPolygonCollision(PolygonCollision* coll)
+{
+	if (coll == nullptr) return;
+	m_PolygonCollList.push_back(coll);
 }
 
 //-------------------------------------
@@ -679,6 +683,48 @@ bool CollisionManager::Collision_RayToBox(Ray* ray, BoxCollision* boxColl, float
 	else {
 		return false;
 	}
+}
+
+bool CollisionManager::Collision_RayToPolygon(Ray* ray, PolygonCollision* polyColl, float* out_T)
+{
+	const float EPSILON = 1e-6f;	// 計算誤差無視用変数
+	POLYGON_POSITION* polyPosArray = polyColl->GetPolygonArray();	// ポリゴンの頂点座標配列
+	// ポリゴンの数だけループ
+	for (int i = 0; i < polyColl->GetArrayCount(); i++) {
+		POLYGON_POSITION poly = polyPosArray[i];
+		D3DXVECTOR3 edgeA = poly.position[1] - poly.position[0];
+		D3DXVECTOR3 edgeB = poly.position[2] - poly.position[0];
+
+		D3DXVECTOR3 v1;
+		D3DXVec3Cross(&v1, ray->GetVec(), &edgeB);
+		float det = D3DXVec3Dot(&edgeA, &v1);
+
+		// 三角ポリゴンにレイが平行に交わっている時にdet = 0になる
+		// detが0に限りなく近いなら交差していない判定にする
+		if (-EPSILON < det && det < EPSILON) continue;
+
+		float invDet = 1.0f / det;
+		D3DXVECTOR3 r = *(ray->GetStartPos()) - poly.position[0];
+		// uが 0<= u <= 1 をではないなら当たっていない
+		float u = D3DXVec3Dot(&v1, &r) * invDet;
+		if (u < 0.0f || u>1.0f) continue;
+
+		D3DXVECTOR3 v2;
+		D3DXVec3Cross(&v2, &r, &edgeA);
+		// vが 0 <= v <= 1 かつ u + v <= 1 でないなら当たっていない
+		float v = D3DXVec3Dot(ray->GetVec(), &v2) * invDet;
+		if (v < 0.0f || u + v>1.0f) continue;
+
+		// tが 0 <= t なら当たってない
+		float t = D3DXVec3Dot(&edgeB, &v2) * invDet;
+		if (t < 0.0f) continue;
+
+		// 当たっている
+		*out_T = t;
+		return true;
+	}
+	// 全てのポリゴンが当たらなかったら当たっていない
+	return false;
 }
 
 

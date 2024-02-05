@@ -7,9 +7,8 @@
 #include "renderer.h"
 #include "SceneGui.h"
 #include "inspectorGui.h"
+#include "polygonCollision.h"
 #include "CollisionManager.h"
-#include "boxCollision.h"
-#include "boxCollisionFrame.h"
 #include "editorCamera.h"
 #include "editorCameraObject.h"
 #include "Ray.h"
@@ -155,14 +154,14 @@ GameObject* SceneGui::GetMousePosObject(POINT mousePos)
 {
 	GameObject* obj = nullptr;
 	float minT = -10.0f;
-	auto colls = CollisionManager::GetInstance()->GetBoxCollList();
+	auto colls = CollisionManager::GetInstance()->GetPolygonCollList();
 
 	auto camera = Manager::GetInstance()->GetEditor()->GetGameObject<EditorCameraObject>()->GetComponent<EditorCamera>();
 	// ゲーム内のゲームオブジェクトの数だけループ
 	for (auto coll : colls) {
 		D3DXVECTOR3 world1, world2;
 		// レイを判定を取るオブジェクトのローカル座標系に変換
-		auto worldMatrix = coll->GetWorldMatrix();
+		auto worldMatrix = coll->GetGameObject()->GetTransform()->GetWorldMatrix();
 		CollisionManager::GetInstance()->ScreenToLocalPosition(worldMatrix,
 			camera->GetViewMatrix(), camera->GetProjectionMatrix(), mousePos, 0.0f, &world1);
 		CollisionManager::GetInstance()->ScreenToLocalPosition(worldMatrix,
@@ -171,10 +170,10 @@ GameObject* SceneGui::GetMousePosObject(POINT mousePos)
 		D3DXVECTOR3 vec = world2 - world1;
 		D3DXVec3Normalize(&vec, &vec);
 		Ray ray(world1, vec);
-		auto box = coll;
+		auto poly = coll;
 		float t = -1.0f;
-		// レイと球体で当たり判定
-		if (CollisionManager::GetInstance()->Collision_RayToBox(&ray, box, &t, NULL)) {
+		// レイとポリゴンで当たり判定
+		if (CollisionManager::GetInstance()->Collision_RayToPolygon(&ray, poly, &t)) {
 			if (t >= 0.0f) {
 				if (minT < 0.0f) {
 					obj = coll->GetGameObject();

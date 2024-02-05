@@ -43,6 +43,12 @@ public:
 	void SaveScene();	// シーンをファイルにセーブする関数
 	void LoadScene();	// シーンをファイルからロードする関数
 
+	void PlayScene();	// シーンを実行する関数
+	void StopScene();	// シーンの実行を止める関数
+	void PauseScene();	// シーンの実行を一時停止する関数
+
+
+
 
 	static Manager* GetInstance();
 	Scene* GetScene() { return m_scene; }

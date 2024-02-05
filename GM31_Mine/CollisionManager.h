@@ -5,6 +5,7 @@
 class BoxCollision;
 class QuadCollision;
 class SphereCollision;
+class PolygonCollision;
 class Ray;
 
 class CollisionManager
@@ -23,6 +24,7 @@ private:
 	std::list<BoxCollision*> m_BoxCollList;
 	std::list<QuadCollision*> m_QuadCollList;
 	std::list<SphereCollision*> m_SphereCollList;
+	std::list<PolygonCollision*> m_PolygonCollList;
 
 	// 初期化処理
 	void Init();
@@ -44,6 +46,7 @@ public:
 	void AddBoxCollision(BoxCollision* coll);
 	void AddQuadCollision(QuadCollision* coll);
 	void AddSphereCollision(SphereCollision* coll);
+	void AddPolygonCollision(PolygonCollision* coll);
 
 	//----------------------------
 	// 当たり判定関係
@@ -59,6 +62,8 @@ public:
 	bool Collision_RayToSphere(Ray* ray, SphereCollision* sphereColl, float* out_T, D3DXVECTOR3* out_HitPos);
 	// レイと立方体の当たり判定
 	bool Collision_RayToBox(Ray* ray, BoxCollision* boxColl, float* out_T, D3DXVECTOR3* out_HitPos);
+	// レイとポリゴンの当たり判定
+	bool Collision_RayToPolygon(Ray* ray, PolygonCollision* polyColl,float* out_T);
 	// スクリーン座標（クライアント座標）からローカル座標系への座標変換
 	void ScreenToLocalPosition(D3DXMATRIX* worldMatrix, D3DXMATRIX* viewMatrix,
 				D3DXMATRIX* projectionMatrix, POINT mousePos, float mouseZ, D3DXVECTOR3* out_Pos);
@@ -66,5 +71,6 @@ public:
 	std::list<BoxCollision*> GetBoxCollList() { return m_BoxCollList; }
 	std::list<QuadCollision*> GetQuadCollList() { return m_QuadCollList; }
 	std::list<SphereCollision*> GetSphereCollList() { return m_SphereCollList; }
+	std::list<PolygonCollision*> GetPolygonCollList() { return m_PolygonCollList; }
 
 };

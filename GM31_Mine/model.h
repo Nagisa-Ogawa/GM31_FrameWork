@@ -50,11 +50,13 @@ private:
 	SUBSET*	m_SubsetArray;
 	unsigned int	m_SubsetNum;
 
+	class PolygonCollision* m_PolyColl = nullptr;	// このモデル用の当たり判定（マウス選択検知用）
+
 	void LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray, unsigned int *MaterialNum );
 
 public:
 
-	void Init(const char* FileName);
+	void Init(const char* FileName,bool hasColl);
 	void Init(MODEL* pModel);
 	void Load() override;
 	void Uninit() override;

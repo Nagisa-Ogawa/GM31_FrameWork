@@ -14,6 +14,7 @@ private:
 
 public:
 	void Init(D3DXVECTOR3 size,D3DXVECTOR3 offset, bool isTrigger);
+	void Init() override;
 	void Load() override;
 	void Uninit() override;
 	void Update() override;

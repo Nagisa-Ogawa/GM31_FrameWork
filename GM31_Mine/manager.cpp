@@ -7,6 +7,7 @@
 #include "manager.h"
 #include "MyImGuiManager.h"
 #include "LuaManager.h"
+#include "CollisionManager.h"
 #include "renderer.h"
 #include "scene.h"
 #include "input.h"
@@ -63,7 +64,7 @@ void Manager::Init()
 	m_editor = new Editor();
 	m_editor->Init();
 	// Sceneファイルの中を確認
-	if (CheckSceneFile()) {
+	if (!CheckSceneFile()) {
 		// Sceneのデータがあったなら読み込み処理
 		LoadScene();
 	}
@@ -75,7 +76,6 @@ void Manager::Init()
 		m_sceneList.push_back(scene);
 		m_scene->Init();
 	}
-
 
 }
 
@@ -203,6 +203,41 @@ void Manager::LoadScene()
 	}
 	// 終了したら成功したことを通知
 	MyImGuiManager::GetInstance()->DebugLog("Load Successful !!");
+}
+
+// シーンを再生する関数
+void Manager::PlayScene()
+{
+	// ゲームウィンドウにフォーカスを設定
+	ImGui::SetWindowFocus("Game");
+	// 現在のシーンをファイルに保存
+	SaveScene();
+	// 実行状態へ
+	SetEngineMode(ENGINE_MODE::RUN);
+	// スクリプトのStart関数を呼び出す
+	GetScene()->CallScriptStartFunc();
+}
+
+void Manager::StopScene()
+{
+	// エディタウィンドウにフォーカスを設定
+	ImGui::SetWindowFocus("Scene");
+	// エディタで選択しているオブジェクトをクリア
+	MyImGuiManager::GetInstance()->ClearSelectObject();
+	// シーンとシーンリストをクリア
+	m_scene = nullptr;
+	m_sceneList.clear();
+	CollisionManager::GetInstance()->Uninit();
+	// ファイルからシーンをロード 
+	m_editor = new Editor();
+	m_editor->Init();
+	LoadScene();
+	// 実行終了
+	Manager::GetInstance()->SetEngineMode(ENGINE_MODE::EDIT);
+}
+
+void Manager::PauseScene()
+{
 }
 
 bool Manager::CheckSceneFile()

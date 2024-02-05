@@ -11,7 +11,7 @@ void Sky::Init()
 {
 	m_transform->m_localScale=D3DXVECTOR3(100.0f, 100.0f, 100.0f);
 	AddComponent<Shader>()->Init("Shader\\unlitTextureVS.cso", "Shader\\unlitTexturePS.cso");
-	AddComponent<Model>()->Init("asset\\model\\Sky.obj");
+	AddComponent<Model>()->Init("asset\\model\\Sky.obj",false);
 }
 
 void Sky::Update() 

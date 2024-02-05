@@ -77,41 +77,11 @@ void MainMenuBarGui::Update()
 			switch (Manager::GetInstance()->GetMode())
 			{
 			case ENGINE_MODE::EDIT:
-				// ゲームウィンドウにフォーカスを設定
-				ImGui::SetWindowFocus("Game");
-				//-------------------------------
-				// 仮
-				// ------------------------------
-				// 現在のシーンをファイルに保存
-
-
-
-				// 実行状態へ
-				Manager::GetInstance()->SetEngineMode(ENGINE_MODE::RUN);
-				// スクリプトのStart関数を呼び出す
-				Manager::GetInstance()->GetScene()->CallScriptStartFunc();
+				Manager::GetInstance()->PlayScene();
 				break;
 			case ENGINE_MODE::RUN:
-			{
-				// エディタウィンドウにフォーカスを設定
-				ImGui::SetWindowFocus("Scene");
-				// エディタでオブジェクトを選択している場合一度リセット
-				auto sceneGui = MyImGuiManager::GetInstance()->GetImGui<SceneGui>();
-				auto inspectorGui = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>();
-				sceneGui->SetSelectedObject(NULL);
-				inspectorGui->SetSelectedObject(NULL);
-				// 現在のシーンをもう一度作り直す
-				// ------------------------------------------
-				// 仮
-				//--------------------------------------------
-				// ファイルからシーンをロード 
-				 
-				
-				// Manager::GetInstance()->SetScene<Scene>();
-				// 実行終了
-				Manager::GetInstance()->SetEngineMode(ENGINE_MODE::EDIT);
+				Manager::GetInstance()->StopScene();
 				break;
-			}
 			default:
 				break;
 			}

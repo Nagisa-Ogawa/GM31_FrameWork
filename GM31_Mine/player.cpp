@@ -29,7 +29,7 @@ void Player::Init()
 	AddComponent<BoxCollision>()->Init(D3DXVECTOR3(0.5f, 1.0f, 0.5f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
 	// AddComponent<SphereCollision>()->Init(1.0f, D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
 	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
-	AddComponent<Model>()->Init("asset\\model\\Bot.obj");
+	AddComponent<Model>()->Init("asset\\model\\Bot.obj",true);
 	//m_Model = AddComponent<AnimationModel>();
 	//m_Model->Init("asset\\model\\Bot.fbx");
 	//m_Model->LoadAnimation("asset\\model\\Bot_Run.fbx", "Run");

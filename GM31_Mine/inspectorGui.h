@@ -7,6 +7,7 @@ class InspectorGui : public MyImGui
 {
 private:
 	GameObject* m_selectedObject{};
+	bool m_isAddComp = false;
 public:
 	void Init() override;	// ‰Šú‰»ŠÖ”
 	void Update()override;	// –ˆƒtƒŒ[ƒ€ˆ—‚·‚éŠÖ”

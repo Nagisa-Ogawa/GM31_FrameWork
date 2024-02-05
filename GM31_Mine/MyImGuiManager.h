@@ -71,10 +71,11 @@ public:
 
 	static MyImGuiManager* GetInstance();
 
-	ImGuiWindow* GetFocusWindow() { return m_focusWindow; }
+	ImGuiWindow* GetFocusWindow() { return m_focusWindow; }		// 現在フォーカスがあっているウィンドウを返す関数
 	void SetFocusWindow(ImGuiWindow* window);	// そのウィンドウにフォーカスがあっていたならセットする関数
 
-	void DebugLog(std::string m);
+	void ClearSelectObject();		// 選択しているオブジェクトをクリアする関数
+	void DebugLog(std::string m);	// メッセージをconsoleウィンドウに表示する関数
 	
 
 };

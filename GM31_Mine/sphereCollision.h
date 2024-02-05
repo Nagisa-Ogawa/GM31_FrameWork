@@ -15,6 +15,7 @@ private:
 
 public:
 	void Init(float radius, D3DXVECTOR3 offset, bool isTrigger);
+	void Init() override;
 	void Load() override;
 	void Uninit() override;
 	void Update() override;

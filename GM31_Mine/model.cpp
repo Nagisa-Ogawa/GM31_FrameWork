@@ -6,12 +6,19 @@
 
 #include "main.h"
 #include "renderer.h"
+#include "gameObject.h"
 #include "model.h"
+#include "polygonCollision.h"
 #include "dispInspector.h"
 
 
-void Model::Init(const char* FileName)
+void Model::Init(const char* FileName, bool hasColl)
 {
+	if (hasColl) {
+		// このモデル用当たり判定を作成
+		m_PolyColl = m_gameObject->AddComponent<PolygonCollision>();
+	}
+	// オブジェクトを.objファイルから読み込む
 	MODEL model;
 	LoadObj(FileName, &model);
 
@@ -153,6 +160,7 @@ void Model::Init(MODEL* pModel)
 
 void Model::Load()
 {
+	m_PolyColl = m_gameObject->GetComponent<PolygonCollision>();
 	MODEL model;
 	LoadObj(m_fileName.c_str(), &model);
 
@@ -287,26 +295,25 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 	strcpy (dir, FileName );
 	PathRemoveFileSpec(dir);
 
+	POLYGON_POSITION* polyPosArray;		// ポリゴンごとの頂点配列
 
+	D3DXVECTOR3* positionArray;	// 頂点配列
+	D3DXVECTOR3* normalArray;	// 法線配列
+	D3DXVECTOR2* texcoordArray;	// テクスチャ座標配列
 
+	unsigned int	positionNum = 0;	// 頂点の個数
+	unsigned int	normalNum = 0;		// 法線の個数
+	unsigned int	texcoordNum = 0;	// テクスチャ座標の個数
+	unsigned int	vertexNum = 0;		// 頂点情報の個数
+	unsigned int	indexNum = 0;		// インデックスの個数
+	unsigned int	in = 0;				// ポリゴンの頂点数
+	unsigned int	subsetNum = 0;		// マテリアルファイルの個数
+	unsigned int	polygonNum = 0;		// ポリゴンの数
 
+	MODEL_MATERIAL	*materialArray = NULL;	// マテリアルの配列
+	unsigned int	materialNum = 0;		// マテリアルの個数
 
-	D3DXVECTOR3	*positionArray;
-	D3DXVECTOR3	*normalArray;
-	D3DXVECTOR2	*texcoordArray;
-
-	unsigned int	positionNum = 0;
-	unsigned int	normalNum = 0;
-	unsigned int	texcoordNum = 0;
-	unsigned int	vertexNum = 0;
-	unsigned int	indexNum = 0;
-	unsigned int	in = 0;
-	unsigned int	subsetNum = 0;
-
-	MODEL_MATERIAL	*materialArray = NULL;
-	unsigned int	materialNum = 0;
-
-	char str[256];
+	char str[256];		// 読み込むモデルファイルのバッファ
 	char *s;
 	char c;
 
@@ -359,8 +366,8 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 			//四角は三角に分割
 			if( in == 4 )
 				in = 6;
-
 			indexNum += in;
+			polygonNum++;
 		}
 	}
 
@@ -369,7 +376,7 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 	positionArray = new D3DXVECTOR3[ positionNum ];
 	normalArray = new D3DXVECTOR3[ normalNum ];
 	texcoordArray = new D3DXVECTOR2[ texcoordNum ];
-
+	polyPosArray = new POLYGON_POSITION[polygonNum];
 
 	Model->VertexArray = new VERTEX_3D[ vertexNum ];
 	Model->VertexNum = vertexNum;
@@ -380,7 +387,10 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 	Model->SubsetArray = new SUBSET[ subsetNum ];
 	Model->SubsetNum = subsetNum;
 
-
+	if (m_PolyColl != nullptr) {
+		// ポリゴン用当たり判定コンポーネントへポリゴン配列をセット
+		m_PolyColl->SetPolygonArray(polyPosArray);
+	}
 
 
 	//要素読込
@@ -391,7 +401,7 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 	unsigned int vc = 0;
 	unsigned int ic = 0;
 	unsigned int sc = 0;
-
+	unsigned int pc = 0;
 
 	fseek( file, 0, SEEK_SET );
 
@@ -481,6 +491,7 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 				// 位置情報を取得
 				s = strtok( str, "/" );	
 				Model->VertexArray[vc].Position = positionArray[ atoi( s ) - 1 ];
+				polyPosArray[pc].position[in] = positionArray[atoi(s) - 1];
 				if( s[ strlen( s ) + 1 ] != '/' )
 				{
 					//テクスチャ座標が存在するならテクスチャ座標を取得
@@ -510,9 +521,12 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 				Model->IndexArray[ic] = vc - 2;
 				ic++;
 			}
+			pc++;
 		}
 	}
-
+	if (m_PolyColl != nullptr) {
+		m_PolyColl->SetArrayCount(pc);
+	}
 
 	if( sc != 0 )
 		Model->SubsetArray[ sc - 1 ].IndexNum = ic - Model->SubsetArray[ sc - 1 ].StartIndex;

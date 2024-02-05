@@ -172,6 +172,14 @@ void MyImGuiManager::SetFocusWindow(ImGuiWindow* window)
 	}
 }
 
+void MyImGuiManager::ClearSelectObject()
+{
+	auto sceneGui = GetImGui<SceneGui>();
+	auto inspectorGui = GetImGui<InspectorGui>();
+	sceneGui->SetSelectedObject(NULL);
+	inspectorGui->SetSelectedObject(NULL);
+}
+
 void MyImGuiManager::DebugLog(std::string m)
 {
 	auto console = GetImGui<ConsoleGui>();

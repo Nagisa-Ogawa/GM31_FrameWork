@@ -12,7 +12,11 @@
 #include "transform.h"
 #include "model.h"
 
-
+//----------------------------------------------
+//
+// 各種コンポーネントをImGuiで表示する関数
+//
+//----------------------------------------------
 
 void DispComponent(AnimationModel* model)
 {
@@ -27,7 +31,15 @@ void DispComponent(AnimationModel* model)
 void DispComponent(BoxCollision* collision)
 {
 	ImGui::Separator();
-	if (ImGui::TreeNodeEx("BoxCollision", ImGuiTreeNodeFlags_DefaultOpen)) {
+	ImGui::AlignTextToFramePadding();
+	bool treeopen = ImGui::TreeNodeEx("BoxCollision", ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
+	// コンポーネント削除ボタンを作成
+	ImGui::SameLine(ImGui::GetWindowWidth() - 30);
+	if (ImGui::Button("X")) 
+	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
+	// コンポーネントの要素を表示
+	if (treeopen)
+	{
 		if (ImGui::TreeNodeEx("Size", ImGuiTreeNodeFlags_DefaultOpen)) {
 			D3DXVECTOR3 sizeVec = collision->GetSize();
 			float size[3] = { sizeVec.x,sizeVec.y ,sizeVec.z };
