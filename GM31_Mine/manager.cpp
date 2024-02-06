@@ -70,10 +70,10 @@ void Manager::Init()
 	}
 	else {
 		// Sceneのデータがないならシーンを作成
-		auto scene = std::make_shared<Scene>();
+		auto scene = std::make_unique<Scene>();
 		m_scene = scene.get();
 		m_scene->SetName("Test");
-		m_sceneList.push_back(scene);
+		m_sceneList.push_back(std::move(scene));
 		m_scene->Init();
 	}
 
@@ -117,6 +117,10 @@ void Manager::Update()
 
 	// GUIの更新処理
 	MyImGuiManager::GetInstance()->Update();
+
+	// オブジェクトが破棄されているかをチェック
+	m_scene->CheckDestroyedObject();
+	m_editor->CheckDestroyedObject();
 
 	if (m_nextScene)
 	{
@@ -162,7 +166,7 @@ void Manager::Draw()
 void Manager::SaveScene()
 {
 	// 現在あるシーンをすべて保存する
-	for (auto scene : m_sceneList) {
+	for (const auto& scene : m_sceneList) {
 		// Scenesフォルダにシーンファイルを作成
 		std::string filePath = "Scenes\\"+scene->GetName() + ".json";
 		std::ofstream file(filePath);
@@ -187,7 +191,7 @@ void Manager::LoadScene()
 	// ファイルからシーンをロード
 	std::list<std::string> nameList = GetAllFiles("Scenes");
 	for (auto fileName : nameList) {
-		std::shared_ptr<Scene> scene;
+		std::unique_ptr<Scene> scene;
 		try {
 			std::ifstream file("Scenes\\" + fileName);
 			cereal::JSONInputArchive archive(file);
@@ -198,8 +202,8 @@ void Manager::LoadScene()
 		}
 		// ファイルから読み込んだ後に読み込み後関数を呼び出し
 		m_scene = scene.get();
-		m_sceneList.push_back(scene);
 		scene->Load();
+		m_sceneList.push_back(std::move(scene));
 	}
 	// 終了したら成功したことを通知
 	MyImGuiManager::GetInstance()->DebugLog("Load Successful !!");

@@ -9,6 +9,7 @@ private:
 	D3DXVECTOR3 m_size{};
 	D3DXVECTOR3 m_offset{};
 	bool		m_isTrigger{};
+	class BoxCollisionFrame* m_collFrame {};
 
 	D3DXMATRIX m_worldMatrix{};
 

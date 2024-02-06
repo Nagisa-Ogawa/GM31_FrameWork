@@ -1,5 +1,6 @@
 #include "MyImGuiManager.h"
 #include "renderer.h"
+#include "gameObject.h"
 #include "dispInspector.h"
 #include "animationModel.h"
 #include "boxCollision.h"
@@ -35,7 +36,11 @@ void DispComponent(BoxCollision* collision)
 	bool treeopen = ImGui::TreeNodeEx("BoxCollision", ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
 	// コンポーネント削除ボタンを作成
 	ImGui::SameLine(ImGui::GetWindowWidth() - 30);
-	if (ImGui::Button("X")) 
+	if (ImGui::Button("X")) {
+		collision->SetDestroy();
+		ImGui::TreePop();
+		return;
+	}
 	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
 	// コンポーネントの要素を表示
 	if (treeopen)

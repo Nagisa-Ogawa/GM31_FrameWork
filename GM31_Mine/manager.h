@@ -20,7 +20,7 @@ private:
 	// シングルトン用インスタンス
 	static Manager* m_instance;
 	// エディタ時用変数
-	std::list<std::shared_ptr<Scene>> m_sceneList;
+	std::list<std::unique_ptr<Scene>> m_sceneList;
 	Scene* m_scene = nullptr;
 	Scene* m_nextScene = nullptr;
 	Scene* m_editor = nullptr;

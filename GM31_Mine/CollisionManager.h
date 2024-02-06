@@ -48,6 +48,11 @@ public:
 	void AddSphereCollision(SphereCollision* coll);
 	void AddPolygonCollision(PolygonCollision* coll);
 
+	void DeleteBoxCollision(BoxCollision* coll);
+	void DeleteQuadCollision(QuadCollision* coll);
+	void DeleteSphereCollision(SphereCollision* coll);
+	void DeletePolygonCollision(PolygonCollision* coll);
+
 	//----------------------------
 	// “–‚½‚è”»’èŠÖŒW
 	//----------------------------

@@ -40,6 +40,7 @@ void CollisionManager::Uninit()
 	m_BoxCollList.clear();
 	m_SphereCollList.clear();
 	m_QuadCollList.clear();
+	m_PolygonCollList.clear();
 }
 
 
@@ -83,6 +84,31 @@ void CollisionManager::AddPolygonCollision(PolygonCollision* coll)
 {
 	if (coll == nullptr) return;
 	m_PolygonCollList.push_back(coll);
+}
+
+void CollisionManager::DeleteBoxCollision(BoxCollision* coll)
+{
+	if (coll == nullptr) return;
+	m_BoxCollList.remove(coll);
+}
+
+void CollisionManager::DeleteQuadCollision(QuadCollision* coll)
+{
+	if (coll == nullptr) return;
+	m_QuadCollList.remove(coll);
+
+}
+
+void CollisionManager::DeleteSphereCollision(SphereCollision* coll)
+{
+	if (coll == nullptr) return;
+	m_SphereCollList.remove(coll);
+}
+
+void CollisionManager::DeletePolygonCollision(PolygonCollision* coll)
+{
+	if (coll == nullptr) return;
+	m_PolygonCollList.remove(coll);
 }
 
 //-------------------------------------

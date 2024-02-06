@@ -16,10 +16,10 @@
 class Scene
 {
 protected:
-	std::list<std::shared_ptr<GameObject>> m_sceneObjectList[3];		// シーンに存在するオブジェクトのリスト
+	std::list<std::unique_ptr<GameObject>> m_sceneObjectList[3];		// シーンに存在するオブジェクトのリスト
 	std::list<Transform*> m_parentObjectList;		// シーンに直接配置されている一番上の親のtransform
 	std::string m_name;		// シーンの名前
-	int m_registerID = 0;
+	int m_registerID = 0;	// ゲームオブジェクトにセットするID
 public:
 	virtual void Init();
 	void Load();	// シーンを読み込んだ際に呼ばれる関数
@@ -40,6 +40,7 @@ public:
 	void CallScriptStartFunc();		// シーンの実行時にアタッチされているスクリプトのStart関数を呼び出す関数
 	void AddParentObject(Transform* transform) { m_parentObjectList.push_back(transform); }
 	void DeleteParentObject(Transform* transform) { m_parentObjectList.remove(transform); }
+	void CheckDestroyedObject();
 
 	/// <summary>
 	/// オブジェクトをシーンに追加する関数
@@ -51,8 +52,7 @@ public:
 	template <typename T>
 	T* AddGameObject(int layer,std::string name)
 	{
-		std::shared_ptr<GameObject> gameObject = std::make_shared<T>();
-		m_sceneObjectList[layer].push_back(gameObject);
+		std::unique_ptr<GameObject> gameObject = std::make_unique<T>();
 		// transformコンポーネントは必須なためここでAddComponent
 		gameObject->SetTransform(gameObject->AddComponent<Transform>());
 		// オブジェクトの名前を設定
@@ -63,8 +63,10 @@ public:
 		// 追加したオブジェクトは親を持たないのでシーンのオブジェクトとして登録
 		m_parentObjectList.push_back(gameObject->GetTransform());
 		gameObject->Init();
+		T* TObject = (T*)gameObject.get();
+		m_sceneObjectList[layer].push_back(std::move(gameObject));
 
-		return (T*)gameObject.get();
+		return TObject;
 	}
 
 	/// <summary>
@@ -77,7 +79,7 @@ public:
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			for (auto object : m_sceneObjectList[i])
+			for (const auto& object : m_sceneObjectList[i])
 			{
 				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
 				{
@@ -98,7 +100,7 @@ public:
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			for (auto object : m_sceneObjectList[i])
+			for (const auto& object : m_sceneObjectList[i])
 			{
 				if (object->GetActive() == false) {
 					continue;
@@ -123,7 +125,7 @@ public:
 		std::vector<T*> objects;
 		for (int i = 0; i < 3; i++)
 		{
-			for (auto object : m_sceneObjectList[i])
+			for (const auto& object : m_sceneObjectList[i])
 			{
 				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
 				{
@@ -145,7 +147,7 @@ public:
 		std::vector<T*> objects;
 		for (int i = 0; i < 3; i++)
 		{
-			for (auto object : m_sceneObjectList[i])
+			for (const auto& object : m_sceneObjectList[i])
 			{
 				if (object->GetActive() == false) {
 					continue;
@@ -158,6 +160,7 @@ public:
 		}
 		return objects;
 	}
+
 
 	template <class Archive>
 	void save(Archive& archive) const

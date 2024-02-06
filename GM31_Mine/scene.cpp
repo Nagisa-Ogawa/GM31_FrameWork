@@ -33,7 +33,7 @@ void Scene::Init()
 void Scene::Load()
 {
 	for (int i = 0; i < 3; i++) {
-		for (auto gameObject : m_sceneObjectList[i]){
+		for (const auto& gameObject : m_sceneObjectList[i]){
 			gameObject->Load();
 		}
 	}
@@ -43,7 +43,7 @@ void Scene::Uninit()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		for (auto gameObject : m_sceneObjectList[i])
+		for (const auto& gameObject : m_sceneObjectList[i])
 		{
 			gameObject->Uninit();
 		}
@@ -55,14 +55,12 @@ void Scene::Update()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		for (auto gameObject : m_sceneObjectList[i])
+		for (const auto& gameObject : m_sceneObjectList[i])
 		{
 			// アクティブフラグがONなら更新処理をする
 			if (gameObject->GetActive())
 				gameObject->Update();
 		}
-		m_sceneObjectList[i].remove_if([](std::shared_ptr<GameObject> object)
-		{return object->Destroy(); });	// ラムダ式
 	}
 }
 
@@ -76,7 +74,7 @@ void Scene::Draw()
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		for (auto gameObject : m_sceneObjectList[i])
+		for (const auto& gameObject : m_sceneObjectList[i])
 		{
 			// アクティブフラグがONなら描画する
 			if (gameObject->GetActive())
@@ -94,7 +92,7 @@ GameObject* Scene::GetGameObjectWithID(int ID)
 	// オブジェクトのリストからIDが同じオブジェクトを探す
 	for (int i = 0; i < 3; i++) {
 		auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(), 
-			[&ID](std::shared_ptr<GameObject> obj) {return obj->GetID() == ID; });
+			[&ID](const auto& obj) {return obj->GetID() == ID; });
 		if (it != m_sceneObjectList[i].end()) {
 			// 一致したオブジェクトがあったなら返す
 			return it->get();
@@ -111,7 +109,7 @@ GameObject* Scene::GetGameObjectWithName(std::string name)
 	// オブジェクトのリストからIDが同じオブジェクトを探す
 	for (int i = 0; i < 3; i++) {
 		auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(),
-			[&name](std::shared_ptr<GameObject> obj) {return obj->GetName() == name; });
+			[&name](const auto& obj) {return obj->GetName() == name; });
 		if (it != m_sceneObjectList[i].end()) {
 			// 一致したオブジェクトがあったなら返す
 			return it->get();
@@ -147,7 +145,7 @@ int Scene::GetActiveGameObjectCount()
 		auto it = m_sceneObjectList[i].begin();
 		// すべての要素を検索し終わるまでループ
 		while (true) {
-			it = std::find_if(it, m_sceneObjectList[i].end(), [](std::shared_ptr<GameObject> obj) {return obj->GetActive(); });
+			it = std::find_if(it, m_sceneObjectList[i].end(), [](const auto& obj) {return obj->GetActive(); });
 			if (it == m_sceneObjectList[i].end()) {
 				break;
 			}
@@ -168,7 +166,7 @@ std::list<GameObject*> Scene::GetAllGameObjects()
 	std::list<GameObject*> objList;
 	for (int i = 0; i < 3; i++)
 	{
-		for (auto gameObject : m_sceneObjectList[i])
+		for (const auto& gameObject : m_sceneObjectList[i])
 		{
 			objList.push_back(gameObject.get());
 		}
@@ -187,6 +185,23 @@ void Scene::CallScriptStartFunc()
 		Script* script = object->GetComponent<Script>();
 		if (script == nullptr)	continue;
 		script->Start();
+	}
+}
+
+void Scene::CheckDestroyedObject()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		// オブジェクトの破棄フラグをチェック
+		m_sceneObjectList[i].remove_if([](const auto& object)
+		{return object->Destroy(); });
+	}
+	// 破棄されないオブジェクトのコンポーネントの破棄フラグをチェック
+	for (int i = 0; i < 3; i++)
+	{
+		for (const auto& gameObject : m_sceneObjectList[i]) {
+			gameObject->CheckDestroyedComponent();
+		}
 	}
 }
 
