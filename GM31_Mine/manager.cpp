@@ -61,8 +61,6 @@ void Manager::Init()
 	MyImGuiManager::GetInstance()->Init(GetWindow());
 	LuaManager::GetInstance()->Init();
 	
-	m_editor = new Editor();
-	m_editor->Init();
 	// Sceneファイルの中を確認
 	if (!CheckSceneFile()) {
 		// Sceneのデータがあったなら読み込み処理
@@ -73,8 +71,9 @@ void Manager::Init()
 		auto scene = std::make_unique<Scene>();
 		m_scene = scene.get();
 		m_scene->SetName("Test");
-		m_sceneList.push_back(std::move(scene));
 		m_scene->Init();
+		m_editor = m_scene->GetEditor();
+		m_sceneList.push_back(std::move(scene));
 	}
 
 }
@@ -120,7 +119,6 @@ void Manager::Update()
 
 	// オブジェクトが破棄されているかをチェック
 	m_scene->CheckDestroyedObject();
-	m_editor->CheckDestroyedObject();
 
 	if (m_nextScene)
 	{
@@ -133,7 +131,6 @@ void Manager::Update()
 		m_scene->Init();
 		m_nextScene = nullptr;
 	}
-
 }
 
 void Manager::Draw()

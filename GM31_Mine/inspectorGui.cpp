@@ -51,6 +51,7 @@ void InspectorGui::Update()
 		for (auto component : componentList) {
 			component->DispInspector();
 		}
+		ImGui::SetCursorPosX(ImGui::GetWindowWidth() / 2.0f - 50.0f);
 		// コンポーネント追加ボタン
 		if (ImGui::Button("AddComponent")) {
 			m_isAddComp = !m_isAddComp;

@@ -54,7 +54,7 @@ void SceneGui::Update()
 		D3DXMatrixIdentity(&objectMatrix);
 
 		// カメラのビュー行列とプロジェクション行列を取得
-		camera = Manager::GetInstance()->GetEditor()->GetGameObject<EditorCameraObject>()->GetComponent<EditorCamera>();
+		camera = Manager::GetInstance()->GetEditor()->GetEditorObject<EditorCameraObject>()->GetComponent<EditorCamera>();
 		viewMatrix = camera->GetViewMatrix();
 		projectionMatrix = camera->GetProjectionMatrix();
 		// オブジェクトのローカル情報から行列を作成
@@ -156,7 +156,7 @@ GameObject* SceneGui::GetMousePosObject(POINT mousePos)
 	float minT = -10.0f;
 	auto colls = CollisionManager::GetInstance()->GetPolygonCollList();
 
-	auto camera = Manager::GetInstance()->GetEditor()->GetGameObject<EditorCameraObject>()->GetComponent<EditorCamera>();
+	auto camera = Manager::GetInstance()->GetEditor()->GetEditorObject<EditorCameraObject>()->GetComponent<EditorCamera>();
 	// ゲーム内のゲームオブジェクトの数だけループ
 	for (auto coll : colls) {
 		D3DXVECTOR3 world1, world2;

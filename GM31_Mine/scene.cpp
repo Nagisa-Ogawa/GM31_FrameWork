@@ -12,6 +12,8 @@
 
 void Scene::Init()
 {
+	m_editor = std::make_unique<Editor>();
+	m_editor->Init();
 	// ---------------------
 	// デバッグ用
 	// ---------------------
@@ -67,10 +69,15 @@ void Scene::Update()
 void Scene::Draw()
 {
 	// 描画をする前にローカル行列からワールド行列を作成
-	for (Transform* transform : m_parentObjectList)
+	for (int i = 0; i < 3; i++)
 	{
-		// 親のないオブジェクトのワールド行列作成関数を呼び子オブジェクトへ連鎖させる
-		transform->MakeWorldMatrix(nullptr);
+		for (const auto& gameObject : m_sceneObjectList[i])
+		{
+			auto transform = gameObject->GetTransform();
+			// 親のないオブジェクトのワールド行列作成関数を呼び、子オブジェクトへ連鎖させる
+			if (transform->GetParent() == nullptr)
+				transform->MakeWorldMatrix(nullptr);
+		}
 	}
 	for (int i = 0; i < 3; i++)
 	{
@@ -83,42 +90,6 @@ void Scene::Draw()
 	}
 }
 
-
-
-GameObject* Scene::GetGameObjectWithID(int ID)
-{	
-	// IDが-1なら無効
-	if (ID == -1) return nullptr;
-	// オブジェクトのリストからIDが同じオブジェクトを探す
-	for (int i = 0; i < 3; i++) {
-		auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(), 
-			[&ID](const auto& obj) {return obj->GetID() == ID; });
-		if (it != m_sceneObjectList[i].end()) {
-			// 一致したオブジェクトがあったなら返す
-			return it->get();
-		}
-	}
-	// ないならnullを返す
-	return nullptr;
-}
-
-GameObject* Scene::GetGameObjectWithName(std::string name)
-{
-	// 名前が空なら無効
-	if (name == "") return nullptr;
-	// オブジェクトのリストからIDが同じオブジェクトを探す
-	for (int i = 0; i < 3; i++) {
-		auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(),
-			[&name](const auto& obj) {return obj->GetName() == name; });
-		if (it != m_sceneObjectList[i].end()) {
-			// 一致したオブジェクトがあったなら返す
-			return it->get();
-		}
-	}
-	// ないならnullを返す
-	return nullptr;
-
-}
 
 /// <summary>
 /// シーンに存在するオブジェクトの個数を取得する関数

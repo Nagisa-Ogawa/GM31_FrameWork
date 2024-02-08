@@ -168,7 +168,6 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="engineDebugGui.cpp" />
     <ClCompile Include="field.cpp" />
-    <ClCompile Include="game.cpp" />
     <ClCompile Include="gameGui.cpp" />
     <ClCompile Include="hierarchyGui.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -222,7 +221,6 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="engineDebugGui.h" />
     <ClInclude Include="field.h" />
-    <ClInclude Include="game.h" />
     <ClInclude Include="gameGui.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="factory.h" />

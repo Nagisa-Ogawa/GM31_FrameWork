@@ -13,7 +13,7 @@ void BoxCollision::Init(D3DXVECTOR3 size, D3DXVECTOR3 offset,bool isTrigger)
 	m_offset = offset;
 	m_isTrigger = isTrigger;
 	std::string name = m_gameObject->GetName() + "BoxCollisionFrame";
-	m_collFrame = Manager::GetInstance()->GetEditor()->AddGameObject<BoxCollisionFrame>(1,name);
+	m_collFrame = Manager::GetInstance()->GetScene()->GetEditor()->AddEditorObject<BoxCollisionFrame>(1,name);
 	m_collFrame->Init(this);
 
 	CollisionManager::GetInstance()->AddBoxCollision(this);
@@ -25,7 +25,7 @@ void BoxCollision::Init()
 	m_offset = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_isTrigger = false;
 	std::string name = m_gameObject->GetName() + "BoxCollisionFrame";
-	m_collFrame = Manager::GetInstance()->GetEditor()->AddGameObject<BoxCollisionFrame>(1, name);
+	m_collFrame = Manager::GetInstance()->GetScene()->GetEditor()->AddEditorObject<BoxCollisionFrame>(1, name);
 	m_collFrame->Init(this);
 
 	CollisionManager::GetInstance()->AddBoxCollision(this);
@@ -33,9 +33,6 @@ void BoxCollision::Init()
 
 void BoxCollision::Load()
 {
-	std::string name = m_gameObject->GetName() + "BoxCollisionFrame";
-	m_collFrame = Manager::GetInstance()->GetEditor()->AddGameObject<BoxCollisionFrame>(1, name);
-	m_collFrame->Init(this);
 	CollisionManager::GetInstance()->AddBoxCollision(this);
 }
 

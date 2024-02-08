@@ -23,7 +23,7 @@ private:
 	std::list<std::unique_ptr<Scene>> m_sceneList;
 	Scene* m_scene = nullptr;
 	Scene* m_nextScene = nullptr;
-	Scene* m_editor = nullptr;
+	Editor* m_editor = nullptr;
 
 	ENGINE_MODE m_mode;
 	Manager();		// コンストラクタ
@@ -52,7 +52,7 @@ public:
 
 	static Manager* GetInstance();
 	Scene* GetScene() { return m_scene; }
-	Scene* GetEditor() { return m_editor; }
+	Editor* GetEditor() { return m_editor; }
 	ENGINE_MODE GetMode() { return m_mode; }
 
 	template <typename T>

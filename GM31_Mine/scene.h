@@ -2,7 +2,6 @@
 
 #include <list>
 #include <memory>
-#include <vector>
 #include <typeinfo>
 
 #include "cereal/cereal.hpp"
@@ -11,26 +10,26 @@
 #include "cereal/types/array.hpp"
 #include "cereal/types/string.hpp"
 
+#include "editor.h"
 #include "gameObject.h"
 
 class Scene
 {
-protected:
+private:
 	std::list<std::unique_ptr<GameObject>> m_sceneObjectList[3];		// シーンに存在するオブジェクトのリスト
-	std::list<Transform*> m_parentObjectList;		// シーンに直接配置されている一番上の親のtransform
+	std::unique_ptr<Editor> m_editor;
 	std::string m_name;		// シーンの名前
 	int m_registerID = 0;	// ゲームオブジェクトにセットするID
 public:
-	virtual void Init();
+	void Init();
 	void Load();	// シーンを読み込んだ際に呼ばれる関数
-	virtual void Uninit();
-	virtual void Update();
-	virtual void Draw();
+	void Uninit();
+	void Update();
+	void Draw();
 
 
 	std::string GetName() { return m_name; }
-	GameObject* GetGameObjectWithID(int ID);
-	GameObject* GetGameObjectWithName(std::string name);
+	Editor* GetEditor() { return m_editor.get(); }
 	size_t GetGameObjectCount();	// シーンに存在するオブジェクトの個数を取得する関数
 	int GetActiveGameObjectCount();	// アクティブなオブジェクトの個数を取得する関数
 	std::list<GameObject*> GetAllGameObjects();		// すべてのオブジェクトをリストで取得する関数
@@ -38,8 +37,6 @@ public:
 	void SetName(std::string name) { m_name = name; }
 
 	void CallScriptStartFunc();		// シーンの実行時にアタッチされているスクリプトのStart関数を呼び出す関数
-	void AddParentObject(Transform* transform) { m_parentObjectList.push_back(transform); }
-	void DeleteParentObject(Transform* transform) { m_parentObjectList.remove(transform); }
 	void CheckDestroyedObject();
 
 	/// <summary>
@@ -60,8 +57,6 @@ public:
 		// IDを設定
 		gameObject->SetID(m_registerID);
 		m_registerID++;
-		// 追加したオブジェクトは親を持たないのでシーンのオブジェクトとして登録
-		m_parentObjectList.push_back(gameObject->GetTransform());
 		gameObject->Init();
 		T* TObject = (T*)gameObject.get();
 		m_sceneObjectList[layer].push_back(std::move(gameObject));
@@ -89,6 +84,43 @@ public:
 		}
 		return nullptr;
 	}
+
+	template <typename T>
+	T* GetGameObjectWithID(int ID) 
+	{
+		// IDが-1なら無効
+		if (ID == -1) return nullptr;
+		// オブジェクトのリストからIDが同じオブジェクトを探す
+		for (int i = 0; i < 3; i++) {
+			auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(),
+				[&ID](const auto& obj) {return obj->GetID() == ID; });
+			if (it != m_sceneObjectList[i].end()) {
+				// 一致したオブジェクトがあったなら返す
+				return (T*)(it->get());
+			}
+		}
+		// ないならnullを返す
+		return nullptr;
+	}
+
+	template <typename T>
+	T* GetGameObjectWithName(std::string name) 
+	{
+		// 名前が空なら無効
+		if (name == "") return nullptr;
+		// オブジェクトのリストからIDが同じオブジェクトを探す
+		for (int i = 0; i < 3; i++) {
+			auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(),
+				[&name](const auto& obj) {return obj->GetName() == name; });
+			if (it != m_sceneObjectList[i].end()) {
+				// 一致したオブジェクトがあったなら返す
+				return (T*)(it->get());
+			}
+		}
+		// ないならnullを返す
+		return nullptr;
+	}
+
 
 	/// <summary>
 	/// アクティブな指定されたオブジェクトを取得する関数

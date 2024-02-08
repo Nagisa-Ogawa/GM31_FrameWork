@@ -35,7 +35,7 @@ void DispComponent(BoxCollision* collision)
 	ImGui::AlignTextToFramePadding();
 	bool treeopen = ImGui::TreeNodeEx("BoxCollision", ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
 	// コンポーネント削除ボタンを作成
-	ImGui::SameLine(ImGui::GetWindowWidth() - 30);
+	ImGui::SameLine(ImGui::GetWindowWidth() - 40);
 	if (ImGui::Button("X")) {
 		collision->SetDestroy();
 		ImGui::TreePop();

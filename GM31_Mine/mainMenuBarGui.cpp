@@ -4,7 +4,6 @@
 #include "renderer.h"
 #include "manager.h"
 #include "scene.h"
-#include "game.h"
 #include "mainMenuBarGui.h"
 #include "SceneGui.h"
 #include "inspectorGui.h"

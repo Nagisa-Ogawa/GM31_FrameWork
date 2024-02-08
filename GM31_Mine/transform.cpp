@@ -29,8 +29,7 @@ void Transform::Load()
 		
 	}
 	else {
-		// 親がいないのなら一番上の親として登録
-		Manager::GetInstance()->GetScene()->AddParentObject(this);
+		m_parent = nullptr;
 	}
 }
 
@@ -70,27 +69,22 @@ void Transform::MakeLocalMatrix()
 /// <param name="parent"></param>
 void Transform::SetParent(Transform* parent)
 {
-	if (m_parent == nullptr) {
-		// 自分に親がいないならシーンの親リストから削除
-		Manager::GetInstance()->GetScene()->DeleteParentObject(this);
-	}
-	else {
+	if (m_parent) {
 		// 自分に親がいるならその親から自分を削除
 		m_parent->DeleteChild(this);
 	}
-	if (parent == nullptr) {
-		// 引数の親がnullptrなら親のいないオブジェクトになる
-		Manager::GetInstance()->GetScene()->AddParentObject(this);
-		// IDを親なしにする
-		m_parentID = -1;
-	}
-	else {
+	if (parent) {
 		// 新しい親の子供として登録
 		parent->SetChild(this);
 		// 新しい親を親として登録
 		m_parent = parent;
 		// IDを親のIDにする
 		m_parentID = parent->m_gameObject->GetID();
+	}
+	else {
+		m_parent = nullptr;
+		// IDを親なしにする
+		m_parentID = -1;
 	}
 }
 
