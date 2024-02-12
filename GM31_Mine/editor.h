@@ -74,12 +74,50 @@ public:
 		return nullptr;
 	}
 
+	template <typename T>
+	T* GetEditorObjectWithID(int ID)
+	{
+		// IDが-1なら無効
+		if (ID == -1) return nullptr;
+		// オブジェクトのリストからIDが同じオブジェクトを探す
+		for (int i = 0; i < 3; i++) {
+			auto it = std::find_if(m_editorObjectList[i].begin(), m_editorObjectList[i].end(),
+				[&ID](const auto& obj) {return obj->GetID() == ID; });
+			if (it != m_editorObjectList[i].end()) {
+				// 一致したオブジェクトがあったなら返す
+				return (T*)(it->get());
+			}
+		}
+		// ないならnullを返す
+		return nullptr;
+	}
+
+	template <typename T>
+	T* GetEditorObjectWithName(std::string name)
+	{
+		// 名前が空なら無効
+		if (name == "") return nullptr;
+		// オブジェクトのリストからIDが同じオブジェクトを探す
+		for (int i = 0; i < 3; i++) {
+			auto it = std::find_if(m_editorObjectList[i].begin(), m_editorObjectList[i].end(),
+				[&name](const auto& obj) {return obj->GetName() == name; });
+			if (it != m_editorObjectList[i].end()) {
+				// 一致したオブジェクトがあったなら返す
+				return (T*)(it->get());
+			}
+		}
+		// ないならnullを返す
+		return nullptr;
+	}
+
+
 	template <class Archive>
 	void save(Archive& archive) const
 	{
 		archive(
 			CEREAL_NVP(m_name),
-			CEREAL_NVP(m_editorObjectList)
+			CEREAL_NVP(m_editorObjectList),
+			CEREAL_NVP(m_registerID)
 		);
 	}
 
@@ -88,7 +126,8 @@ public:
 	{
 		archive(
 			CEREAL_NVP(m_name),
-			CEREAL_NVP(m_editorObjectList)
+			CEREAL_NVP(m_editorObjectList),
+			CEREAL_NVP(m_registerID)
 		);
 	}
 

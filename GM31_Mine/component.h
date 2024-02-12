@@ -12,7 +12,7 @@ class GameObject;
 class Component
 {
 protected:
-	GameObject* m_gameObject;
+	GameObject* m_gameObject = nullptr;
 	int m_ID = -1;
 	bool m_destroy = false;
 public:

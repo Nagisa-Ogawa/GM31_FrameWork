@@ -13,6 +13,7 @@ void PolygonCollision::Load()
 
 void PolygonCollision::Uninit()
 {
+	CollisionManager::GetInstance()->DeletePolygonCollision(this);
 	delete[] m_polyArray;	// ”z—ñ‚ð‰ð•ú
 }
 

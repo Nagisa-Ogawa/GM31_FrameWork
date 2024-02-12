@@ -1,19 +1,29 @@
 #pragma once
 #include "MyImGui.h"
 
+enum SHOW_MODE
+{
+	SHOW_GAMEOBJECT,
+	SHOW_FILE,
+};
+
 class GameObject;
+class FileTreeNode;
 
 class InspectorGui : public MyImGui
 {
 private:
-	GameObject* m_selectedObject{};
+	SHOW_MODE m_showMode;
+	GameObject* m_selectedObject = nullptr;
+	FileTreeNode* m_fileNode = nullptr;
 	bool m_isAddComp = false;
 public:
 	void Init() override;	// èâä˙âªä÷êî
 	void Update()override;	// ñàÉtÉåÅ[ÉÄèàóùÇ∑ÇÈä÷êî
 
 	GameObject* GetSelectedObject() { return m_selectedObject; }
-	void SetSelectedObject(GameObject* object) { m_selectedObject = object; }
+	void SetSelectedObject(GameObject* object) { m_selectedObject = object; m_showMode = SHOW_MODE::SHOW_GAMEOBJECT; }
+	void SetFileNode(FileTreeNode* fileNode) { m_fileNode = fileNode; m_showMode = SHOW_MODE::SHOW_FILE; }
 };
 
 

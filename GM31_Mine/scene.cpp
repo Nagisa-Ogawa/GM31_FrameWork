@@ -39,6 +39,7 @@ void Scene::Load()
 			gameObject->Load();
 		}
 	}
+	m_editor->Load();
 }
 
 void Scene::Uninit()
@@ -174,5 +175,7 @@ void Scene::CheckDestroyedObject()
 			gameObject->CheckDestroyedComponent();
 		}
 	}
+	m_editor->CheckDestroyedObject();
 }
+
 

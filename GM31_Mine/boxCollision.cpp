@@ -7,17 +7,6 @@
 #include "boxCollisionFrame.h"
 #include "dispInspector.h"
 
-void BoxCollision::Init(D3DXVECTOR3 size, D3DXVECTOR3 offset,bool isTrigger)
-{
-	m_size = size;
-	m_offset = offset;
-	m_isTrigger = isTrigger;
-	std::string name = m_gameObject->GetName() + "BoxCollisionFrame";
-	m_collFrame = Manager::GetInstance()->GetScene()->GetEditor()->AddEditorObject<BoxCollisionFrame>(1,name);
-	m_collFrame->Init(this);
-
-	CollisionManager::GetInstance()->AddBoxCollision(this);
-}
 
 void BoxCollision::Init()
 {
@@ -27,12 +16,15 @@ void BoxCollision::Init()
 	std::string name = m_gameObject->GetName() + "BoxCollisionFrame";
 	m_collFrame = Manager::GetInstance()->GetScene()->GetEditor()->AddEditorObject<BoxCollisionFrame>(1, name);
 	m_collFrame->Init(this);
+	m_collID = m_collFrame->GetID();
 
 	CollisionManager::GetInstance()->AddBoxCollision(this);
 }
 
 void BoxCollision::Load()
 {
+	m_collFrame = Manager::GetInstance()->GetScene()->GetEditor()->GetEditorObjectWithID<BoxCollisionFrame>(m_collID);
+	m_collFrame->SetCollision(this);
 	CollisionManager::GetInstance()->AddBoxCollision(this);
 }
 

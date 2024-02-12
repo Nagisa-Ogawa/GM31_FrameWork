@@ -2,13 +2,12 @@
 local TestA = {}
 local gameObject
 
-
 local vec = Vector3(0, 0, 0)
 local count = 0
 
 -- ゲームオブジェクトが作成されたときに一度だけ実行される関数
 function TestA.Start()
-    ImGuiManager:DebugLog("TestA : Start")
+    -- ImGuiManager:DebugLog("TestA : Start")
 end
 
 -- 毎フレーム呼ばれる更新関数

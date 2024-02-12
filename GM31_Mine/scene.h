@@ -86,7 +86,7 @@ public:
 	}
 
 	template <typename T>
-	T* GetGameObjectWithID(int ID) 
+	T* GetGameObjectWithID(int ID)
 	{
 		// IDが-1なら無効
 		if (ID == -1) return nullptr;
@@ -114,7 +114,7 @@ public:
 				[&name](const auto& obj) {return obj->GetName() == name; });
 			if (it != m_sceneObjectList[i].end()) {
 				// 一致したオブジェクトがあったなら返す
-				return (T*)(it->get());
+				return it->get();
 			}
 		}
 		// ないならnullを返す
@@ -199,7 +199,9 @@ public:
 	{
 		archive(
 			CEREAL_NVP(m_name),
-			CEREAL_NVP(m_sceneObjectList)
+			CEREAL_NVP(m_sceneObjectList),
+			CEREAL_NVP(m_editor),
+			CEREAL_NVP(m_registerID)
 		);
 	}
 
@@ -208,7 +210,9 @@ public:
 	{
 		archive(
 			CEREAL_NVP(m_name),
-			CEREAL_NVP(m_sceneObjectList)
+			CEREAL_NVP(m_sceneObjectList),
+			CEREAL_NVP(m_editor),
+			CEREAL_NVP(m_registerID)
 		);
 	}
 

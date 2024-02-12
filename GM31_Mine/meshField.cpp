@@ -120,7 +120,7 @@ void MeshField::Init()
 
 	// テクスチャ読み込み
 	D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
-											"asset/texture/floor01.jpg",
+											"Assets\\Textures\\floor01.jpg",
 											NULL,
 											NULL,
 											&m_Texture,
@@ -128,9 +128,9 @@ void MeshField::Init()
 	assert( m_Texture );
 
 
-	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "shader\\vertexLightingVS.cso");
+	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "Assets\\Shaders\\vertexLightingVS.cso");
 
-	Renderer::CreatePixelShader(&m_PixelShader, "shader\\vertexLightingPS.cso");
+	Renderer::CreatePixelShader(&m_PixelShader, "Assets\\Shaders\\vertexLightingPS.cso");
 
 
 }
@@ -226,7 +226,7 @@ void MeshField::Load()
 
 	// テクスチャ読み込み
 	D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
-		"asset/texture/floor01.jpg",
+		"Assets\\Textures\\floor01.jpg",
 		NULL,
 		NULL,
 		&m_Texture,
@@ -234,9 +234,9 @@ void MeshField::Load()
 	assert(m_Texture);
 
 
-	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "shader\\vertexLightingVS.cso");
+	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "Assets\\Shaders\\vertexLightingVS.cso");
 
-	Renderer::CreatePixelShader(&m_PixelShader, "shader\\vertexLightingPS.cso");
+	Renderer::CreatePixelShader(&m_PixelShader, "Assets\\Shaders\\vertexLightingPS.cso");
 
 	GameObject::Load();
 }

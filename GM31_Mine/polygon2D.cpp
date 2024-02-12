@@ -7,13 +7,13 @@
 
 void Polygon2D::Init(D3DXVECTOR2 pos, D3DXVECTOR2 size, const char* textureName)
 {
-	AddComponent<Shader>()->Init("Shader/unlitTextureVS.cso", "Shader/unlitTexturePS.cso");
+	AddComponent<Shader>()->Init("Assets\\Shaders\\unlitTextureVS.cso", "Assets\\Shaders\\unlitTexturePS.cso");
 	AddComponent<Sprite>()->Init(pos, size, textureName);
 }
 
 void Polygon2D::Init(D3DXVECTOR2 pos, D3DXVECTOR2 size)
 {
-	AddComponent<Shader>()->Init("Shader/unlitTextureVS.cso", "Shader/unlitTexturePS.cso");
+	AddComponent<Shader>()->Init("Assets\\Shaders\\unlitTextureVS.cso", "Assets\\Shaders\\unlitTexturePS.cso");
 	AddComponent<Sprite>()->Init(pos, size);
 }
 

@@ -14,4 +14,23 @@ public:
 
 	void RotateCamera(D3DXVECTOR2 delta);	// カメラをカメラ自身を中心として回転させる関数
 
+	template <class Archive>
+	void save(Archive& archive) const
+	{
+		archive(
+			cereal::base_class<GameObject>(this)
+		);
+	}
+
+	template <class Archive>
+	void load(Archive& archive)
+	{
+		archive(
+			cereal::base_class<GameObject>(this)
+		);
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(EditorCameraObject);
+

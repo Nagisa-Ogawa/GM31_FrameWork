@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
 #include "main.h"
 #include "manager.h"
 #include "gameObject.h"
@@ -14,6 +15,10 @@ void Script::Init(std::string fileName)
 {
 	// 初期化処理
 	m_fileName = fileName;
+	// リストに追加
+	LuaManager::GetInstance()->AddScriptList(this);
+	// ファイルの更新時間を確認
+	m_updateTime = GetUpdateTime();
 	// 最初にLuaファイルをコンパイル
 	CompileLua();
 
@@ -25,6 +30,10 @@ void Script::Init(std::string fileName)
 
 void Script::Load()
 {
+	// リストに追加
+	LuaManager::GetInstance()->AddScriptList(this);
+	// ファイルの更新時間を確認
+	m_updateTime = GetUpdateTime();
 	// Luaファイルをコンパイル
 	CompileLua();
 }
@@ -60,11 +69,11 @@ void Script::Start()
 
 void Script::Uninit()
 {
+	LuaManager::GetInstance()->DeleteScriptList(this);
 }
 
 void Script::Update()
 {
-
 	lua_State* L = LuaManager::GetInstance()->GetLuaState();
 
 	// 操作する前のスタックを記録
@@ -101,7 +110,7 @@ void Script::DispInspector()
 /// </summary>
 void Script::CompileLua()
 {
-	std::string fileName = "Scripts\\" + m_fileName;
+	std::string fileName = "Assets\\Scripts\\" + m_fileName;
 	lua_State* L = LuaManager::GetInstance()->GetLuaState();
 
 	// 操作する前のスタックを記録
@@ -141,4 +150,35 @@ void Script::CompileLua()
 	// スタックをリセットする
 	lua_settop(L, top);
 
+}
+
+/// <summary>
+/// Luaファイルの更新時間を取得する関数
+/// </summary>
+time_t Script::GetUpdateTime()
+{
+	struct _stat buf;
+	time_t updateTime;
+	std::string filepath = "Assets\\Scripts\\" + m_fileName;
+	// ファイルの情報を取得する
+	_stat(filepath.c_str(), &buf);
+	// 更新時間を取得
+	updateTime = buf.st_mtime;
+	return updateTime;
+}
+
+
+/// <summary>
+/// Luaファイルが更新されているかをチェックする関数
+/// </summary>
+/// <returns>更新されているかどうか</returns>
+bool Script::CheckUpdate()
+{
+	// 現在のファイル更新時間を取得
+	auto nowUpdateTime = GetUpdateTime();
+	// 更新時間が変更されていたならLuaファイルが更新されている
+	if (m_updateTime != nowUpdateTime) {
+		return true;
+	}
+	return false;
 }

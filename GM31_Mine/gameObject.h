@@ -134,7 +134,7 @@ public:
 	{
 		// 破棄フラグがONになっているコンポーネントは削除
 		m_componentList.remove_if([](const auto& component)
-		{return component->Destroy(); });
+		{return component->Destroy();});
 	}
 
 	template <class Archive>
@@ -145,7 +145,8 @@ public:
 			CEREAL_NVP(m_id),
 			CEREAL_NVP(m_componentList),
 			CEREAL_NVP(m_active),
-			CEREAL_NVP(m_destroy)
+			CEREAL_NVP(m_destroy),
+			CEREAL_NVP(m_registerID)
 		);
 	}
 
@@ -157,7 +158,8 @@ public:
 			CEREAL_NVP(m_id),
 			CEREAL_NVP(m_componentList),
 			CEREAL_NVP(m_active),
-			CEREAL_NVP(m_destroy)
+			CEREAL_NVP(m_destroy),
+			CEREAL_NVP(m_registerID)
 		);
 	}
 };

@@ -11,8 +11,8 @@ void SphereCollisionFrame::Init(float radius, D3DXVECTOR3 offset)
 	m_transform->m_worldScale = D3DXVECTOR3(radius, radius, radius);
 	m_Offset = offset;
 	m_transform->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f) + m_Offset;
-	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
-	AddComponent<Model>()->Init("asset\\model\\sphereCollision.obj",false);
+	AddComponent<Shader>()->Init("Assets\\Shaders\\vertexLightingVS.cso", "Assets\\Shaders\\vertexLightingPS.cso");
+	AddComponent<Model>()->Init("Asset\\Models\\sphereCollision.obj",false);
 }
 
 void SphereCollisionFrame::Update()

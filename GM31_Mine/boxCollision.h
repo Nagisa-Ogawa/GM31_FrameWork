@@ -9,7 +9,8 @@ private:
 	D3DXVECTOR3 m_size{};
 	D3DXVECTOR3 m_offset{};
 	bool		m_isTrigger{};
-	class BoxCollisionFrame* m_collFrame {};
+	class BoxCollisionFrame* m_collFrame {};	// エディタ上に表示するためのオブジェクト
+	int m_collID = -1;							// 表示用オブジェクトのID
 
 	D3DXMATRIX m_worldMatrix{};
 
@@ -39,7 +40,8 @@ public:
 			cereal::base_class<Component>(this),
 			CEREAL_NVP(size),
 			CEREAL_NVP(offset),
-			CEREAL_NVP(m_isTrigger)
+			CEREAL_NVP(m_isTrigger),
+			CEREAL_NVP(m_collID)
 		);
 	}
 
@@ -51,7 +53,8 @@ public:
 			cereal::base_class<Component>(this),
 			size,
 			offset,
-			m_isTrigger
+			m_isTrigger,
+			m_collID
 		);
 		m_size = D3DXVECTOR3(size.x, size.y, size.z);
 		m_offset = D3DXVECTOR3(offset.x, offset.y, offset.z);

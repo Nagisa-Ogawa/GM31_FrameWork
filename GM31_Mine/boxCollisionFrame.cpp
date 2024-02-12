@@ -11,8 +11,8 @@
 void BoxCollisionFrame::Init(BoxCollision* collision)
 {
 	m_collision = collision;
-	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
-	AddComponent<Model>()->Init("asset\\model\\boxCollision.obj",false);
+	AddComponent<Shader>()->Init("Assets\\Shaders\\vertexLightingVS.cso", "Assets\\Shaders\\vertexLightingPS.cso");
+	AddComponent<Model>()->Init("Assets\\Models\\boxCollision.obj",false);
 }
 
 

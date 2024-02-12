@@ -9,6 +9,8 @@ class Script :public Component
 private:
 	luabind::object m_object;
 	std::string m_fileName;
+	time_t m_updateTime;
+	bool m_isCompiled = false;
 public:
 	void Init(std::string fileName);
 	void Load() override;
@@ -19,6 +21,8 @@ public:
 
 	void Start();	// シーンの実行時に最初に一度だけ呼ばれる関数
 	void CompileLua();	// Luaファイルをコンパイルする関数
+	time_t GetUpdateTime();	// Luaファイルの更新時間を取得する
+	bool CheckUpdate();	// Luaファイルが更新されているかをチェック
 
 	std::string GetFileName() { return m_fileName; }
 

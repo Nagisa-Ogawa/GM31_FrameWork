@@ -62,7 +62,7 @@ void Manager::Init()
 	LuaManager::GetInstance()->Init();
 	
 	// Sceneファイルの中を確認
-	if (!CheckSceneFile()) {
+	if (CheckSceneFile()) {
 		// Sceneのデータがあったなら読み込み処理
 		LoadScene();
 	}
@@ -98,6 +98,8 @@ void Manager::Update()
 	case EDIT:
 		// 編集モードの時はエディタのみ更新処理を呼び出す
 		m_editor->Update();
+		// Luaファイルが更新されているかチェック
+		LuaManager::GetInstance()->CheckUpdateScript();
 		break;
 	case RUN:
 		// 実行中の時はエディタとゲームの更新処理をどちらも呼び出す
@@ -165,7 +167,7 @@ void Manager::SaveScene()
 	// 現在あるシーンをすべて保存する
 	for (const auto& scene : m_sceneList) {
 		// Scenesフォルダにシーンファイルを作成
-		std::string filePath = "Scenes\\"+scene->GetName() + ".json";
+		std::string filePath = "Assets\\Scenes\\"+scene->GetName() + ".json";
 		std::ofstream file(filePath);
 		// シーン情報をシリアライズ
 		try {
@@ -186,11 +188,11 @@ void Manager::SaveScene()
 void Manager::LoadScene()
 {
 	// ファイルからシーンをロード
-	std::list<std::string> nameList = GetAllFiles("Scenes");
+	std::list<std::string> nameList = GetAllFiles("Assets\\Scenes");
 	for (auto fileName : nameList) {
 		std::unique_ptr<Scene> scene;
 		try {
-			std::ifstream file("Scenes\\" + fileName);
+			std::ifstream file("Assets\\Scenes\\" + fileName);
 			cereal::JSONInputArchive archive(file);
 			archive(scene);
 		}
@@ -199,6 +201,7 @@ void Manager::LoadScene()
 		}
 		// ファイルから読み込んだ後に読み込み後関数を呼び出し
 		m_scene = scene.get();
+		m_editor = scene->GetEditor();
 		scene->Load();
 		m_sceneList.push_back(std::move(scene));
 	}
@@ -229,6 +232,7 @@ void Manager::StopScene()
 	m_scene = nullptr;
 	m_sceneList.clear();
 	CollisionManager::GetInstance()->Uninit();
+	LuaManager::GetInstance()->ClearScriptList();
 	// ファイルからシーンをロード 
 	m_editor = new Editor();
 	m_editor->Init();
@@ -245,7 +249,7 @@ bool Manager::CheckSceneFile()
 {
 	HANDLE h;
 	WIN32_FIND_DATA win32FindData;
-	std::string searchName = "Scenes//*";
+	std::string searchName = "Assets\\Scenes\\*";
 
 	h = FindFirstFile(searchName.c_str(), &win32FindData);
 
@@ -261,7 +265,7 @@ std::list<std::string> Manager::GetAllFiles(std::string dirPath)
 	HANDLE h;
 	WIN32_FIND_DATA win32FindData;
 	std::list<std::string> nameList;
-	std::string searchName = dirPath + "//*";
+	std::string searchName = dirPath + "\\*";
 
 	h = FindFirstFile(searchName.c_str(), &win32FindData);
 

@@ -33,14 +33,20 @@ void DispComponent(BoxCollision* collision)
 {
 	ImGui::Separator();
 	ImGui::AlignTextToFramePadding();
-	bool treeopen = ImGui::TreeNodeEx("BoxCollision", ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
+	std::string name = "BoxCollision##" + std::to_string(collision->GetID());
+	bool treeopen = ImGui::TreeNodeEx(name.c_str(), ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
 	// コンポーネント削除ボタンを作成
 	ImGui::SameLine(ImGui::GetWindowWidth() - 40);
+	// ボタンの色を赤色にする
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
 	if (ImGui::Button("X")) {
 		collision->SetDestroy();
+		style = ImGuiStyle();
 		ImGui::TreePop();
 		return;
 	}
+	style = ImGuiStyle();
 	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
 	// コンポーネントの要素を表示
 	if (treeopen)
@@ -90,7 +96,24 @@ void DispComponent(Model* model)
 void DispComponent(QuadCollision* collision)
 {
 	ImGui::Separator();
-	if (ImGui::TreeNodeEx("QuadCollision", ImGuiTreeNodeFlags_DefaultOpen)) {
+	ImGui::AlignTextToFramePadding();
+	std::string name = "QuadCollision##" + std::to_string(collision->GetID());
+	bool treeopen = ImGui::TreeNodeEx(name.c_str(), ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
+	// コンポーネント削除ボタンを作成
+	ImGui::SameLine(ImGui::GetWindowWidth() - 40);
+	// ボタンの色を赤色にする
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
+	if (ImGui::Button("X")) {
+		collision->SetDestroy();
+		style = ImGuiStyle();
+		ImGui::TreePop();
+		return;
+	}
+	style = ImGuiStyle();
+	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
+	// コンポーネントの要素を表示
+	if (treeopen){
 		if (ImGui::TreeNodeEx("Size", ImGuiTreeNodeFlags_DefaultOpen)) {
 			D3DXVECTOR2* sizeVec = collision->GetSize();
 			float size[2] = { sizeVec->x,sizeVec->y };
@@ -117,7 +140,24 @@ void DispComponent(QuadCollision* collision)
 void DispComponent(Script* script)
 {
 	ImGui::Separator();
-	if (ImGui::TreeNodeEx("Script", ImGuiTreeNodeFlags_DefaultOpen)) {
+	ImGui::AlignTextToFramePadding();
+	std::string name = "Script##" + std::to_string(script->GetID());
+	bool treeopen = ImGui::TreeNodeEx(name.c_str(), ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
+	// コンポーネント削除ボタンを作成
+	ImGui::SameLine(ImGui::GetWindowWidth() - 40);
+	// ボタンの色を赤色にする
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
+	if (ImGui::Button("X")) {
+		script->SetDestroy();
+		style = ImGuiStyle();
+		ImGui::TreePop();
+		return;
+	}
+	style = ImGuiStyle();
+	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
+	// コンポーネントの要素を表示
+	if (treeopen) {
 		ImGui::Text("FileName : %s", script->GetFileName().c_str());
 		ImGui::TreePop();
 	}
@@ -144,7 +184,24 @@ void DispComponent(Shader* shader)
 void DispComponent(SphereCollision* collision)
 {
 	ImGui::Separator();
-	if (ImGui::TreeNodeEx("SphereCollision", ImGuiTreeNodeFlags_DefaultOpen)) {
+	ImGui::AlignTextToFramePadding();
+	std::string name = "SphereCollision##" + std::to_string(collision->GetID());
+	bool treeopen = ImGui::TreeNodeEx(name.c_str(), ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
+	// コンポーネント削除ボタンを作成
+	ImGui::SameLine(ImGui::GetWindowWidth() - 40);
+	// ボタンの色を赤色にする
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
+	if (ImGui::Button("X")) {
+		collision->SetDestroy();
+		style = ImGuiStyle();
+		ImGui::TreePop();
+		return;
+	}
+	style = ImGuiStyle();
+	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
+	// コンポーネントの要素を表示
+	if (treeopen) {
 		float* radius = collision->GetRadius();
 		ImGui::InputFloat("Radius : ", radius);
 		if (ImGui::TreeNodeEx("Offset", ImGuiTreeNodeFlags_DefaultOpen)) {

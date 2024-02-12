@@ -8,10 +8,10 @@
 void Field::Init()
 {
 	D3DXVECTOR3 basePos = D3DXVECTOR3((5 * 10.0f)/2.0f, 0.0f, (5 * 10.0f)/2.0f);
-	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
+	AddComponent<Shader>()->Init("Assets\\Shaders\\vertexLightingVS.cso", "Assets\\Shaders\\vertexLightingPS.cso");
 	for (int y = 0; y < 5; y++) {
 		for (int x = 0; x < 5; x++) {
-			AddComponent<Plane>()->Init("asset/texture/floor01.jpg");
+			AddComponent<Plane>()->Init("Assets\\Textures\\floor01.jpg");
 		}
 	}
 }

@@ -13,7 +13,7 @@ void MainMenuBarGui::Init()
 {
 	// ‰æ‘œ‚ð“Ç‚Ýž‚Ý
 	D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
-		"asset/texture/ExecutionBtn.png",
+		"Assets\\Textures\\ExecutionBtn.png",
 		NULL,
 		NULL,
 		&m_executeBtnTexture,
@@ -21,7 +21,7 @@ void MainMenuBarGui::Init()
 	assert(m_executeBtnTexture);
 
 	D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
-		"asset/texture/StopBtn.png",
+		"Assets\\Textures\\StopBtn.png",
 		NULL,
 		NULL,
 		&m_stopBtnTexture,
@@ -29,6 +29,12 @@ void MainMenuBarGui::Init()
 	assert(m_stopBtnTexture);
 
 
+}
+
+void MainMenuBarGui::Uninit()
+{
+	m_executeBtnTexture->Release();
+	m_stopBtnTexture->Release();
 }
 
 void MainMenuBarGui::Update()

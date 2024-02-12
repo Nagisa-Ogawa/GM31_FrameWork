@@ -6,7 +6,6 @@
 #include "player.h"
 #include "model.h"
 #include "shader.h"
-#include "enemy.h"
 #include "CollisionManager.h"
 #include "boxCollision.h"
 #include "quadCollision.h"
@@ -26,10 +25,12 @@ void Player::Init()
 {
 	m_transform->m_localScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	m_transform->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	AddComponent<BoxCollision>()->Init(D3DXVECTOR3(0.5f, 1.0f, 0.5f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
+	auto coll = AddComponent<BoxCollision>(); 
+	coll->SetSize(D3DXVECTOR3(0.5f, 1.0f, 0.5f));
+	coll->SetOffset(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	// AddComponent<SphereCollision>()->Init(1.0f, D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
-	AddComponent<Shader>()->Init("Shader\\vertexLightingVS.cso", "Shader\\vertexLightingPS.cso");
-	AddComponent<Model>()->Init("asset\\model\\Bot.obj",true);
+	AddComponent<Shader>()->Init("Assets\\Shaders\\vertexLightingVS.cso", "Assets\\Shaders\\vertexLightingPS.cso");
+	AddComponent<Model>()->Init("Assets\\Models\\Bot.obj",true);
 	//m_Model = AddComponent<AnimationModel>();
 	//m_Model->Init("asset\\model\\Bot.fbx");
 	//m_Model->LoadAnimation("asset\\model\\Bot_Run.fbx", "Run");
@@ -68,22 +69,22 @@ void Player::Update()
 	// 仮
 	// --------------------------------
 	// プレイヤーと敵（正方形）の当たり判定
-	m_IsHitEnemy = false;
-	BoxCollision* pPCollision = GetComponent<BoxCollision>();
-	auto pEnemies = Manager::GetInstance()->GetScene()->GetActiveGameObjects<Enemy>();
-	for (auto pEnemy : pEnemies) {
-		BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
-		float l = 0.0f;
-		D3DXVECTOR3 dir{};
-		if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision,&l,&dir)) {
-			m_IsHitEnemy = true;
-		}
-		if (m_IsHitEnemy) {
-			m_transform->m_localPosition += dir * l;
-		}
-	}
+	//m_IsHitEnemy = false;
+	//BoxCollision* pPCollision = GetComponent<BoxCollision>();
+	//auto pEnemies = Manager::GetInstance()->GetScene()->GetActiveGameObjects<Enemy>();
+	//for (auto pEnemy : pEnemies) {
+	//	BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
+	//	float l = 0.0f;
+	//	D3DXVECTOR3 dir{};
+	//	if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision,&l,&dir)) {
+	//		m_IsHitEnemy = true;
+	//	}
+	//	if (m_IsHitEnemy) {
+	//		m_transform->m_localPosition += dir * l;
+	//	}
+	//}
 
-	m_IsHitWall = false;
+	//m_IsHitWall = false;
 
 	// プレイヤーと壁の当たり判定
 	//auto pWalls = Manager::GetInstance()->GetScene()->GetGameObjects<Wall>();

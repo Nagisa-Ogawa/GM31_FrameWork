@@ -6,19 +6,6 @@
 #include "sphereCollisionFrame.h"
 #include "dispInspector.h"
 
-void SphereCollision::Init(float radius, D3DXVECTOR3 offset, bool isTrigger)
-{
-	m_radius = radius;
-	m_offset = offset;
-	std::string name = m_gameObject->GetName() + "SphereCollisionFram";
-	auto m_CollFrame = Manager::GetInstance()->GetScene()->GetEditor()->AddEditorObject<SphereCollisionFrame>(1,name);
-	m_CollFrame->Init(radius, offset);
-	m_CollFrame->SetCollTransform(m_gameObject->GetTransform());
-	m_CollFrame->SetActive(false);
-
-	CollisionManager::GetInstance()->AddSphereCollision(this);
-	m_transform = m_gameObject->GetTransform();
-}
 
 void SphereCollision::Init()
 {

@@ -8,6 +8,7 @@
 #include "input.h"
 #include "gameObject.h"
 #include "transform.h"
+#include "script.h"
 
 
 LuaManager* LuaManager::m_Instance = NULL;
@@ -107,8 +108,42 @@ void LuaManager::Init()
 
 void LuaManager::Uninit()
 {
+	m_scriptList.clear();
 	// 終了
 	lua_close(m_L);
+}
+
+void LuaManager::AddScriptList(Script* script)
+{
+	if (script)
+		m_scriptList.push_back(script);
+}
+
+void LuaManager::DeleteScriptList(Script* script)
+{
+	if (script)
+		m_scriptList.remove(script);
+}
+
+void LuaManager::ClearScriptList()
+{
+	m_scriptList.clear();
+}
+
+/// <summary>
+/// 現在のシーンで使用されているLuaファイル
+/// </summary>
+void LuaManager::CheckUpdateScript()
+{
+	// 現在のシーンにあるファイルをチェック
+	for (auto script : m_scriptList) {
+		// ファイルが変更されているかをチェック
+		if (script->CheckUpdate()) {
+			// 変更されていたならコンパイルをし直す
+			MyImGuiManager::GetInstance()->DebugLog("Lua update !!");
+			script->CompileLua();
+		}
+	}
 }
 
 

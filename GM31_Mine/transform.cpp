@@ -20,7 +20,7 @@ void Transform::Load()
 	if (m_parentID != -1)
 	{	
 		// 親IDから親オブジェクトを取得
-		auto parentObject = Manager::GetInstance()->GetScene()->GetGameObjectWithID(m_parentID);
+		auto parentObject = Manager::GetInstance()->GetScene()->GetGameObjectWithID<GameObject>(m_parentID);
 		auto parent = parentObject->GetTransform();
 		// 親として登録
 		m_parent = parent;

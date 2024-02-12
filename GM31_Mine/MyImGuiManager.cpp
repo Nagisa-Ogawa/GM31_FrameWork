@@ -91,6 +91,10 @@ void MyImGuiManager::Init(HWND hwnd)
 
 void MyImGuiManager::Uninit()
 {
+	for (MyImGui* myImGui : m_myImGuiList)
+	{
+		myImGui->Uninit();
+	}
 	// Cleanup
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
