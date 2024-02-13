@@ -35,6 +35,7 @@ public:
 	FileTreeNode* Insert(int id, FILENODE_TYPE fileType, std::string fileName);
 	bool Delete();
 
-	bool IsExistDirChild();
-	std::list<FileTreeNode*> GetDirChildList();
+	bool IsExistSameFileName(std::string fileName);	// 引数のファイル名と同じファイル名の子供がいるかチェックする関数
+	bool IsExistDirChild();							// ディレクトリの子供が存在するかをチェックする関数
+	std::list<FileTreeNode*> GetDirChildList();		// ディレクトリの子供のリストを返す関数
 };

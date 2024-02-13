@@ -23,6 +23,21 @@ bool FileTreeNode::Delete()
 }
 
 /// <summary>
+/// 引数のファイル名と同じファイル名の子供がいるかチェックする関数
+/// </summary>
+/// <param name="fileName"></param>
+/// <returns></returns>
+bool FileTreeNode::IsExistSameFileName(std::string fileName)
+{
+    for (auto child : m_childList) {
+        if (child->m_fileName == fileName) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/// <summary>
 /// 子ノードにディレクトリのノードがあるかをチェックする関数
 /// </summary>
 /// <returns>子ノードにディレクトリのノードが存在したかどうか</returns>

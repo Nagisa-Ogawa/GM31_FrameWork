@@ -11,7 +11,10 @@
 #include "projectGui.h"
 
 #define ICON_NUM (7)
-#define FILEBUTTON_SIZE (70)
+#define BUTTON_SIZE_FILE (70)
+#define CREATE_SCENE_POPUP_NAME ("Create Scene")
+#define CREATE_SCRIPT_POPUP_NAME ("Create Script")
+
 
 void ProjectGui::Init()
 {
@@ -128,7 +131,7 @@ void ProjectGui::ShowDirNode(FileTreeNode* fileNode,int* selectNodeID)
 /// <param name="fileNode"></param>
 void ProjectGui::ShowSelectChildNode(FileTreeNode* fileNode)
 {
-    ImVec2 btnSize(FILEBUTTON_SIZE, FILEBUTTON_SIZE);
+    ImVec2 btnSize(BUTTON_SIZE_FILE, BUTTON_SIZE_FILE);
     ImGuiStyle& style = ImGui::GetStyle();
     // ボタンのスタイルを変更
     style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.8f, 0.8f, 1.0f);
@@ -179,7 +182,7 @@ void ProjectGui::ShowSelectChildNode(FileTreeNode* fileNode)
         ImGui::ImageButton((void*)m_plusButtonTexture, btnSize);
         // ボタンをダブルクリックした時
         if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
-            ImGui::OpenPopup("CreateScenePopup");
+            ImGui::OpenPopup(CREATE_SCENE_POPUP_NAME);
         }
     }
     // スクリプトフォルダを開いている場合スクリプト追加ボタンを表示
@@ -187,7 +190,7 @@ void ProjectGui::ShowSelectChildNode(FileTreeNode* fileNode)
         ImGui::ImageButton((void*)m_plusButtonTexture, btnSize);
         // ボタンをダブルクリックした時
         if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
-            ImGui::OpenPopup("CreateScriptPopup");
+            ImGui::OpenPopup(CREATE_SCRIPT_POPUP_NAME);
         }
     }
     // スタイルをリセット
@@ -285,8 +288,22 @@ void ProjectGui::PushFileButton(FileTreeNode* fileNode)
 void ProjectGui::ShowCreateScenePopup()
 {
     // スクリプトを作成するポップアップを表示
-    if (ImGui::BeginPopup("CreateScenePopup"))
+    if (ImGui::BeginPopupModal(CREATE_SCENE_POPUP_NAME, NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10);
+        ImGui::Separator();
+        char str[128] = "";
+        ImGui::InputText("SceneName", str, IM_ARRAYSIZE(str));
+        ImVec2 btnSize = ImVec2(60, 30);
+        if (ImGui::Button("Create", btnSize)) {
+            // スクリプトを作成する
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine(250);
+        if (ImGui::Button("Cancel", btnSize)) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::PopStyleVar();
         ImGui::EndPopup();
     }
 }
@@ -294,10 +311,36 @@ void ProjectGui::ShowCreateScenePopup()
 void ProjectGui::ShowCreateScriptPopup()
 {
     // スクリプトを作成するポップアップを表示
-    if (ImGui::BeginPopup("CreateScriptPopup"))
+    if (ImGui::BeginPopupModal(CREATE_SCRIPT_POPUP_NAME,NULL,ImGuiWindowFlags_AlwaysAutoResize))
     {
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10);
         ImGui::Separator();
-        ImGui::Text("Create Script");
+        char str[128] = "";
+        ImGui::InputText("FileName", str,IM_ARRAYSIZE(str));
+        ImVec2 btnSize = ImVec2(60, 30);
+        if (ImGui::Button("Create", btnSize)) {
+            // ファイル名が入力されているかチェック
+            if (str == "") {
+                MyImGuiManager::GetInstance()->DebugLog("Error!! Script Name is Enpty!!");
+                ImGui::CloseCurrentPopup();
+            }
+            // ファイル名に拡張子を付け足す
+            std::string fileName = str;
+            fileName += ".lua";
+            // 同じファイル名があるかチェック
+            if () {
+
+            }
+            // スクリプトを作成する
+            // スクリプトを作成したならファイル木構造を更新する
+            // 成功したことを通知
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine(250);
+        if (ImGui::Button("Cancel", btnSize)) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::PopStyleVar();
         ImGui::EndPopup();
     }
 }

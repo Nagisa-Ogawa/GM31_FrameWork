@@ -147,6 +147,14 @@ void LuaManager::CheckUpdateScript()
 }
 
 
+void LuaManager::CreateScriptFile(std::string fileName)
+{
+	// 引数のファイル名からファイルを作成
+	// ファイルに最初から記述するプログラム文を書き込む
+
+}
+
+
 LuaManager::~LuaManager()
 {
 	// インスタンスを解放

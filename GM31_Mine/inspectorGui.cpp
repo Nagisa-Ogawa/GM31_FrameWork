@@ -43,7 +43,7 @@ void InspectorGui::Update()
 			char str[128];
 			strcpy_s(str, m_selectedObject->GetName().c_str());
 			ImGui::PushItemWidth(-40);
-			if (ImGui::InputText("##objectName", str, sizeof(str), ImGuiInputTextFlags_EnterReturnsTrue)) {
+			if (ImGui::InputText("##objectName", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue)) {
 				std::string s(str);
 				m_selectedObject->SetName(s);
 			}
