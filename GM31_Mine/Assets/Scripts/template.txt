@@ -1,0 +1,23 @@
+-- どのスクリプトにも必要な変数
+local fileName = {}		-- クラスを表すテーブル
+local gameObject		-- このスクリプトがコンポーネントされているオブジェクト
+
+-- ゲームオブジェクトが作成されたときに一度だけ実行される関数
+function fileName.Start()
+
+end
+
+
+-- 毎フレーム呼ばれる更新関数
+function fileName.Update()
+
+end
+
+
+-- スクリプトがアタッチされているオブジェクトを取得
+function GetGameObject(object)
+    gameObject = object
+end
+
+
+return fileName

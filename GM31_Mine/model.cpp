@@ -12,17 +12,17 @@
 #include "dispInspector.h"
 
 
-void Model::Init(const char* FileName, bool hasColl)
+void Model::Init(const char* fileName, bool hasColl)
 {
 	if (hasColl) {
 		// このモデル用当たり判定を作成
-		m_PolyColl = m_gameObject->AddComponent<PolygonCollision>();
+		m_polyColl = m_gameObject->AddComponent<PolygonCollision>();
 	}
 	// オブジェクトを.objファイルから読み込む
 	MODEL model;
-	LoadObj(FileName, &model);
+	LoadObj(fileName, &model);
 
-	m_fileName = FileName;
+	m_fileName = fileName;
 
 	// 頂点バッファ生成
 	{
@@ -37,7 +37,7 @@ void Model::Init(const char* FileName, bool hasColl)
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = model.VertexArray;
 
-		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_vertexBuffer);
 	}
 
 
@@ -54,34 +54,34 @@ void Model::Init(const char* FileName, bool hasColl)
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = model.IndexArray;
 
-		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_IndexBuffer);
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_indexBuffer);
 	}
 
 	// サブセット設定
 	{
-		m_SubsetArray = new SUBSET[model.SubsetNum];
-		m_SubsetNum = model.SubsetNum;
+		m_subsetArray = new SUBSET[model.SubsetNum];
+		m_subsetNum = model.SubsetNum;
 
 		for (unsigned int i = 0; i < model.SubsetNum; i++)
 		{
-			m_SubsetArray[i].StartIndex = model.SubsetArray[i].StartIndex;
-			m_SubsetArray[i].IndexNum = model.SubsetArray[i].IndexNum;
+			m_subsetArray[i].StartIndex = model.SubsetArray[i].StartIndex;
+			m_subsetArray[i].IndexNum = model.SubsetArray[i].IndexNum;
 
-			m_SubsetArray[i].Material.Material = model.SubsetArray[i].Material.Material;
+			m_subsetArray[i].Material.Material = model.SubsetArray[i].Material.Material;
 
-			m_SubsetArray[i].Material.Texture = NULL;
+			m_subsetArray[i].Material.Texture = NULL;
 
 			D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
 				model.SubsetArray[i].Material.TextureName,
 				NULL,
 				NULL,
-				&m_SubsetArray[i].Material.Texture,
+				&m_subsetArray[i].Material.Texture,
 				NULL);
 
-			if (m_SubsetArray[i].Material.Texture)
-				m_SubsetArray[i].Material.Material.TextureEnable = true;
+			if (m_subsetArray[i].Material.Texture)
+				m_subsetArray[i].Material.Material.TextureEnable = true;
 			else
-				m_SubsetArray[i].Material.Material.TextureEnable = false;
+				m_subsetArray[i].Material.Material.TextureEnable = false;
 
 		}
 	}
@@ -108,7 +108,7 @@ void Model::Init(MODEL* pModel)
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem =pModel->VertexArray;
 
-		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_vertexBuffer);
 	}
 
 
@@ -125,34 +125,34 @@ void Model::Init(MODEL* pModel)
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = pModel->IndexArray;
 
-		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_IndexBuffer);
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_indexBuffer);
 	}
 
 	// サブセット設定
 	{
-		m_SubsetArray = new SUBSET[pModel->SubsetNum];
-		m_SubsetNum = pModel->SubsetNum;
+		m_subsetArray = new SUBSET[pModel->SubsetNum];
+		m_subsetNum = pModel->SubsetNum;
 
 		for (unsigned int i = 0; i < pModel->SubsetNum; i++)
 		{
-			m_SubsetArray[i].StartIndex = pModel->SubsetArray[i].StartIndex;
-			m_SubsetArray[i].IndexNum = pModel->SubsetArray[i].IndexNum;
+			m_subsetArray[i].StartIndex = pModel->SubsetArray[i].StartIndex;
+			m_subsetArray[i].IndexNum = pModel->SubsetArray[i].IndexNum;
 
-			m_SubsetArray[i].Material.Material = pModel->SubsetArray[i].Material.Material;
+			m_subsetArray[i].Material.Material = pModel->SubsetArray[i].Material.Material;
 
-			m_SubsetArray[i].Material.Texture = NULL;
+			m_subsetArray[i].Material.Texture = NULL;
 
 			D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
 				pModel->SubsetArray[i].Material.TextureName,
 				NULL,
 				NULL,
-				&m_SubsetArray[i].Material.Texture,
+				&m_subsetArray[i].Material.Texture,
 				NULL);
 
-			if (m_SubsetArray[i].Material.Texture)
-				m_SubsetArray[i].Material.Material.TextureEnable = true;
+			if (m_subsetArray[i].Material.Texture)
+				m_subsetArray[i].Material.Material.TextureEnable = true;
 			else
-				m_SubsetArray[i].Material.Material.TextureEnable = false;
+				m_subsetArray[i].Material.Material.TextureEnable = false;
 
 		}
 	}
@@ -160,7 +160,7 @@ void Model::Init(MODEL* pModel)
 
 void Model::Load()
 {
-	m_PolyColl = m_gameObject->GetComponent<PolygonCollision>();
+	m_polyColl = m_gameObject->GetComponent<PolygonCollision>();
 	MODEL model;
 	LoadObj(m_fileName.c_str(), &model);
 
@@ -178,7 +178,7 @@ void Model::Load()
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = model.VertexArray;
 
-		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_vertexBuffer);
 	}
 
 
@@ -195,34 +195,34 @@ void Model::Load()
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = model.IndexArray;
 
-		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_IndexBuffer);
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_indexBuffer);
 	}
 
 	// サブセット設定
 	{
-		m_SubsetArray = new SUBSET[model.SubsetNum];
-		m_SubsetNum = model.SubsetNum;
+		m_subsetArray = new SUBSET[model.SubsetNum];
+		m_subsetNum = model.SubsetNum;
 
 		for (unsigned int i = 0; i < model.SubsetNum; i++)
 		{
-			m_SubsetArray[i].StartIndex = model.SubsetArray[i].StartIndex;
-			m_SubsetArray[i].IndexNum = model.SubsetArray[i].IndexNum;
+			m_subsetArray[i].StartIndex = model.SubsetArray[i].StartIndex;
+			m_subsetArray[i].IndexNum = model.SubsetArray[i].IndexNum;
 
-			m_SubsetArray[i].Material.Material = model.SubsetArray[i].Material.Material;
+			m_subsetArray[i].Material.Material = model.SubsetArray[i].Material.Material;
 
-			m_SubsetArray[i].Material.Texture = NULL;
+			m_subsetArray[i].Material.Texture = NULL;
 
 			D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
 				model.SubsetArray[i].Material.TextureName,
 				NULL,
 				NULL,
-				&m_SubsetArray[i].Material.Texture,
+				&m_subsetArray[i].Material.Texture,
 				NULL);
 
-			if (m_SubsetArray[i].Material.Texture)
-				m_SubsetArray[i].Material.Material.TextureEnable = true;
+			if (m_subsetArray[i].Material.Texture)
+				m_subsetArray[i].Material.Material.TextureEnable = true;
 			else
-				m_SubsetArray[i].Material.Material.TextureEnable = false;
+				m_subsetArray[i].Material.Material.TextureEnable = false;
 
 		}
 	}
@@ -235,16 +235,16 @@ void Model::Load()
 
 void Model::Uninit()
 {
-	m_VertexBuffer->Release();
-	m_IndexBuffer->Release();
+	m_vertexBuffer->Release();
+	m_indexBuffer->Release();
 
-	for (unsigned int i = 0; i < m_SubsetNum; i++)
+	for (unsigned int i = 0; i < m_subsetNum; i++)
 	{
-		if (m_SubsetArray[i].Material.Texture)
-			m_SubsetArray[i].Material.Texture->Release();
+		if (m_subsetArray[i].Material.Texture)
+			m_subsetArray[i].Material.Texture->Release();
 	}
 
-	delete[] m_SubsetArray;
+	delete[] m_subsetArray;
 }
 
 void Model::Update()
@@ -257,26 +257,26 @@ void Model::Draw()
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
-	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
+	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 
 	// インデックスバッファ設定
-	Renderer::GetDeviceContext()->IASetIndexBuffer(m_IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	Renderer::GetDeviceContext()->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	// プリミティブトポロジ設定
 	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
-	for (unsigned int i = 0; i < m_SubsetNum; i++)
+	for (unsigned int i = 0; i < m_subsetNum; i++)
 	{
 		// マテリアル設定
-		Renderer::SetMaterial(m_SubsetArray[i].Material.Material);
+		Renderer::SetMaterial(m_subsetArray[i].Material.Material);
 
 		// テクスチャ設定
-		if (m_SubsetArray[i].Material.Texture)
-			Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &m_SubsetArray[i].Material.Texture);
+		if (m_subsetArray[i].Material.Texture)
+			Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &m_subsetArray[i].Material.Texture);
 
 		// ポリゴン描画
-		Renderer::GetDeviceContext()->DrawIndexed(m_SubsetArray[i].IndexNum, m_SubsetArray[i].StartIndex, 0);
+		Renderer::GetDeviceContext()->DrawIndexed(m_subsetArray[i].IndexNum, m_subsetArray[i].StartIndex, 0);
 	}
 
 }
@@ -287,12 +287,108 @@ void Model::DispInspector()
 }
 
 
+/// <summary>
+/// モデルを変更する関数
+/// </summary>
+/// <param name="fileName"></param>
+void Model::ChangeModel(std::string fileName)
+{
+	// 読み込むファイル名が同じなら読み込まない
+	if (fileName == m_fileName) {
+		return;
+	}
+
+	// オブジェクトを.objファイルから読み込む
+	MODEL model;
+	LoadObj(fileName.c_str(), &model);
+
+	m_fileName = fileName;
+
+	// 現在のバッファを削除
+	m_vertexBuffer->Release();
+	m_indexBuffer->Release();
+
+	for (unsigned int i = 0; i < m_subsetNum; i++)
+	{
+		if (m_subsetArray[i].Material.Texture)
+			m_subsetArray[i].Material.Texture->Release();
+	}
+
+	delete[] m_subsetArray;
+
+	// 頂点バッファ生成
+	{
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(VERTEX_3D) * model.VertexNum;
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.pSysMem = model.VertexArray;
+
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_vertexBuffer);
+	}
+
+
+	// インデックスバッファ生成
+	{
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(unsigned int) * model.IndexNum;
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.pSysMem = model.IndexArray;
+
+		Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_indexBuffer);
+	}
+
+	// サブセット設定
+	{
+		m_subsetArray = new SUBSET[model.SubsetNum];
+		m_subsetNum = model.SubsetNum;
+
+		for (unsigned int i = 0; i < model.SubsetNum; i++)
+		{
+			m_subsetArray[i].StartIndex = model.SubsetArray[i].StartIndex;
+			m_subsetArray[i].IndexNum = model.SubsetArray[i].IndexNum;
+
+			m_subsetArray[i].Material.Material = model.SubsetArray[i].Material.Material;
+
+			m_subsetArray[i].Material.Texture = NULL;
+
+			D3DX11CreateShaderResourceViewFromFile(Renderer::GetDevice(),
+				model.SubsetArray[i].Material.TextureName,
+				NULL,
+				NULL,
+				&m_subsetArray[i].Material.Texture,
+				NULL);
+
+			if (m_subsetArray[i].Material.Texture)
+				m_subsetArray[i].Material.Material.TextureEnable = true;
+			else
+				m_subsetArray[i].Material.Material.TextureEnable = false;
+
+		}
+	}
+
+	delete[] model.VertexArray;
+	delete[] model.IndexArray;
+	delete[] model.SubsetArray;
+}
+
 //モデル読込////////////////////////////////////////////
-void Model::LoadObj( const char *FileName, MODEL *Model )
+void Model::LoadObj( const char *fileName, MODEL *Model )
 {
 
 	char dir[MAX_PATH];
-	strcpy (dir, FileName );
+	strcpy (dir, fileName );
 	PathRemoveFileSpec(dir);
 
 	POLYGON_POSITION* polyPosArray;		// ポリゴンごとの頂点配列
@@ -319,7 +415,7 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 
 
 	FILE *file;
-	file = fopen( FileName, "rt" );
+	file = fopen( fileName, "rt" );
 	assert(file);
 
 
@@ -387,9 +483,9 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 	Model->SubsetArray = new SUBSET[ subsetNum ];
 	Model->SubsetNum = subsetNum;
 
-	if (m_PolyColl != nullptr) {
+	if (m_polyColl != nullptr) {
 		// ポリゴン用当たり判定コンポーネントへポリゴン配列をセット
-		m_PolyColl->SetPolygonArray(polyPosArray);
+		m_polyColl->SetPolygonArray(polyPosArray);
 	}
 
 
@@ -524,8 +620,8 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 			pc++;
 		}
 	}
-	if (m_PolyColl != nullptr) {
-		m_PolyColl->SetArrayCount(pc);
+	if (m_polyColl != nullptr) {
+		m_polyColl->SetArrayCount(pc);
 	}
 
 	if( sc != 0 )
@@ -543,11 +639,11 @@ void Model::LoadObj( const char *FileName, MODEL *Model )
 
 
 //マテリアル読み込み///////////////////////////////////////////////////////////////////
-void Model::LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray, unsigned int *MaterialNum )
+void Model::LoadMaterial( const char *fileName, MODEL_MATERIAL **materialArray, unsigned int *materialNum )
 {
 
 	char dir[MAX_PATH];
-	strcpy(dir, FileName);
+	strcpy(dir, fileName);
 	PathRemoveFileSpec(dir);
 
 
@@ -555,11 +651,11 @@ void Model::LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray, 
 	char str[256];
 
 	FILE *file;
-	file = fopen( FileName, "rt" );
+	file = fopen( fileName, "rt" );
 	assert(file);
 
-	MODEL_MATERIAL *materialArray;
-	unsigned int materialNum = 0;
+	MODEL_MATERIAL *matArray;
+	unsigned int matNum = 0;
 
 	//要素数カウント
 	while( true )
@@ -572,13 +668,13 @@ void Model::LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray, 
 
 		if( strcmp( str, "newmtl" ) == 0 )
 		{
-			materialNum++;
+			matNum++;
 		}
 	}
 
 
 	//メモリ確保
-	materialArray = new MODEL_MATERIAL[ materialNum ];
+	matArray = new MODEL_MATERIAL[ matNum ];
 
 
 	//要素読込
@@ -598,47 +694,47 @@ void Model::LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray, 
 		{
 			//マテリアル名
 			mc++;
-			fscanf( file, "%s", materialArray[ mc ].Name );
-			strcpy( materialArray[ mc ].TextureName, "" );
+			fscanf( file, "%s", matArray[ mc ].Name );
+			strcpy( matArray[ mc ].TextureName, "" );
 
-			materialArray[mc].Material.Emission.r = 0.0f;
-			materialArray[mc].Material.Emission.g = 0.0f;
-			materialArray[mc].Material.Emission.b = 0.0f;
-			materialArray[mc].Material.Emission.a = 0.0f;
+			matArray[mc].Material.Emission.r = 0.0f;
+			matArray[mc].Material.Emission.g = 0.0f;
+			matArray[mc].Material.Emission.b = 0.0f;
+			matArray[mc].Material.Emission.a = 0.0f;
 		}
 		else if( strcmp( str, "Ka" ) == 0 )
 		{
 			//アンビエント
-			fscanf( file, "%f", &materialArray[ mc ].Material.Ambient.r );
-			fscanf( file, "%f", &materialArray[ mc ].Material.Ambient.g );
-			fscanf( file, "%f", &materialArray[ mc ].Material.Ambient.b );
-			materialArray[ mc ].Material.Ambient.a = 1.0f;
+			fscanf( file, "%f", &matArray[ mc ].Material.Ambient.r );
+			fscanf( file, "%f", &matArray[ mc ].Material.Ambient.g );
+			fscanf( file, "%f", &matArray[ mc ].Material.Ambient.b );
+			matArray[ mc ].Material.Ambient.a = 1.0f;
 		}
 		else if( strcmp( str, "Kd" ) == 0 )
 		{
 			//ディフューズ
-			fscanf( file, "%f", &materialArray[ mc ].Material.Diffuse.r );
-			fscanf( file, "%f", &materialArray[ mc ].Material.Diffuse.g );
-			fscanf( file, "%f", &materialArray[ mc ].Material.Diffuse.b );
-			materialArray[ mc ].Material.Diffuse.a = 1.0f;
+			fscanf( file, "%f", &matArray[ mc ].Material.Diffuse.r );
+			fscanf( file, "%f", &matArray[ mc ].Material.Diffuse.g );
+			fscanf( file, "%f", &matArray[ mc ].Material.Diffuse.b );
+			matArray[ mc ].Material.Diffuse.a = 1.0f;
 		}
 		else if( strcmp( str, "Ks" ) == 0 )
 		{
 			//スペキュラ
-			fscanf( file, "%f", &materialArray[ mc ].Material.Specular.r );
-			fscanf( file, "%f", &materialArray[ mc ].Material.Specular.g );
-			fscanf( file, "%f", &materialArray[ mc ].Material.Specular.b );
-			materialArray[ mc ].Material.Specular.a = 1.0f;
+			fscanf( file, "%f", &matArray[ mc ].Material.Specular.r );
+			fscanf( file, "%f", &matArray[ mc ].Material.Specular.g );
+			fscanf( file, "%f", &matArray[ mc ].Material.Specular.b );
+			matArray[ mc ].Material.Specular.a = 1.0f;
 		}
 		else if( strcmp( str, "Ns" ) == 0 )
 		{
 			//スペキュラ強度
-			fscanf( file, "%f", &materialArray[ mc ].Material.Shininess );
+			fscanf( file, "%f", &matArray[ mc ].Material.Shininess );
 		}
 		else if( strcmp( str, "d" ) == 0 )
 		{
 			//アルファ
-			fscanf( file, "%f", &materialArray[ mc ].Material.Diffuse.a );
+			fscanf( file, "%f", &matArray[ mc ].Material.Diffuse.a );
 		}
 		else if( strcmp( str, "map_Kd" ) == 0 )
 		{
@@ -650,13 +746,13 @@ void Model::LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray, 
 			strcat( path, "\\" );
 			strcat( path, str );
 
-			strcat( materialArray[ mc ].TextureName, path );
+			strcat( matArray[ mc ].TextureName, path );
 		}
 	}
 
 	fclose(file);
 
-	*MaterialArray = materialArray;
-	*MaterialNum = materialNum;
+	*materialArray = matArray;
+	*materialNum = matNum;
 }
 

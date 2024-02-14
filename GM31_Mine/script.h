@@ -19,6 +19,8 @@ public:
 	void Draw() override;
 	void DispInspector() override;
 
+	void ChangeScriptFile(std::string filePath);	// スクリプトファイルを変更する関数
+
 	void Start();	// シーンの実行時に最初に一度だけ呼ばれる関数
 	void CompileLua();	// Luaファイルをコンパイルする関数
 	time_t GetUpdateTime();	// Luaファイルの更新時間を取得する

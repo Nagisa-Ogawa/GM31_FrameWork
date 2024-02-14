@@ -28,6 +28,7 @@ void InspectorGui::Update()
 	
 	ImGui::Begin("Inspecter");
 	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	switch (m_showMode)
 	{
 	case SHOW_GAMEOBJECT:
@@ -53,7 +54,7 @@ void InspectorGui::Update()
 			// ボタンの色を赤色にする
 			ImGuiStyle& style = ImGui::GetStyle();
 			style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X",ImVec2(20,20))) {
 				// 削除フラグをONにする
 				m_selectedObject->SetDestroy();
 				// 削除するオブジェクトを選択されたオブジェクト変数から削除
@@ -134,6 +135,7 @@ void InspectorGui::Update()
 	default:
 		break;
 	}
+	ImGui::PopStyleVar();
 	ImGui::End();
 
 }

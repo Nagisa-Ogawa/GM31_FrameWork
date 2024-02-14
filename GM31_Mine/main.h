@@ -25,6 +25,8 @@
 #pragma comment (lib, "d3dx9.lib")
 #pragma comment (lib, "d3dx11.lib")
 
+#pragma comment (lib, "Comdlg32.lib")
+
 // âÊñ ÉTÉCÉY
 #define SCREEN_WIDTH	(1540)
 #define SCREEN_HEIGHT	(845)

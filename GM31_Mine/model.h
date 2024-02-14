@@ -42,21 +42,21 @@ class Model : public Component
 {
 private:
 
-	ID3D11Buffer*	m_VertexBuffer;
-	ID3D11Buffer*	m_IndexBuffer;
+	ID3D11Buffer*	m_vertexBuffer;
+	ID3D11Buffer*	m_indexBuffer;
 
 	std::string m_fileName;
 
-	SUBSET*	m_SubsetArray;
-	unsigned int	m_SubsetNum;
+	SUBSET*	m_subsetArray;
+	unsigned int	m_subsetNum;
 
-	class PolygonCollision* m_PolyColl = nullptr;	// このモデル用の当たり判定（マウス選択検知用）
+	class PolygonCollision* m_polyColl = nullptr;	// このモデル用の当たり判定（マウス選択検知用）
 
-	void LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray, unsigned int *MaterialNum );
+	void LoadMaterial( const char *fileName, MODEL_MATERIAL **materialArray, unsigned int *materialNum );
 
 public:
 
-	void Init(const char* FileName,bool hasColl);
+	void Init(const char* fileName,bool hasColl);
 	void Init(MODEL* pModel);
 	void Load() override;
 	void Uninit() override;
@@ -64,7 +64,8 @@ public:
 	void Draw() override;
 	void DispInspector() override;
 
-	void LoadObj( const char *FileName, MODEL *Model );
+	void ChangeModel(std::string fileName);
+	void LoadObj( const char *fileName, MODEL *Model );
 	std::string GetFileName() { return m_fileName; }
 
 	template <class Archive>

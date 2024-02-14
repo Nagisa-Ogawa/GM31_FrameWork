@@ -75,7 +75,6 @@ void AnimationModel::Draw()
 
 void AnimationModel::DispInspector()
 {
-	DispComponent(this);
 }
 
 

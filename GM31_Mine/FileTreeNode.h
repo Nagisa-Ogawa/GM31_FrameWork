@@ -33,7 +33,7 @@ public:
 	void SetFileType(FILENODE_TYPE fileType) { m_fileType = fileType; }
 
 	FileTreeNode* Insert(int id, FILENODE_TYPE fileType, std::string fileName);
-	bool Delete();
+	bool Delete(bool isDeleteThis);
 
 	bool IsExistSameFileName(std::string fileName);	// 引数のファイル名と同じファイル名の子供がいるかチェックする関数
 	bool IsExistDirChild();							// ディレクトリの子供が存在するかをチェックする関数

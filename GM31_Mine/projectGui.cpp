@@ -9,6 +9,7 @@
 #include "manager.h"
 #include "scene.h"
 #include "projectGui.h"
+#include "LuaManager.h"
 
 #define ICON_NUM (7)
 #define BUTTON_SIZE_FILE (70)
@@ -42,24 +43,29 @@ void ProjectGui::Init()
         NULL);
     assert(m_plusButtonTexture);
 
-    m_selectionMask = (1 << 2);
+    m_selectionMask = 0;
     // 一番親となるノードを作成
     m_fileTree = new FileTreeNode();
     m_fileTree->SetID(0);
     m_fileTree->SetFileName("Assets");
     m_fileTree->SetFileFullPath("Assets");
     m_fileTree->SetFileType(FILENODE_TYPE::NODE_DIRECTORY);
-    int registerID = 1;
+    m_registerID = 1;
     // ファイルを検索
-    FindFile(m_fileTree,&registerID);
+    FindFile(m_fileTree,&m_registerID);
 }
 
 void ProjectGui::Update()
 {
 	ImGui::Begin("Project");
-	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
 
+	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5);
 	ImGui::BeginChild("Dir", ImVec2(ImGui::GetContentRegionAvail().x * 0.1f, 0),true,ImGuiWindowFlags_ChildWindow);
+    // 木構造をリロードする関数
+    if (ImGui::Button("Reload", ImVec2(60, 20))) {
+        PushReloadButton();
+    }
     // ファイルの木構造を表示
     ShowDirNode(m_fileTree,&m_selectionID);
     // 選択されたノードがあるかチェック
@@ -68,6 +74,7 @@ void ProjectGui::Update()
         m_selectionMask = (1 << m_selectionID);
     }
     ImGui::EndChild();
+
 	ImGui::SameLine();
     ImGui::BeginChild("File", ImVec2(0, 0), true, 0);
 	// 選択されたノードがある場合そのノードの子要素を表示
@@ -76,6 +83,7 @@ void ProjectGui::Update()
     }
 	ImGui::EndChild();
 
+    ImGui::PopStyleVar();
 	ImGui::End();
 }
 
@@ -135,7 +143,6 @@ void ProjectGui::ShowSelectChildNode(FileTreeNode* fileNode)
     ImGuiStyle& style = ImGui::GetStyle();
     // ボタンのスタイルを変更
     style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.8f, 0.8f, 1.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding,10);
     float windowVisibleSize = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
     int n = 0;
     int lastID = -1;
@@ -195,7 +202,6 @@ void ProjectGui::ShowSelectChildNode(FileTreeNode* fileNode)
     }
     // スタイルをリセット
     style = ImGuiStyle();
-    ImGui::PopStyleVar();
     ShowCreateScenePopup();
     ShowCreateScriptPopup();
 
@@ -224,9 +230,20 @@ std::string ProjectGui::CutFileName(std::string fileName,int maxWidth)
 
 std::string ProjectGui::GetFileExtension(std::string fileName)
 {
+    std::string extName = "";
     int extNum = fileName.find_last_of(".");
-    std::string extName = fileName.substr(extNum, fileName.size() - extNum);
+    if (extNum != -1)
+        extName = fileName.substr(extNum, fileName.size() - extNum);
     return extName;
+}
+
+std::string ProjectGui::GetNoFileExtension(std::string fileName)
+{
+    std::string noExtName = "";
+    int extNum = fileName.find_last_of(".");
+    if (extNum != -1)
+        noExtName = fileName.substr(0, extNum);
+    return noExtName;
 }
 
 /// <summary>
@@ -274,29 +291,88 @@ void ProjectGui::FindFile(FileTreeNode* fileNode, int* registerID)
     FindClose(fHandle);
 }
 
+
+/// <summary>
+/// ファイル木構造を更新する関数
+/// </summary>
+/// <param name="fileNode"></param>
+void ProjectGui::UpdateFile(FileTreeNode* fileNode)
+{
+
+}
+
+
+/// <summary>
+/// ディレクトリボタンを押した時の処理
+/// </summary>
+/// <param name="fileNode"></param>
 void ProjectGui::PushDirButton(FileTreeNode* fileNode)
 {
     SetFileNode(fileNode);
 }
 
+
+/// <summary>
+/// ファイルボタンを押したときの処理
+/// </summary>
+/// <param name="fileNode"></param>
 void ProjectGui::PushFileButton(FileTreeNode* fileNode)
 {
     auto inspector = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>();
     inspector->SetFileNode(fileNode);
 }
 
+void ProjectGui::PushReloadButton()
+{
+    auto inspector = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>();
+    inspector->SetFileNode(nullptr);
+    m_selectNode = nullptr;
+    m_selectionID = -1;
+    m_selectionMask = 0;
+    m_fileTree->Delete(false);
+    m_registerID = 1;
+    FindFile(m_fileTree, &m_registerID);
+}
+
+
+/// <summary>
+/// シーンを作成するポップアップを表示する関数
+/// </summary>
 void ProjectGui::ShowCreateScenePopup()
 {
-    // スクリプトを作成するポップアップを表示
+    // シーンを作成するポップアップを表示
     if (ImGui::BeginPopupModal(CREATE_SCENE_POPUP_NAME, NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10);
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5);
         ImGui::Separator();
         char str[128] = "";
-        ImGui::InputText("SceneName", str, IM_ARRAYSIZE(str));
+        ImGui::InputText(".json", str, IM_ARRAYSIZE(str));
         ImVec2 btnSize = ImVec2(60, 30);
-        if (ImGui::Button("Create", btnSize)) {
-            // スクリプトを作成する
+        if (ImGui::Button("OK", btnSize)) {
+            std::string fileName = str;
+            // 拡張子がないなら付け足す
+            if (GetFileExtension(fileName) != ".json") {
+                fileName += ".json";
+            }
+            // ファイル名が入力されているかチェック
+            if (fileName == ".json") {
+                MyImGuiManager::GetInstance()->DebugLog("Faild!! This scene name is enpty!!");
+            }
+            // 同じシーン名があるかチェック
+            else if (m_selectNode->IsExistSameFileName(fileName)) {
+                MyImGuiManager::GetInstance()->DebugLog("Faild!! This scene name is already in use!!");
+            }
+            else {
+                // シーンを作成する
+                if (true) {
+                    // スクリプトを作成したならファイル木構造に追加
+                    m_selectNode->Insert(m_registerID, FILENODE_TYPE::NODE_FILE, fileName);
+                    m_registerID++;
+                    // 成功したことを通知
+                    MyImGuiManager::GetInstance()->DebugLog("Success!! Create Scene!!");
+                }
+            }
+            strcpy(str, "");
             ImGui::CloseCurrentPopup();
         }
         ImGui::SameLine(250);
@@ -308,32 +384,45 @@ void ProjectGui::ShowCreateScenePopup()
     }
 }
 
+
+/// <summary>
+/// スクリプトを作成するポップアップを表示する関数
+/// </summary>
 void ProjectGui::ShowCreateScriptPopup()
 {
     // スクリプトを作成するポップアップを表示
     if (ImGui::BeginPopupModal(CREATE_SCRIPT_POPUP_NAME,NULL,ImGuiWindowFlags_AlwaysAutoResize))
     {
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10);
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5);
         ImGui::Separator();
-        char str[128] = "";
-        ImGui::InputText("FileName", str,IM_ARRAYSIZE(str));
+        static char str[128] = "";
+        ImGui::InputText(".lua", str, IM_ARRAYSIZE(str));
         ImVec2 btnSize = ImVec2(60, 30);
-        if (ImGui::Button("Create", btnSize)) {
-            // ファイル名が入力されているかチェック
-            if (str == "") {
-                MyImGuiManager::GetInstance()->DebugLog("Error!! Script Name is Enpty!!");
-                ImGui::CloseCurrentPopup();
-            }
-            // ファイル名に拡張子を付け足す
+        if (ImGui::Button("OK", btnSize)) {
             std::string fileName = str;
-            fileName += ".lua";
-            // 同じファイル名があるかチェック
-            if () {
-
+            // 拡張子がないなら付け足す
+            if (GetFileExtension(fileName) != ".lua") {
+                fileName += ".lua";
             }
-            // スクリプトを作成する
-            // スクリプトを作成したならファイル木構造を更新する
-            // 成功したことを通知
+            // ファイル名が入力されているかチェック
+            if (fileName == ".lua") {
+                MyImGuiManager::GetInstance()->DebugLog("Faild!! This file name is enpty!!");
+            }
+            // 同じファイル名があるかチェック
+            else if (m_selectNode->IsExistSameFileName(fileName)) {
+                MyImGuiManager::GetInstance()->DebugLog("Faild!! This file name is already in use!!");
+            }
+            else {
+                // スクリプトを作成する
+                if (LuaManager::GetInstance()->CreateScriptFile(GetNoFileExtension(fileName))) {
+                    // スクリプトを作成したならファイル木構造に追加
+                    m_selectNode->Insert(m_registerID, FILENODE_TYPE::NODE_FILE, fileName);
+                    m_registerID++;
+                    // 成功したことを通知
+                    MyImGuiManager::GetInstance()->DebugLog("Success!! Create LuaScript!!");
+                }
+            }
+            strcpy(str, "");
             ImGui::CloseCurrentPopup();
         }
         ImGui::SameLine(250);

@@ -62,7 +62,7 @@ void Manager::Init()
 	LuaManager::GetInstance()->Init();
 	
 	// Sceneファイルの中を確認
-	if (CheckSceneFile()) {
+	if (!CheckSceneFile()) {
 		// Sceneのデータがあったなら読み込み処理
 		LoadScene();
 	}
@@ -74,6 +74,11 @@ void Manager::Init()
 		m_scene->Init();
 		m_editor = m_scene->GetEditor();
 		m_sceneList.push_back(std::move(scene));
+
+		auto scene2 = std::make_unique<Scene>();
+		scene2->SetName("Test2");
+		// scene2->Init();
+		m_sceneList.push_back(std::move(scene2));
 	}
 
 }
@@ -127,7 +132,6 @@ void Manager::Update()
 		if (m_scene)
 		{
 			m_scene->Uninit();
-			delete m_scene;
 		}
 		m_scene = m_nextScene;
 		m_scene->Init();

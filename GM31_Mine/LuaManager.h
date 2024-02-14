@@ -48,7 +48,7 @@ public:
 
 	void CheckUpdateScript();		// スクリプトファイル（Luaファイル）が変更されているかをチェックする関数
 
-	void CreateScriptFile(std::string fileName);
+	bool CreateScriptFile(std::string fileName);
 
 	void Init();	// 初期化処理
 	void Uninit();	// 終了処理

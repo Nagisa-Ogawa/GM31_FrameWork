@@ -31,9 +31,6 @@
     <Filter Include="ヘッダー ファイル\Factory">
       <UniqueIdentifier>{66c10d7b-f743-4802-8cb2-c0290ebfe395}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Factory">
-      <UniqueIdentifier>{ca7406b8-fe08-4840-bcfa-7cdb68a5e8e6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Other">
       <UniqueIdentifier>{ec1248f1-8183-4f63-b136-79f435dd7653}</UniqueIdentifier>
     </Filter>
@@ -211,6 +208,9 @@
       <Filter>ソース ファイル\EditorObject</Filter>
     </ClCompile>
     <ClCompile Include="FileTreeNode.cpp">
+      <Filter>ソース ファイル\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="fileDialog.cpp">
       <Filter>ソース ファイル\Other</Filter>
     </ClCompile>
   </ItemGroup>
@@ -393,6 +393,9 @@
       <Filter>ヘッダー ファイル\EditorObject</Filter>
     </ClInclude>
     <ClInclude Include="FileTreeNode.h">
+      <Filter>ヘッダー ファイル\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="fileDialog.h">
       <Filter>ヘッダー ファイル\Other</Filter>
     </ClInclude>
   </ItemGroup>

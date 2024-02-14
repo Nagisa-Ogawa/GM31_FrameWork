@@ -1,8 +1,8 @@
 #include "MyImGuiManager.h"
 #include "renderer.h"
 #include "gameObject.h"
+#include "fileDialog.h"
 #include "dispInspector.h"
-#include "animationModel.h"
 #include "boxCollision.h"
 #include "camera.h"
 #include "quadCollision.h"
@@ -19,18 +19,9 @@
 //
 //----------------------------------------------
 
-void DispComponent(AnimationModel* model)
-{
-	ImGui::Separator();
-	if (ImGui::TreeNodeEx("AnimationModel", ImGuiTreeNodeFlags_DefaultOpen)) {
-		ImGui::Text("FileName : %s", model->GetFileName().c_str());
-		ImGui::TreePop();
-	}
-	ImGui::Separator();
-}
-
 void DispComponent(BoxCollision* collision)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	ImGui::Separator();
 	ImGui::AlignTextToFramePadding();
 	std::string name = "BoxCollision##" + std::to_string(collision->GetID());
@@ -40,13 +31,13 @@ void DispComponent(BoxCollision* collision)
 	// ボタンの色を赤色にする
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
-	if (ImGui::Button("X")) {
+	if (ImGui::Button("X", ImVec2(20, 20))) {
 		collision->SetDestroy();
 		style = ImGuiStyle();
+		ImGui::PopStyleVar();
 		ImGui::TreePop();
 		return;
 	}
-	style = ImGuiStyle();
 	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
 	// コンポーネントの要素を表示
 	if (treeopen)
@@ -72,29 +63,49 @@ void DispComponent(BoxCollision* collision)
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+	style = ImGuiStyle();
+	ImGui::PopStyleVar();
 }
 
 void DispComponent(Camera* camera)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	ImGui::Separator();
 	if (ImGui::TreeNodeEx("Camera", ImGuiTreeNodeFlags_DefaultOpen)) {
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+	ImGui::PopStyleVar();
 }
 
 void DispComponent(Model* model)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	ImGui::Separator();
 	if (ImGui::TreeNodeEx("Model", ImGuiTreeNodeFlags_DefaultOpen)) {
-		ImGui::Text("FileName : %s", model->GetFileName().c_str());
+		char str[256];
+		strcpy_s(str, model->GetFileName().c_str());
+		ImGui::PushItemWidth(-60);
+		ImGui::InputText("##FileName", str,IM_ARRAYSIZE(str),ImGuiInputTextFlags_ReadOnly);
+		ImGui::PopItemWidth();
+		// モデル変更用ボタン
+		ImGui::SameLine(ImGui::GetWindowWidth() - 60);
+		if (ImGui::Button("Set")) {
+			std::string filePath;
+			if (OpneFileDialog(GetWindow(), "ファイルを選択してください", "Assets\\Models", "ファイル(.obj)\0*.obj\0", &filePath)) {
+				// モデル変更
+				model->ChangeModel(filePath);
+			}
+		}
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+	ImGui::PopStyleVar();
 }
 
 void DispComponent(QuadCollision* collision)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	ImGui::Separator();
 	ImGui::AlignTextToFramePadding();
 	std::string name = "QuadCollision##" + std::to_string(collision->GetID());
@@ -104,13 +115,13 @@ void DispComponent(QuadCollision* collision)
 	// ボタンの色を赤色にする
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
-	if (ImGui::Button("X")) {
+	if (ImGui::Button("X", ImVec2(20, 20))) {
 		collision->SetDestroy();
 		style = ImGuiStyle();
+		ImGui::PopStyleVar();
 		ImGui::TreePop();
 		return;
 	}
-	style = ImGuiStyle();
 	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
 	// コンポーネントの要素を表示
 	if (treeopen){
@@ -135,10 +146,13 @@ void DispComponent(QuadCollision* collision)
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+	style = ImGuiStyle();
+	ImGui::PopStyleVar();
 }
 
 void DispComponent(Script* script)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	ImGui::Separator();
 	ImGui::AlignTextToFramePadding();
 	std::string name = "Script##" + std::to_string(script->GetID());
@@ -148,41 +162,85 @@ void DispComponent(Script* script)
 	// ボタンの色を赤色にする
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
-	if (ImGui::Button("X")) {
+	if (ImGui::Button("X", ImVec2(20, 20))) {
 		script->SetDestroy();
 		style = ImGuiStyle();
+		ImGui::PopStyleVar();
 		ImGui::TreePop();
 		return;
 	}
-	style = ImGuiStyle();
+	style.Colors[ImGuiCol_Button] = ImGuiStyle().Colors[ImGuiCol_Button];
 	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
 	// コンポーネントの要素を表示
 	if (treeopen) {
-		ImGui::Text("FileName : %s", script->GetFileName().c_str());
+		char str[256];
+		strcpy_s(str, script->GetFileName().c_str());
+		ImGui::PushItemWidth(-60);
+		ImGui::InputText("##ScriptFileName", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_ReadOnly);
+		ImGui::PopItemWidth();
+		// スクリプトファイル変更用ボタン
+		ImGui::SameLine(ImGui::GetWindowWidth() - 60);
+		if (ImGui::Button("Set")) {
+			std::string filePath;
+			if (OpneFileDialog(GetWindow(), "ファイルを選択してください", "Assets\\Scripts", "ファイル(.lua)\0*.lua\0", &filePath)) {
+				// スクリプトファイル変更
+				script->ChangeScriptFile(filePath);
+			}
+		}
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+	ImGui::PopStyleVar();
 }
 
 void DispComponent(Shader* shader)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	ImGui::Separator();
 	if (ImGui::TreeNodeEx("Shader", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::TreeNodeEx("VertexShader", ImGuiTreeNodeFlags_DefaultOpen)) {
-			ImGui::Text("FileName : %s", shader->GetVSFile().c_str());
+			char str[256];
+			strcpy_s(str, shader->GetVSFile().c_str());
+			ImGui::PushItemWidth(-60);
+			ImGui::InputText("##VSFileName", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_ReadOnly);
+			ImGui::PopItemWidth();
+			// VSShader変更用ボタン
+			ImGui::SameLine(ImGui::GetWindowWidth() - 60);
+			if (ImGui::Button("Set")) {
+				std::string filePath;
+				if (OpneFileDialog(GetWindow(), "ファイルを選択してください", "Assets\\Shaders", "ファイル(VS.cso)\0*VS.cso\0", &filePath)) {
+					// シェーダー変更
+					shader->ChangeVertexShaer(filePath);
+				}
+			}
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNodeEx("PixelShader", ImGuiTreeNodeFlags_DefaultOpen)) {
-			ImGui::Text("FileName : %s", shader->GetPSFile().c_str());
+			char str[256];
+			strcpy_s(str, shader->GetPSFile().c_str());
+			ImGui::PushItemWidth(-60);
+			ImGui::InputText("##PSFileName", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_ReadOnly);
+			ImGui::PopItemWidth();
+			// PSShader変更用ボタン
+			ImGui::SameLine(ImGui::GetWindowWidth() - 60);
+			if (ImGui::Button("Set")) {
+				std::string filePath;
+				if (OpneFileDialog(GetWindow(), "ファイルを選択してください", "Assets\\Shaders", "ファイル(.PScso)\0*PS.cso\0", &filePath)) {
+					// シェーダー変更
+					shader->ChangePixelShaer(filePath);
+				}
+			}
 			ImGui::TreePop();
 		}
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+	ImGui::PopStyleVar();
 }
 
 void DispComponent(SphereCollision* collision)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	ImGui::Separator();
 	ImGui::AlignTextToFramePadding();
 	std::string name = "SphereCollision##" + std::to_string(collision->GetID());
@@ -192,9 +250,10 @@ void DispComponent(SphereCollision* collision)
 	// ボタンの色を赤色にする
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
-	if (ImGui::Button("X")) {
+	if (ImGui::Button("X", ImVec2(20, 20))) {
 		collision->SetDestroy();
 		style = ImGuiStyle();
+		ImGui::PopStyleVar();
 		ImGui::TreePop();
 		return;
 	}
@@ -217,10 +276,12 @@ void DispComponent(SphereCollision* collision)
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+	ImGui::PopStyleVar();
 }
 
 void DispComponent(Sprite* sprite)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	ImGui::Separator();
 	if (ImGui::TreeNodeEx("Sprite", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -243,10 +304,12 @@ void DispComponent(Sprite* sprite)
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+	ImGui::PopStyleVar();
 }
 
 void DispComponent(Transform* transform)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
 	ImGui::Separator();
 	if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::TreeNodeEx("Local",ImGuiTreeNodeFlags_DefaultOpen))	{
@@ -310,4 +373,5 @@ void DispComponent(Transform* transform)
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+	ImGui::PopStyleVar();
 }

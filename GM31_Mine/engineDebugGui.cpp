@@ -5,6 +5,7 @@
 #include "boxCollision.h"
 #include "boxCollisionFrame.h"
 #include "engineDebugGui.h"
+#include "fileDialog.h"
 
 void EngineDebugGui::Init()
 {
@@ -16,5 +17,10 @@ void EngineDebugGui::Update()
 	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
 	ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
 	ImGui::Text("FocusWindowName : %s", MyImGuiManager::GetInstance()->GetFocusWindow()->Name);
+	if (ImGui::Button("OpenFile", ImVec2(100, 50))) {
+		std::string s;
+		OpneFileDialog(GetWindow(),"ファイルを選択してください","Assets\\Models","ファイル(.obj)\0*.obj\0",&s);
+		MyImGuiManager::GetInstance()->DebugLog(s);
+	}
 	ImGui::End();
 }

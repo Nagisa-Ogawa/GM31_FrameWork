@@ -21,6 +21,9 @@ public:
 	void Draw() override;
 	void DispInspector() override;
 
+	void ChangeVertexShaer(std::string fileName);
+	void ChangePixelShaer(std::string fileName);
+
 	std::string GetVSFile() { return m_fileNameVS; }
 	std::string GetPSFile() { return m_fileNamePS; }
 

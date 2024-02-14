@@ -168,6 +168,7 @@
     <ClCompile Include="editorCameraObject.cpp" />
     <ClCompile Include="engineDebugGui.cpp" />
     <ClCompile Include="field.cpp" />
+    <ClCompile Include="fileDialog.cpp" />
     <ClCompile Include="gameGui.cpp" />
     <ClCompile Include="hierarchyGui.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="editorCameraObject.h" />
     <ClInclude Include="engineDebugGui.h" />
     <ClInclude Include="field.h" />
+    <ClInclude Include="fileDialog.h" />
     <ClInclude Include="gameGui.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="factory.h" />

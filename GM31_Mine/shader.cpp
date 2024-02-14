@@ -43,3 +43,26 @@ void Shader::DispInspector()
 {
 	DispComponent(this);
 }
+
+void Shader::ChangeVertexShaer(std::string fileName)
+{
+	// 同じシェーダーファイルなら読み込まない
+	if (fileName == m_fileNameVS) {
+		return;
+	}
+	m_fileNameVS = fileName;
+	m_VertexLayout->Release();
+	m_VertexShader->Release();
+	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, fileName.c_str());
+}
+
+void Shader::ChangePixelShaer(std::string fileName)
+{
+	// 同じシェーダーファイルなら読み込まない
+	if (fileName == m_fileNamePS) {
+		return;
+	}
+	m_fileNamePS = fileName;
+	m_PixelShader->Release();
+	Renderer::CreatePixelShader(&m_PixelShader, fileName.c_str());
+}

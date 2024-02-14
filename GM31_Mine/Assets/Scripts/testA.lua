@@ -2,9 +2,6 @@
 local TestA = {}
 local gameObject
 
-local vec = Vector3(0, 0, 0)
-local count = 0
-
 -- ゲームオブジェクトが作成されたときに一度だけ実行される関数
 function TestA.Start()
     -- ImGuiManager:DebugLog("TestA : Start")
@@ -26,14 +23,6 @@ function TestA.Update()
     end
     if Input.GetKeyPress(KEY_W) then
         transform.localPosition = transform.localPosition + transform:GetForward() * 0.1
-    end
-
-    -- 回転のキー入力
-    if Input.GetKeyPress(KEY_Q) then
-        transform.localRotation.y = transform.localRotation.y - 0.05;
-    end
-    if Input.GetKeyPress(KEY_E) then
-        transform.localRotation.y = transform.localRotation.y + 0.05;
     end
 
 end

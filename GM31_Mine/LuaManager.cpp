@@ -1,4 +1,7 @@
 
+#include <fstream>
+#include <iterator>
+#include <regex>
 #include "LuaManager.h"
 #include <luabind/operator.hpp>
 
@@ -147,11 +150,30 @@ void LuaManager::CheckUpdateScript()
 }
 
 
-void LuaManager::CreateScriptFile(std::string fileName)
+bool LuaManager::CreateScriptFile(std::string fileName)
 {
+	// プログラム文をテンプレート用テキストファイルから取得
+	std::string tempFileName = "Assets\\Scripts\\template.txt";
+	std::ifstream ifs(tempFileName);
+	if (ifs.fail()) {
+		MyImGuiManager::GetInstance()->DebugLog("Faild!! template.txt is none");
+		return false;
+	}
+	std::istreambuf_iterator<char> it(ifs);
+	std::istreambuf_iterator<char> last;
+	std::string tempTxt(it, last);
+	// プログラム文のクラス名の部分を置き換え
+	tempTxt = std::regex_replace(tempTxt, std::regex("fileName"), fileName);
 	// 引数のファイル名からファイルを作成
-	// ファイルに最初から記述するプログラム文を書き込む
-
+	std::string luaFileName = "Assets\\Scripts\\" + fileName + ".lua";
+	std::ofstream ofs(luaFileName);
+	if (ofs.fail()) {
+		MyImGuiManager::GetInstance()->DebugLog("Faild!! can't create file");
+		return false;
+	}
+	// ファイルにプログラム文を書き込む
+	ofs << tempTxt << std::endl;
+	return true;
 }
 
 

@@ -39,7 +39,7 @@ void Player::Init()
 	//m_AnimationName = "Idle";
 	//m_NextAnimationName = "Idle";
 
-	AddComponent<Script>()->Init("testA.lua");
+	AddComponent<Script>()->Init("Assets\\Scripts\\testA.lua");
 }
 
 void Player::Update()

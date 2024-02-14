@@ -106,11 +106,26 @@ void Script::DispInspector()
 }
 
 /// <summary>
+/// スクリプトファイルを変更する関数
+/// </summary>
+void Script::ChangeScriptFile(std::string filePath)
+{
+	// ファイル名が同じなら変更しない
+	if (m_fileName == filePath) {
+		return;
+	}
+	m_fileName = filePath;
+	// ファイルの更新時間を確認
+	m_updateTime = GetUpdateTime();
+	// Luaファイルをコンパイル
+	CompileLua();
+}
+
+/// <summary>
 /// Luaファイルをコンパイルする関数
 /// </summary>
 void Script::CompileLua()
 {
-	std::string fileName = "Assets\\Scripts\\" + m_fileName;
 	lua_State* L = LuaManager::GetInstance()->GetLuaState();
 
 	// 操作する前のスタックを記録
@@ -118,7 +133,7 @@ void Script::CompileLua()
 	LuaManager::GetInstance()->SetIsDebug(true);
 
 	// ファイルをロード
-	if (luaL_loadfile(L, fileName.c_str()) != 0) {
+	if (luaL_loadfile(L, m_fileName.c_str()) != 0) {
 		std::string m = m_fileName + " luaL_loadfile failed!\n" + lua_tostring(L, -1);
 		MyImGuiManager::GetInstance()->DebugLog(m);
 		lua_pop(L, 1);
@@ -161,10 +176,15 @@ time_t Script::GetUpdateTime()
 	time_t updateTime;
 	std::string filepath = "Assets\\Scripts\\" + m_fileName;
 	// ファイルの情報を取得する
-	_stat(filepath.c_str(), &buf);
-	// 更新時間を取得
-	updateTime = buf.st_mtime;
-	return updateTime;
+	int err = _stat(filepath.c_str(), &buf);
+	if (err == 0) {
+		// 更新時間を取得
+		updateTime = buf.st_mtime;
+		return updateTime;
+	}
+	else {
+		return 0;
+	}
 }
 
 
@@ -177,7 +197,7 @@ bool Script::CheckUpdate()
 	// 現在のファイル更新時間を取得
 	auto nowUpdateTime = GetUpdateTime();
 	// 更新時間が変更されていたならLuaファイルが更新されている
-	if (m_updateTime != nowUpdateTime) {
+	if (nowUpdateTime != 0 && m_updateTime != nowUpdateTime) {
 		return true;
 	}
 	return false;

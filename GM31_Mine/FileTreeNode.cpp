@@ -13,12 +13,15 @@ FileTreeNode* FileTreeNode::Insert(int id, FILENODE_TYPE fileType, std::string f
     return child;
 }
 
-bool FileTreeNode::Delete()
+bool FileTreeNode::Delete(bool isDeleteThis)
 {
     for (auto child : m_childList) {
-        child->Delete();
+        child->Delete(true);
     }
-    delete this;
+    m_childList.clear();
+    if (isDeleteThis) {
+        delete this;
+    }
     return true;
 }
 

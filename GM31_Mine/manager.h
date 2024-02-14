@@ -19,10 +19,8 @@ class Manager
 private:
 	// シングルトン用インスタンス
 	static Manager* m_instance;
-	// エディタ時用変数
-	std::list<std::unique_ptr<Scene>> m_sceneList;
-	Scene* m_scene = nullptr;
-	Scene* m_nextScene = nullptr;
+	std::unique_ptr<Scene> m_scene = nullptr;
+	std::unique_ptr<Scene> m_nextScene = nullptr;
 	Editor* m_editor = nullptr;
 
 	ENGINE_MODE m_mode;
@@ -51,7 +49,7 @@ public:
 
 
 	static Manager* GetInstance();
-	Scene* GetScene() { return m_scene; }
+	Scene* GetScene() { return m_scene.get(); }
 	Editor* GetEditor() { return m_editor; }
 	ENGINE_MODE GetMode() { return m_mode; }
 
