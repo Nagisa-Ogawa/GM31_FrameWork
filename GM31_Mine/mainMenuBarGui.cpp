@@ -43,7 +43,7 @@ void MainMenuBarGui::Update()
 		if (ImGui::BeginMenu("File")) {
 			if (ImGui::MenuItem("Save")) {
 				// シーンをセーブ
-				Manager::GetInstance()->SaveScene();
+				Manager::GetInstance()->SaveEditScene();
 			}
 			ImGui::EndMenu();
 		}

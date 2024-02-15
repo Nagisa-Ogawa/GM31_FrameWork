@@ -1,0 +1,285 @@
+{
+    "value0": {
+        "ptr_wrapper": {
+            "valid": 1,
+            "data": {
+                "m_name": "hoge",
+                "m_sceneObjectList": {
+                    "value0": [
+                        {
+                            "polymorphic_id": 2147483649,
+                            "polymorphic_name": "CameraObject",
+                            "ptr_wrapper": {
+                                "valid": 1,
+                                "data": {
+                                    "value0": {
+                                        "m_name": "Camera",
+                                        "m_id": 0,
+                                        "m_componentList": [
+                                            {
+                                                "polymorphic_id": 2147483650,
+                                                "polymorphic_name": "Transform",
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 0
+                                                        },
+                                                        "m_parentID": -1,
+                                                        "worldPostion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldRotation": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        },
+                                                        "localPostion": {
+                                                            "x": 0.0,
+                                                            "y": 5.0,
+                                                            "z": -10.0
+                                                        },
+                                                        "localRotation": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "localScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 2147483651,
+                                                "polymorphic_name": "Camera",
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 1
+                                                        },
+                                                        "position": {
+                                                            "x": 0.0,
+                                                            "y": 5.0,
+                                                            "z": -10.0
+                                                        },
+                                                        "rotation": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "m_active": true,
+                                        "m_destroy": false,
+                                        "m_registerID": 2
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "value1": [
+                        {
+                            "polymorphic_id": 2147483652,
+                            "polymorphic_name": "Sky",
+                            "ptr_wrapper": {
+                                "valid": 1,
+                                "data": {
+                                    "value0": {
+                                        "m_name": "Sky",
+                                        "m_id": 1,
+                                        "m_componentList": [
+                                            {
+                                                "polymorphic_id": 2,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 0
+                                                        },
+                                                        "m_parentID": -1,
+                                                        "worldPostion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldRotation": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        },
+                                                        "localPostion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "localRotation": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "localScale": {
+                                                            "x": 100.0,
+                                                            "y": 100.0,
+                                                            "z": 100.0
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 2147483653,
+                                                "polymorphic_name": "Shader",
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 1
+                                                        },
+                                                        "m_fileNameVS": "Assets\\Shaders\\unlitTextureVS.cso",
+                                                        "m_fileNamePS": "Assets\\Shaders\\unlitTexturePS.cso"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 2147483654,
+                                                "polymorphic_name": "Model",
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 2
+                                                        },
+                                                        "m_fileName": "Assets\\Models\\Sky.obj"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "m_active": true,
+                                        "m_destroy": false,
+                                        "m_registerID": 3
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "value2": []
+                },
+                "m_editor": {
+                    "ptr_wrapper": {
+                        "valid": 1,
+                        "data": {
+                            "m_name": "",
+                            "m_editorObjectList": {
+                                "value0": [
+                                    {
+                                        "polymorphic_id": 2147483655,
+                                        "polymorphic_name": "EditorCameraObject",
+                                        "ptr_wrapper": {
+                                            "valid": 1,
+                                            "data": {
+                                                "value0": {
+                                                    "m_name": "EditorCamera",
+                                                    "m_id": 0,
+                                                    "m_componentList": [
+                                                        {
+                                                            "polymorphic_id": 2,
+                                                            "ptr_wrapper": {
+                                                                "valid": 1,
+                                                                "data": {
+                                                                    "value0": {
+                                                                        "m_ID": 0
+                                                                    },
+                                                                    "m_parentID": -1,
+                                                                    "worldPostion": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0
+                                                                    },
+                                                                    "worldRotation": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0
+                                                                    },
+                                                                    "worldScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0,
+                                                                        "z": 1.0
+                                                                    },
+                                                                    "localPostion": {
+                                                                        "x": 7.787843704223633,
+                                                                        "y": 4.142614841461182,
+                                                                        "z": 1.3185521364212037
+                                                                    },
+                                                                    "localRotation": {
+                                                                        "x": 0.1199999451637268,
+                                                                        "y": 0.006000002380460501,
+                                                                        "z": 0.0
+                                                                    },
+                                                                    "localScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0,
+                                                                        "z": 1.0
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "polymorphic_id": 2147483656,
+                                                            "polymorphic_name": "EditorCamera",
+                                                            "ptr_wrapper": {
+                                                                "valid": 1,
+                                                                "data": {
+                                                                    "value0": {
+                                                                        "m_ID": 1
+                                                                    },
+                                                                    "postion": {
+                                                                        "x": 7.787843704223633,
+                                                                        "y": 4.142614841461182,
+                                                                        "z": 1.3185521364212037
+                                                                    },
+                                                                    "rotation": {
+                                                                        "x": 0.1199999451637268,
+                                                                        "y": 0.006000002380460501,
+                                                                        "z": 0.0
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ],
+                                                    "m_active": true,
+                                                    "m_destroy": false,
+                                                    "m_registerID": 2
+                                                }
+                                            }
+                                        }
+                                    }
+                                ],
+                                "value1": [],
+                                "value2": []
+                            },
+                            "m_registerID": 1
+                        }
+                    }
+                },
+                "m_registerID": 2
+            }
+        }
+    }
+}

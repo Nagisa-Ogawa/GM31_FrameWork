@@ -17,10 +17,11 @@ void EngineDebugGui::Update()
 	MyImGuiManager::GetInstance()->SetFocusWindow(ImGui::GetCurrentWindow());
 	ImGui::Text(" %.1f FPS (%.3f ms/frame)  ", ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
 	ImGui::Text("FocusWindowName : %s", MyImGuiManager::GetInstance()->GetFocusWindow()->Name);
-	if (ImGui::Button("OpenFile", ImVec2(100, 50))) {
-		std::string s;
-		OpneFileDialog(GetWindow(),"ファイルを選択してください","Assets\\Models","ファイル(.obj)\0*.obj\0",&s);
-		MyImGuiManager::GetInstance()->DebugLog(s);
+	if (ImGui::Button("crateScene", ImVec2(100, 50))) {
+		Manager::GetInstance()->CreateScene("hoge");
+	}
+	if (ImGui::Button("changeScene", ImVec2(100, 50))) {
+		Manager::GetInstance()->ChangeScene("Test1");
 	}
 	ImGui::End();
 }

@@ -18,17 +18,15 @@ void Scene::Init()
 	// デバッグ用
 	// ---------------------
 	AddGameObject<CameraObject>(0, "Camera");
-	auto player = AddGameObject<Player>(1, "Player");
-	auto box = AddGameObject<Box>(1, "box");
-	box->GetTransform()->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 15.0f);
-	auto box1 = AddGameObject<Box>(1, "box1");
-	box1->GetTransform()->m_localPosition = D3DXVECTOR3(3.0f, 0.0f, 0.0f);
-	box1->GetTransform()->SetParent(box->GetTransform());
+	//auto player = AddGameObject<Player>(1, "Player");
+	//auto box = AddGameObject<Box>(1, "box");
+	//box->GetTransform()->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 15.0f);
+	//auto box1 = AddGameObject<Box>(1, "box1");
+	//box1->GetTransform()->m_localPosition = D3DXVECTOR3(3.0f, 0.0f, 0.0f);
+	//box1->GetTransform()->SetParent(box->GetTransform());
+	//auto meshField = AddGameObject<MeshField>(1, "Filed");
 
 	AddGameObject<Sky>(1, "Sky");
-
-
-	auto meshField = AddGameObject<MeshField>(1, "Filed");
 
 }
 

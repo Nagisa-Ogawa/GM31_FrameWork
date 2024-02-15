@@ -62,23 +62,16 @@ void Manager::Init()
 	LuaManager::GetInstance()->Init();
 	
 	// Sceneファイルの中を確認
-	if (!CheckSceneFile()) {
+	if (CheckSceneFile()) {
 		// Sceneのデータがあったなら読み込み処理
-		LoadScene();
+		LoadEditScene();
 	}
 	else {
 		// Sceneのデータがないならシーンを作成
-		auto scene = std::make_unique<Scene>();
-		m_scene = scene.get();
-		m_scene->SetName("Test");
+		m_scene = std::make_unique<Scene>();
+		m_scene->SetName("Test1");
 		m_scene->Init();
 		m_editor = m_scene->GetEditor();
-		m_sceneList.push_back(std::move(scene));
-
-		auto scene2 = std::make_unique<Scene>();
-		scene2->SetName("Test2");
-		// scene2->Init();
-		m_sceneList.push_back(std::move(scene2));
 	}
 
 }
@@ -133,8 +126,10 @@ void Manager::Update()
 		{
 			m_scene->Uninit();
 		}
-		m_scene = m_nextScene;
-		m_scene->Init();
+		m_scene.reset();
+		m_scene = std::move(m_nextScene);
+		m_editor = m_scene->GetEditor();
+		m_scene->Load();
 		m_nextScene = nullptr;
 	}
 }
@@ -161,56 +156,160 @@ void Manager::Draw()
 
 }
 
+/// <summary>
+/// シーンを作成する関数
+/// </summary>
+/// <param name="sceneName">作成するシーン名</param>
+void Manager::CreateScene(std::string sceneName)
+{
+	// 新しいシーンを作成
+	std::unique_ptr<Scene> scene= std::make_unique<Scene>();
+	scene->SetName(sceneName);
+	scene->Init();
+	// シーンをファイルに保存
+	SaveScene(scene);
+	MyImGuiManager::GetInstance()->DebugLog("Successful!! create scene");
+}
+
+/// <summary>
+/// 現在のシーンを変更する関数
+/// </summary>
+/// <param name="sceneName">変更するシーン名</param>
+void Manager::ChangeScene(std::string sceneName)
+{
+	if (!IsExistScene(sceneName)) {
+		MyImGuiManager::GetInstance()->DebugLog("Faild!! Can't change scene. this scene name isn't used.");
+		return;
+	}
+	LoadScene(m_nextScene,sceneName);
+
+}
+
+
+void Manager::SaveEditScene()
+{
+	SaveScene(m_scene);
+}
+
+/// <summary>
+/// 現在のシーンをロードする関数
+/// </summary>
+void Manager::LoadEditScene()
+{
+	LoadScene(m_scene);
+	// ファイルから読み込んだ後に読み込み後関数を呼び出し
+	m_editor = m_scene->GetEditor();
+	m_scene->Load();
+}
+
 
 /// <summary>
 /// シーンをファイルに保存する関数
 /// </summary>
 /// <param name="fileName">保存するファイル名</param>
-void Manager::SaveScene()
+bool Manager::SaveScene(std::unique_ptr<Scene>& scene)
 {
-	// 現在あるシーンをすべて保存する
-	for (const auto& scene : m_sceneList) {
-		// Scenesフォルダにシーンファイルを作成
-		std::string filePath = "Assets\\Scenes\\"+scene->GetName() + ".json";
-		std::ofstream file(filePath);
-		// シーン情報をシリアライズ
-		try {
-			cereal::JSONOutputArchive archive(file);
-			archive(scene);
-		}
-		catch (std::exception& e) {
-			MyImGuiManager::GetInstance()->DebugLog(e.what());
-		}
+	// 現在のシーンの名前を保存
+	SaveEditorSceneName();
+	// 現在のシーンを保存する
+	// Scenesフォルダにシーンファイルを作成
+	std::string filePath = "Assets\\Scenes\\"+ scene->GetName() + ".json";
+	std::ofstream file(filePath);
+	if (file.fail()) {
+		return false;
+	}
+	// シーン情報をシリアライズ
+	try {
+		cereal::JSONOutputArchive archive(file);
+		archive(scene);
+	}
+	catch (std::exception& e) {
+		MyImGuiManager::GetInstance()->DebugLog(e.what());
+		return false;
 	}
 	// 終了したら成功したことを通知
 	MyImGuiManager::GetInstance()->DebugLog("Save Successful !!");
+	return true;
 }
+
 
 /// <summary>
 /// シーンをロードする関数
 /// </summary>
-void Manager::LoadScene()
+bool Manager::LoadScene(std::unique_ptr<Scene>& scene, std::string sceneName)
 {
-	// ファイルからシーンをロード
-	std::list<std::string> nameList = GetAllFiles("Assets\\Scenes");
-	for (auto fileName : nameList) {
-		std::unique_ptr<Scene> scene;
-		try {
-			std::ifstream file("Assets\\Scenes\\" + fileName);
-			cereal::JSONInputArchive archive(file);
-			archive(scene);
+	std::string fileName = "";
+	if (sceneName == "") {
+		// どのシーンを編集していたかをファイルから取得
+		fileName = LoadEditorSceneName();
+		if (fileName == "") {
+			return false;
 		}
-		catch (std::exception& e) {
-			MyImGuiManager::GetInstance()->DebugLog(e.what());
-		}
-		// ファイルから読み込んだ後に読み込み後関数を呼び出し
-		m_scene = scene.get();
-		m_editor = scene->GetEditor();
-		scene->Load();
-		m_sceneList.push_back(std::move(scene));
+	}
+	else {
+		fileName = sceneName;
+	}
+	fileName += ".json";
+	// 編集していたシーンファイルをロード
+	try {
+		std::ifstream file("Assets\\Scenes\\" + fileName);
+		cereal::JSONInputArchive archive(file);
+		archive(scene);
+	}
+	catch (std::exception& e) {
+		MyImGuiManager::GetInstance()->DebugLog(e.what());
+		return false;
 	}
 	// 終了したら成功したことを通知
 	MyImGuiManager::GetInstance()->DebugLog("Load Successful !!");
+	return true;
+}
+
+/// <summary>
+/// 編集していたシーン名を保存する関数
+/// </summary>
+void Manager::SaveEditorSceneName()
+{
+	std::string filePath = "Assets\\Scenes\\EditSceneInfo\\sceneName.json";
+	std::ofstream file(filePath);
+	// シーン情報をシリアライズ
+	try {
+		cereal::JSONOutputArchive archive(file);
+		archive(cereal::make_nvp("EditSceneName",m_scene->GetName()));
+	}
+	catch (std::exception& e) {
+		MyImGuiManager::GetInstance()->DebugLog(e.what());
+	}
+	// 終了したら成功したことを通知
+	MyImGuiManager::GetInstance()->DebugLog("Successful!! Save EditSceneName");
+
+}
+
+
+/// <summary>
+/// 編集していたシーン名をロードする関数
+/// </summary>
+/// <returns>編集していたシーン名</returns>
+std::string Manager::LoadEditorSceneName()
+{
+	std::string fileName = "Assets\\Scenes\\EditSceneInfo\\sceneName.json";
+	std::ifstream file(fileName);
+	if (file.fail()) {
+		MyImGuiManager::GetInstance()->DebugLog("Faild!! "+fileName+" is can't find");
+		return "";
+	}
+	std::string editSceneName;
+	try {
+		cereal::JSONInputArchive archive(file);
+		archive(editSceneName);
+	}
+	catch (std::exception& e) {
+		MyImGuiManager::GetInstance()->DebugLog(e.what());
+		return "";
+	}
+	// 終了したら成功したことを通知
+	MyImGuiManager::GetInstance()->DebugLog("Successful!! Load EditSceneName");
+	return editSceneName;
 }
 
 // シーンを再生する関数
@@ -219,7 +318,7 @@ void Manager::PlayScene()
 	// ゲームウィンドウにフォーカスを設定
 	ImGui::SetWindowFocus("Game");
 	// 現在のシーンをファイルに保存
-	SaveScene();
+	SaveEditScene();
 	// 実行状態へ
 	SetEngineMode(ENGINE_MODE::RUN);
 	// スクリプトのStart関数を呼び出す
@@ -232,15 +331,13 @@ void Manager::StopScene()
 	ImGui::SetWindowFocus("Scene");
 	// エディタで選択しているオブジェクトをクリア
 	MyImGuiManager::GetInstance()->ClearSelectObject();
-	// シーンとシーンリストをクリア
+	// シーンをクリア
+	m_scene.reset();
 	m_scene = nullptr;
-	m_sceneList.clear();
 	CollisionManager::GetInstance()->Uninit();
 	LuaManager::GetInstance()->ClearScriptList();
 	// ファイルからシーンをロード 
-	m_editor = new Editor();
-	m_editor->Init();
-	LoadScene();
+	LoadEditScene();
 	// 実行終了
 	Manager::GetInstance()->SetEngineMode(ENGINE_MODE::EDIT);
 }
@@ -260,8 +357,22 @@ bool Manager::CheckSceneFile()
 	if (h == INVALID_HANDLE_VALUE) {
 		return false;
 	}
-	return true;
+
+	do {
+		if (win32FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			// 取得したものがディレクトリなら無視
+		}
+		else {
+			// ファイルが一つでもあったなら出る
+			return true;
+		}
+	} while (FindNextFile(h, &win32FindData));
+
+	FindClose(h);
+
+	return false;
 }
+
 
 
 std::list<std::string> Manager::GetAllFiles(std::string dirPath)
@@ -289,4 +400,39 @@ std::list<std::string> Manager::GetAllFiles(std::string dirPath)
 	FindClose(h);
 
 	return nameList;
+}
+
+/// <summary>
+/// 引数のシーン名のシーンファイルが存在するかチェックする関数
+/// </summary>
+/// <param name="name">探すシーンの名前</param>
+/// <returns>存在したかどうか</returns>
+bool Manager::IsExistScene(std::string name)
+{
+	name += ".json";
+	HANDLE h;
+	WIN32_FIND_DATA win32FindData;
+	std::list<std::string> nameList;
+	std::string searchName = "Assets\\Scenes\\*";
+
+	h = FindFirstFile(searchName.c_str(), &win32FindData);
+
+	if (h == INVALID_HANDLE_VALUE) {
+		return false;
+	}
+
+	do {
+		if (win32FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			// 取得したものがディレクトリなら無視
+		}
+		else {
+			if (win32FindData.cFileName == name) {
+				return true;
+			}
+		}
+	} while (FindNextFile(h, &win32FindData));
+
+	FindClose(h);
+
+	return false;
 }
