@@ -57,9 +57,9 @@ void Manager::Init()
 {
 	m_mode = ENGINE_MODE::EDIT;
 
-	Renderer::Init();
-	MyImGuiManager::GetInstance()->Init(GetWindow());
-	LuaManager::GetInstance()->Init();
+	Renderer::Init();		// 描画関係初期化
+	LuaManager::GetInstance()->Init();	// Lua関係初期化
+	MyImGuiManager::GetInstance()->Init(GetWindow());	// ImGui関係初期化
 	
 	// Sceneファイルの中を確認
 	if (CheckSceneFile()) {
@@ -69,16 +69,16 @@ void Manager::Init()
 	else {
 		// Sceneのデータがないならシーンを作成
 		m_scene = std::make_unique<Scene>();
-		m_scene->SetName("Test1");
+		m_scene->SetName("SampleScene");
 		m_scene->Init();
 		m_editor = m_scene->GetEditor();
 	}
-
 }
 
 
 void Manager::Uninit()
 {
+	SaveEditScene();
 	m_scene->Uninit();
 	m_editor->Uninit();
 	delete m_editor;
@@ -120,18 +120,8 @@ void Manager::Update()
 	// オブジェクトが破棄されているかをチェック
 	m_scene->CheckDestroyedObject();
 
-	if (m_nextScene)
-	{
-		if (m_scene)
-		{
-			m_scene->Uninit();
-		}
-		m_scene.reset();
-		m_scene = std::move(m_nextScene);
-		m_editor = m_scene->GetEditor();
-		m_scene->Load();
-		m_nextScene = nullptr;
-	}
+	// シーンが変更されるかチェック
+	CheckChangeScene();
 }
 
 void Manager::Draw()
@@ -156,38 +146,73 @@ void Manager::Draw()
 
 }
 
+void Manager::CheckChangeScene()
+{
+	if (m_nextScene)
+	{
+		// シーンがあるなら終了処理を呼ぶ
+		if (m_scene)
+		{
+			m_scene->Uninit();
+		}
+		// GUIで現在参照しているオブジェクトをクリア
+		MyImGuiManager::GetInstance()->ClearSelectObject();
+		// ポインタを解放
+		m_scene.reset();
+		// 新しいシーンを代入
+		m_scene = std::move(m_nextScene);
+		m_editor = m_scene->GetEditor();
+		// シーンのロード処理を呼び出す
+		m_scene->Load();
+		m_nextScene = nullptr;
+	}
+}
+
 /// <summary>
 /// シーンを作成する関数
 /// </summary>
 /// <param name="sceneName">作成するシーン名</param>
-void Manager::CreateScene(std::string sceneName)
+bool Manager::CreateScene(std::string sceneName)
 {
 	// 新しいシーンを作成
 	std::unique_ptr<Scene> scene= std::make_unique<Scene>();
 	scene->SetName(sceneName);
 	scene->Init();
 	// シーンをファイルに保存
-	SaveScene(scene);
-	MyImGuiManager::GetInstance()->DebugLog("Successful!! create scene");
+	if (SaveScene(scene)) {
+		MyImGuiManager::GetInstance()->DebugLog("Successful!! create scene");
+		return true;
+	}
+	return false;
 }
 
 /// <summary>
 /// 現在のシーンを変更する関数
 /// </summary>
 /// <param name="sceneName">変更するシーン名</param>
-void Manager::ChangeScene(std::string sceneName)
+bool Manager::ChangeScene(std::string sceneName)
 {
 	if (!IsExistScene(sceneName)) {
 		MyImGuiManager::GetInstance()->DebugLog("Faild!! Can't change scene. this scene name isn't used.");
-		return;
+		return false;
 	}
-	LoadScene(m_nextScene,sceneName);
-
+	// シーンを変える前にセーブ
+	Manager::GetInstance()->SaveEditScene();
+	// シーンをロード
+	if (LoadScene(m_nextScene, sceneName)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 
 void Manager::SaveEditScene()
 {
+	// 現在のシーンの名前を保存
+	SaveEditorSceneName();
+	// 現在のシーンを保存
 	SaveScene(m_scene);
 }
 
@@ -196,7 +221,8 @@ void Manager::SaveEditScene()
 /// </summary>
 void Manager::LoadEditScene()
 {
-	LoadScene(m_scene);
+	std::string fileName = LoadEditorSceneName();
+	LoadScene(m_scene,fileName);
 	// ファイルから読み込んだ後に読み込み後関数を呼び出し
 	m_editor = m_scene->GetEditor();
 	m_scene->Load();
@@ -209,8 +235,6 @@ void Manager::LoadEditScene()
 /// <param name="fileName">保存するファイル名</param>
 bool Manager::SaveScene(std::unique_ptr<Scene>& scene)
 {
-	// 現在のシーンの名前を保存
-	SaveEditorSceneName();
 	// 現在のシーンを保存する
 	// Scenesフォルダにシーンファイルを作成
 	std::string filePath = "Assets\\Scenes\\"+ scene->GetName() + ".json";
@@ -238,16 +262,9 @@ bool Manager::SaveScene(std::unique_ptr<Scene>& scene)
 /// </summary>
 bool Manager::LoadScene(std::unique_ptr<Scene>& scene, std::string sceneName)
 {
-	std::string fileName = "";
+	std::string fileName = sceneName;
 	if (sceneName == "") {
-		// どのシーンを編集していたかをファイルから取得
-		fileName = LoadEditorSceneName();
-		if (fileName == "") {
-			return false;
-		}
-	}
-	else {
-		fileName = sceneName;
+		return false;
 	}
 	fileName += ".json";
 	// 編集していたシーンファイルをロード

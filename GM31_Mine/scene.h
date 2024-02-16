@@ -33,6 +33,8 @@ public:
 	size_t GetGameObjectCount();	// シーンに存在するオブジェクトの個数を取得する関数
 	int GetActiveGameObjectCount();	// アクティブなオブジェクトの個数を取得する関数
 	std::list<GameObject*> GetAllGameObjects();		// すべてのオブジェクトをリストで取得する関数
+	std::list<GameObject*> GetMostParentObjects();	// 親のいないオブジェクトをリストで取得する関数
+	std::list<std::string> GetObjectNameList();		// シーンにあるオブジェクトの名前をリストで取得する関数
 
 	void SetName(std::string name) { m_name = name; }
 

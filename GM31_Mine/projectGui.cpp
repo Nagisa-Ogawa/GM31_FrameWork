@@ -170,6 +170,13 @@ void ProjectGui::ShowSelectChildNode(FileTreeNode* fileNode)
             if (ImGui::ImageButton((void*)m_fileNodeTextureMap[extName], btnSize)) {
                 PushFileButton(child);
             }
+            // ファイルボタンをダブルクリックした時
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
+                // シーンファイルなら
+                if (m_selectNode->GetFileName() == "Scenes" && extName == ".json") {
+                    PushSceneFileButton(child);
+                }
+            }
         }
         // ファイル名が長すぎる場合省略
         std::string fileName = CutFileName(child->GetFileName(),btnSize.x);
@@ -313,7 +320,7 @@ void ProjectGui::PushDirButton(FileTreeNode* fileNode)
 
 
 /// <summary>
-/// ファイルボタンを押したときの処理
+/// ファイルボタンを押した時の処理
 /// </summary>
 /// <param name="fileNode"></param>
 void ProjectGui::PushFileButton(FileTreeNode* fileNode)
@@ -322,6 +329,22 @@ void ProjectGui::PushFileButton(FileTreeNode* fileNode)
     inspector->SetFileNode(fileNode);
 }
 
+
+/// <summary>
+/// シーンファイルボタンを押した時の処理
+/// </summary>
+/// <param name="fileNode">選択したノードの情報</param>
+void ProjectGui::PushSceneFileButton(FileTreeNode* fileNode)
+{
+    std::string sceneName = GetNoFileExtension(fileNode->GetFileName());
+    // シーンを読み込み
+    Manager::GetInstance()->ChangeScene(sceneName);
+}
+
+
+/// <summary>
+/// ファイル再読み込みボタンを押した時の処理
+/// </summary>
 void ProjectGui::PushReloadButton()
 {
     auto inspector = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>();
@@ -345,28 +368,28 @@ void ProjectGui::ShowCreateScenePopup()
     {
         ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5);
         ImGui::Separator();
-        char str[128] = "";
+        static char str[128] = "";
         ImGui::InputText(".json", str, IM_ARRAYSIZE(str));
         ImVec2 btnSize = ImVec2(60, 30);
         if (ImGui::Button("OK", btnSize)) {
             std::string fileName = str;
-            // 拡張子がないなら付け足す
-            if (GetFileExtension(fileName) != ".json") {
-                fileName += ".json";
+            // 拡張子があるなら外す
+            if (GetFileExtension(fileName) == ".json") {
+                fileName = GetNoFileExtension(fileName);
             }
             // ファイル名が入力されているかチェック
-            if (fileName == ".json") {
+            if (fileName == "") {
                 MyImGuiManager::GetInstance()->DebugLog("Faild!! This scene name is enpty!!");
             }
             // 同じシーン名があるかチェック
-            else if (m_selectNode->IsExistSameFileName(fileName)) {
+            else if (m_selectNode->IsExistSameFileName(fileName+".json")) {
                 MyImGuiManager::GetInstance()->DebugLog("Faild!! This scene name is already in use!!");
             }
             else {
                 // シーンを作成する
-                if (true) {
+                if (Manager::GetInstance()->CreateScene(fileName)) {
                     // スクリプトを作成したならファイル木構造に追加
-                    m_selectNode->Insert(m_registerID, FILENODE_TYPE::NODE_FILE, fileName);
+                    m_selectNode->Insert(m_registerID, FILENODE_TYPE::NODE_FILE, fileName + ".json");
                     m_registerID++;
                     // 成功したことを通知
                     MyImGuiManager::GetInstance()->DebugLog("Success!! Create Scene!!");

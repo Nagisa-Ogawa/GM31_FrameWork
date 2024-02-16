@@ -3,7 +3,7 @@
         "ptr_wrapper": {
             "valid": 1,
             "data": {
-                "m_name": "Test1",
+                "m_name": "SampleScene",
                 "m_sceneObjectList": {
                     "value0": [
                         {
@@ -93,13 +93,13 @@
                     "value1": [
                         {
                             "polymorphic_id": 2147483652,
-                            "polymorphic_name": "Box",
+                            "polymorphic_name": "Sky",
                             "ptr_wrapper": {
                                 "valid": 1,
                                 "data": {
                                     "value0": {
-                                        "m_name": "box",
-                                        "m_id": 2,
+                                        "m_name": "Sky",
+                                        "m_id": 1,
                                         "m_componentList": [
                                             {
                                                 "polymorphic_id": 2,
@@ -127,8 +127,8 @@
                                                         },
                                                         "localPostion": {
                                                             "x": 0.0,
-                                                            "y": 0.9133189916610718,
-                                                            "z": 15.0
+                                                            "y": 0.0,
+                                                            "z": 0.0
                                                         },
                                                         "localRotation": {
                                                             "x": 0.0,
@@ -136,9 +136,9 @@
                                                             "z": 0.0
                                                         },
                                                         "localScale": {
-                                                            "x": 1.0,
-                                                            "y": 1.0,
-                                                            "z": 1.0
+                                                            "x": 100.0,
+                                                            "y": 100.0,
+                                                            "z": 100.0
                                                         }
                                                     }
                                                 }
@@ -152,8 +152,8 @@
                                                         "value0": {
                                                             "m_ID": 1
                                                         },
-                                                        "m_fileNameVS": "Assets\\Shaders\\vertexLightingVS.cso",
-                                                        "m_fileNamePS": "Assets\\Shaders\\vertexLightingPS.cso"
+                                                        "m_fileNameVS": "Assets\\Shaders\\unlitTextureVS.cso",
+                                                        "m_fileNamePS": "Assets\\Shaders\\unlitTexturePS.cso"
                                                     }
                                                 }
                                             },
@@ -166,62 +166,27 @@
                                                         "value0": {
                                                             "m_ID": 2
                                                         },
-                                                        "m_fileName": "Assets\\Models\\box.obj"
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 2147483655,
-                                                "polymorphic_name": "PolygonCollision",
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 3
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 2147483656,
-                                                "polymorphic_name": "BoxCollision",
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 4
-                                                        },
-                                                        "size": {
-                                                            "x": 1.0,
-                                                            "y": 1.0,
-                                                            "z": 1.0
-                                                        },
-                                                        "offset": {
-                                                            "x": 0.0,
-                                                            "y": 1.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "m_isTrigger": false,
-                                                        "m_collID": 2
+                                                        "m_fileName": "Assets\\Models\\Sky.obj"
                                                     }
                                                 }
                                             }
                                         ],
                                         "m_active": true,
                                         "m_destroy": false,
-                                        "m_registerID": 5
+                                        "m_registerID": 3
                                     }
                                 }
                             }
                         },
                         {
-                            "polymorphic_id": 4,
+                            "polymorphic_id": 2147483655,
+                            "polymorphic_name": "Player",
                             "ptr_wrapper": {
                                 "valid": 1,
                                 "data": {
                                     "value0": {
-                                        "m_name": "box1",
-                                        "m_id": 3,
+                                        "m_name": "Player",
+                                        "m_id": 2,
                                         "m_componentList": [
                                             {
                                                 "polymorphic_id": 2,
@@ -231,7 +196,7 @@
                                                         "value0": {
                                                             "m_ID": 0
                                                         },
-                                                        "m_parentID": 2,
+                                                        "m_parentID": -1,
                                                         "worldPostion": {
                                                             "x": 0.0,
                                                             "y": 0.0,
@@ -248,9 +213,143 @@
                                                             "z": 1.0
                                                         },
                                                         "localPostion": {
-                                                            "x": 3.0,
+                                                            "x": 0.1765955090522766,
+                                                            "y": 0.2277955412864685,
+                                                            "z": 0.0
+                                                        },
+                                                        "localRotation": {
+                                                            "x": 0.0,
                                                             "y": 0.0,
                                                             "z": 0.0
+                                                        },
+                                                        "localScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 2147483656,
+                                                "polymorphic_name": "BoxCollision",
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 1
+                                                        },
+                                                        "size": {
+                                                            "x": 0.5,
+                                                            "y": 1.0,
+                                                            "z": 0.5
+                                                        },
+                                                        "offset": {
+                                                            "x": 0.0,
+                                                            "y": 1.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "m_isTrigger": false,
+                                                        "m_collID": 1
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 5,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 2
+                                                        },
+                                                        "m_fileNameVS": "Assets\\Shaders\\vertexLightingVS.cso",
+                                                        "m_fileNamePS": "Assets\\Shaders\\vertexLightingPS.cso"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 6,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 3
+                                                        },
+                                                        "m_fileName": "Assets\\Models\\Bot.obj"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 2147483657,
+                                                "polymorphic_name": "PolygonCollision",
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 4
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 2147483658,
+                                                "polymorphic_name": "Script",
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 5
+                                                        },
+                                                        "m_fileName": "Assets\\Scripts\\testA.lua"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "m_active": true,
+                                        "m_destroy": false,
+                                        "m_registerID": 6
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "polymorphic_id": 2147483659,
+                            "polymorphic_name": "Box",
+                            "ptr_wrapper": {
+                                "valid": 1,
+                                "data": {
+                                    "value0": {
+                                        "m_name": "box",
+                                        "m_id": 3,
+                                        "m_componentList": [
+                                            {
+                                                "polymorphic_id": 2,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 0
+                                                        },
+                                                        "m_parentID": -1,
+                                                        "worldPostion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldRotation": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        },
+                                                        "localPostion": {
+                                                            "x": 0.0,
+                                                            "y": 1.2831313610076905,
+                                                            "z": 15.0
                                                         },
                                                         "localRotation": {
                                                             "x": 0.0,
@@ -291,7 +390,125 @@
                                                 }
                                             },
                                             {
-                                                "polymorphic_id": 7,
+                                                "polymorphic_id": 9,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 3
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 8,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 4
+                                                        },
+                                                        "size": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        },
+                                                        "offset": {
+                                                            "x": 0.0,
+                                                            "y": 1.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "m_isTrigger": false,
+                                                        "m_collID": 2
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "m_active": true,
+                                        "m_destroy": false,
+                                        "m_registerID": 6
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "polymorphic_id": 11,
+                            "ptr_wrapper": {
+                                "valid": 1,
+                                "data": {
+                                    "value0": {
+                                        "m_name": "box1",
+                                        "m_id": 4,
+                                        "m_componentList": [
+                                            {
+                                                "polymorphic_id": 2,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 0
+                                                        },
+                                                        "m_parentID": 3,
+                                                        "worldPostion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldRotation": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        },
+                                                        "localPostion": {
+                                                            "x": 7.735226631164551,
+                                                            "y": 0.24024724960327149,
+                                                            "z": 0.72210693359375
+                                                        },
+                                                        "localRotation": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "localScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 5,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 1
+                                                        },
+                                                        "m_fileNameVS": "Assets\\Shaders\\vertexLightingVS.cso",
+                                                        "m_fileNamePS": "Assets\\Shaders\\vertexLightingPS.cso"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 6,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 2
+                                                        },
+                                                        "m_fileName": "Assets\\Models\\box.obj"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 9,
                                                 "ptr_wrapper": {
                                                     "valid": 1,
                                                     "data": {
@@ -333,14 +550,14 @@
                             }
                         },
                         {
-                            "polymorphic_id": 2147483657,
+                            "polymorphic_id": 2147483660,
                             "polymorphic_name": "MeshField",
                             "ptr_wrapper": {
                                 "valid": 1,
                                 "data": {
                                     "value0": {
                                         "m_name": "Filed",
-                                        "m_id": 4,
+                                        "m_id": 5,
                                         "m_componentList": [
                                             {
                                                 "polymorphic_id": 2,
@@ -391,91 +608,6 @@
                                     }
                                 }
                             }
-                        },
-                        {
-                            "polymorphic_id": 2147483658,
-                            "polymorphic_name": "Sky",
-                            "ptr_wrapper": {
-                                "valid": 1,
-                                "data": {
-                                    "value0": {
-                                        "m_name": "Sky",
-                                        "m_id": 5,
-                                        "m_componentList": [
-                                            {
-                                                "polymorphic_id": 2,
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 0
-                                                        },
-                                                        "m_parentID": -1,
-                                                        "worldPostion": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "worldRotation": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "worldScale": {
-                                                            "x": 1.0,
-                                                            "y": 1.0,
-                                                            "z": 1.0
-                                                        },
-                                                        "localPostion": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "localRotation": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "localScale": {
-                                                            "x": 100.0,
-                                                            "y": 100.0,
-                                                            "z": 100.0
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 5,
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 1
-                                                        },
-                                                        "m_fileNameVS": "Assets\\Shaders\\unlitTextureVS.cso",
-                                                        "m_fileNamePS": "Assets\\Shaders\\unlitTexturePS.cso"
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 6,
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 2
-                                                        },
-                                                        "m_fileName": "Assets\\Models\\Sky.obj"
-                                                    }
-                                                }
-                                            }
-                                        ],
-                                        "m_active": true,
-                                        "m_destroy": false,
-                                        "m_registerID": 3
-                                    }
-                                }
-                            }
                         }
                     ],
                     "value2": []
@@ -488,7 +620,7 @@
                             "m_editorObjectList": {
                                 "value0": [
                                     {
-                                        "polymorphic_id": 2147483659,
+                                        "polymorphic_id": 2147483661,
                                         "polymorphic_name": "EditorCameraObject",
                                         "ptr_wrapper": {
                                             "valid": 1,
@@ -522,13 +654,13 @@
                                                                         "z": 1.0
                                                                     },
                                                                     "localPostion": {
-                                                                        "x": 4.086713790893555,
-                                                                        "y": 4.410674571990967,
-                                                                        "z": -4.932586193084717
+                                                                        "x": 0.48022526502609255,
+                                                                        "y": 4.306253433227539,
+                                                                        "z": 10.991280555725098
                                                                     },
                                                                     "localRotation": {
-                                                                        "x": 0.3240000903606415,
-                                                                        "y": -0.33599910140037539,
+                                                                        "x": 0.3809995949268341,
+                                                                        "y": -0.1350007802248001,
                                                                         "z": 0.0
                                                                     },
                                                                     "localScale": {
@@ -540,7 +672,7 @@
                                                             }
                                                         },
                                                         {
-                                                            "polymorphic_id": 2147483660,
+                                                            "polymorphic_id": 2147483662,
                                                             "polymorphic_name": "EditorCamera",
                                                             "ptr_wrapper": {
                                                                 "valid": 1,
@@ -549,13 +681,13 @@
                                                                         "m_ID": 1
                                                                     },
                                                                     "postion": {
-                                                                        "x": 4.086713790893555,
-                                                                        "y": 4.410674571990967,
-                                                                        "z": -4.932586193084717
+                                                                        "x": 0.48022526502609255,
+                                                                        "y": 4.306253433227539,
+                                                                        "z": 10.991280555725098
                                                                     },
                                                                     "rotation": {
-                                                                        "x": 0.3240000903606415,
-                                                                        "y": -0.33599910140037539,
+                                                                        "x": 0.3809995949268341,
+                                                                        "y": -0.1350007802248001,
                                                                         "z": 0.0
                                                                     }
                                                                 }
@@ -572,8 +704,92 @@
                                 ],
                                 "value1": [
                                     {
-                                        "polymorphic_id": 2147483661,
+                                        "polymorphic_id": 2147483663,
                                         "polymorphic_name": "BoxCollisionFrame",
+                                        "ptr_wrapper": {
+                                            "valid": 1,
+                                            "data": {
+                                                "value0": {
+                                                    "m_name": "PlayerBoxCollisionFrame",
+                                                    "m_id": 1,
+                                                    "m_componentList": [
+                                                        {
+                                                            "polymorphic_id": 2,
+                                                            "ptr_wrapper": {
+                                                                "valid": 1,
+                                                                "data": {
+                                                                    "value0": {
+                                                                        "m_ID": 0
+                                                                    },
+                                                                    "m_parentID": -1,
+                                                                    "worldPostion": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0
+                                                                    },
+                                                                    "worldRotation": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0
+                                                                    },
+                                                                    "worldScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0,
+                                                                        "z": 1.0
+                                                                    },
+                                                                    "localPostion": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0
+                                                                    },
+                                                                    "localRotation": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0
+                                                                    },
+                                                                    "localScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0,
+                                                                        "z": 1.0
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "polymorphic_id": 5,
+                                                            "ptr_wrapper": {
+                                                                "valid": 1,
+                                                                "data": {
+                                                                    "value0": {
+                                                                        "m_ID": 1
+                                                                    },
+                                                                    "m_fileNameVS": "Assets\\Shaders\\vertexLightingVS.cso",
+                                                                    "m_fileNamePS": "Assets\\Shaders\\vertexLightingPS.cso"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "polymorphic_id": 6,
+                                                            "ptr_wrapper": {
+                                                                "valid": 1,
+                                                                "data": {
+                                                                    "value0": {
+                                                                        "m_ID": 2
+                                                                    },
+                                                                    "m_fileName": "Assets\\Models\\boxCollision.obj"
+                                                                }
+                                                            }
+                                                        }
+                                                    ],
+                                                    "m_active": true,
+                                                    "m_destroy": false,
+                                                    "m_registerID": 3
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "polymorphic_id": 15,
                                         "ptr_wrapper": {
                                             "valid": 1,
                                             "data": {
@@ -657,7 +873,7 @@
                                         }
                                     },
                                     {
-                                        "polymorphic_id": 13,
+                                        "polymorphic_id": 15,
                                         "ptr_wrapper": {
                                             "valid": 1,
                                             "data": {
@@ -740,15 +956,3 @@
                                             }
                                         }
                                     }
-                                ],
-                                "value2": []
-                            },
-                            "m_registerID": 4
-                        }
-                    }
-                },
-                "m_registerID": 6
-            }
-        }
-    }
-}

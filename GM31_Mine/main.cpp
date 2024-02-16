@@ -8,7 +8,7 @@
 
 
 const char* CLASS_NAME = "AppClass";
-const char* WINDOW_NAME = "DX11ÉQÅ[ÉÄ";
+const char* WINDOW_NAME = "CalmEngine";
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

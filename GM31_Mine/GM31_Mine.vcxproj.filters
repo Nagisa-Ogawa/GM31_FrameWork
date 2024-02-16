@@ -213,6 +213,9 @@
     <ClCompile Include="fileDialog.cpp">
       <Filter>ソース ファイル\Other</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectTreeNode.cpp">
+      <Filter>ソース ファイル\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="field.h">
@@ -396,6 +399,9 @@
       <Filter>ヘッダー ファイル\Other</Filter>
     </ClInclude>
     <ClInclude Include="fileDialog.h">
+      <Filter>ヘッダー ファイル\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTreeNode.h">
       <Filter>ヘッダー ファイル\Other</Filter>
     </ClInclude>
   </ItemGroup>

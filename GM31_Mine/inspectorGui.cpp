@@ -59,6 +59,7 @@ void InspectorGui::Update()
 				m_selectedObject->SetDestroy();
 				// 削除するオブジェクトを選択されたオブジェクト変数から削除
 				MyImGuiManager::GetInstance()->ClearSelectObject();
+				ImGui::PopStyleVar();
 				style = ImGuiStyle();
 				ImGui::End();
 				return;
@@ -79,20 +80,21 @@ void InspectorGui::Update()
 			}
 			if (m_isAddComp) {
 				const char* compNames[] = { "BoxCollision", "Camera", "Model", "QuadCollision", "Script", "Shader", "SphereCollision"};
-				int item_current_idx = -1; // Here we store our selection data as an index.
+				int selectNo = -1; // 選んだコンポーネントの添字
 				if (ImGui::BeginListBox("##addComponentList"))
 				{
 					for (int n = 0; n < IM_ARRAYSIZE(compNames); n++)
 					{
-						const bool is_selected = (item_current_idx == n);
-						if (ImGui::Selectable(compNames[n], is_selected)) {
-							item_current_idx = n;
+						const bool isSelected = (selectNo == n);
+						if (ImGui::Selectable(compNames[n], isSelected)) {
+							selectNo = n;
 						}
 					}
 					ImGui::EndListBox();
 				}
-				if (item_current_idx != -1) {
-					switch (item_current_idx)
+				// 選ばれたコンポーネントを追加
+				if (selectNo != -1) {
+					switch (selectNo)
 					{
 					case 0:
 						m_selectedObject->AddComponent<BoxCollision>();

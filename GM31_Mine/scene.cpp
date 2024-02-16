@@ -1,5 +1,7 @@
 #include "main.h"
 #include "scene.h"
+#include "MyImGuiManager.h"
+#include "hierarchyGui.h"
 #include "script.h"
 
 #include "renderer.h"
@@ -18,16 +20,19 @@ void Scene::Init()
 	// デバッグ用
 	// ---------------------
 	AddGameObject<CameraObject>(0, "Camera");
-	//auto player = AddGameObject<Player>(1, "Player");
-	//auto box = AddGameObject<Box>(1, "box");
-	//box->GetTransform()->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 15.0f);
-	//auto box1 = AddGameObject<Box>(1, "box1");
-	//box1->GetTransform()->m_localPosition = D3DXVECTOR3(3.0f, 0.0f, 0.0f);
-	//box1->GetTransform()->SetParent(box->GetTransform());
-	//auto meshField = AddGameObject<MeshField>(1, "Filed");
-
 	AddGameObject<Sky>(1, "Sky");
+	auto player = AddGameObject<Player>(1, "Player");
+	auto box = AddGameObject<Box>(1, "box");
+	box->GetTransform()->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 15.0f);
+	auto box1 = AddGameObject<Box>(1, "box1");
+	box1->GetTransform()->m_localPosition = D3DXVECTOR3(3.0f, 0.0f, 0.0f);
+	box1->GetTransform()->SetParent(box->GetTransform());
+	auto meshField = AddGameObject<MeshField>(1, "Filed");
 
+
+	// ヒエラルキーウィンドウのオブジェクト木構造を初期化
+	auto hierarchy = MyImGuiManager::GetInstance()->GetImGui<HierarchyGui>();
+	hierarchy->InitObjectTree();
 }
 
 void Scene::Load()
@@ -38,6 +43,10 @@ void Scene::Load()
 		}
 	}
 	m_editor->Load();
+
+	// ヒエラルキーウィンドウのオブジェクト木構造を初期化
+	auto hierarchy = MyImGuiManager::GetInstance()->GetImGui<HierarchyGui>();
+	hierarchy->InitObjectTree();
 }
 
 void Scene::Uninit()
@@ -142,6 +151,45 @@ std::list<GameObject*> Scene::GetAllGameObjects()
 		}
 	}
 	return objList;
+}
+
+
+/// <summary>
+/// 親がいない（一番親）オブジェクトをリストにして取得する関数
+/// </summary>
+/// <returns></returns>
+std::list<GameObject*> Scene::GetMostParentObjects()
+{
+	std::list<GameObject*> objList;
+	for (int i = 0; i < 3; i++)
+	{
+		for (const auto& gameObject : m_sceneObjectList[i])
+		{
+			// 親がいないなら（一番親なら）
+			if (gameObject->GetTransform()->GetParent() == nullptr) {
+				objList.push_back(gameObject.get());
+			}
+		}
+	}
+	return objList;
+}
+
+
+/// <summary>
+/// シーンにあるオブジェクトの名前をリストで取得する関数
+/// </summary>
+/// <returns>オブジェクトの名前リスト</returns>
+std::list<std::string> Scene::GetObjectNameList()
+{
+	std::list<std::string> objNameList;
+	for (int i = 0; i < 3; i++)
+	{
+		for (const auto& gameObject : m_sceneObjectList[i])
+		{
+			objNameList.push_back(gameObject->GetName());
+		}
+	}
+	return objNameList;
 }
 
 

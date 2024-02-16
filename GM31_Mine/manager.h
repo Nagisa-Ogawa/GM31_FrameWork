@@ -38,22 +38,22 @@ public:
 	void Update();
 	void Draw();
 
-	void CreateScene(std::string sceneName);	// シーンを作成する関数
-	void ChangeScene(std::string sceneName);	// シーンを変更する関数
+	void CheckChangeScene();
+
+	bool CreateScene(std::string sceneName);	// シーンを作成する関数
+	bool ChangeScene(std::string sceneName);	// シーンを変更する関数
 
 	bool CheckSceneFile();	// シーンファイルが存在するかをチェックする関数
 	void SaveEditScene();	// 編集しているシーンをファイルに保存する関数
 	void LoadEditScene();	// 編集しているシーンをファイルからロードする関数
 	bool SaveScene(std::unique_ptr<Scene>& scene);	// シーンをファイルに保存する関数
-	bool LoadScene(std::unique_ptr<Scene>& scene, std::string sceneName = "");	// シーンをファイルからロードする関数
+	bool LoadScene(std::unique_ptr<Scene>& scene, std::string sceneName);	// シーンをファイルからロードする関数
 	void SaveEditorSceneName();		// 編集していたシーン名を保存する関数
 	std::string LoadEditorSceneName();		// 編集していたシーン名をロードする関数
 
 	void PlayScene();	// シーンを実行する関数
 	void StopScene();	// シーンの実行を止める関数
 	void PauseScene();	// シーンの実行を一時停止する関数
-
-
 
 
 	static Manager* GetInstance();

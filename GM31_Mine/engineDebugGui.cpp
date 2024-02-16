@@ -21,7 +21,7 @@ void EngineDebugGui::Update()
 		Manager::GetInstance()->CreateScene("hoge");
 	}
 	if (ImGui::Button("changeScene", ImVec2(100, 50))) {
-		Manager::GetInstance()->ChangeScene("Test1");
+		Manager::GetInstance()->ChangeScene("hoge");
 	}
 	ImGui::End();
 }
