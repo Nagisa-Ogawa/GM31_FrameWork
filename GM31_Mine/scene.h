@@ -59,6 +59,8 @@ public:
 		// IDを設定
 		gameObject->SetID(m_registerID);
 		m_registerID++;
+		// ゲームオブジェクトであることをセット
+		gameObject->SetIsGameObject(true);
 		gameObject->Init();
 		T* TObject = (T*)gameObject.get();
 		m_sceneObjectList[layer].push_back(std::move(gameObject));

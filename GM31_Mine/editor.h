@@ -46,6 +46,8 @@ public:
 		// IDを設定
 		editorObject->SetID(m_registerID);
 		m_registerID++;
+		// エディタ用オブジェクトであることをセット
+		editorObject->SetIsGameObject(false);
 		editorObject->Init();
 		T* TObject = (T*)editorObject.get();
 		m_editorObjectList[layer].push_back(std::move(editorObject));

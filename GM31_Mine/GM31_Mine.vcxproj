@@ -171,6 +171,7 @@
     <ClCompile Include="field.cpp" />
     <ClCompile Include="fileDialog.cpp" />
     <ClCompile Include="gameGui.cpp" />
+    <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="hierarchyGui.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\ImGuizmo.cpp" />

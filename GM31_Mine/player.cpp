@@ -28,7 +28,6 @@ void Player::Init()
 	auto coll = AddComponent<BoxCollision>(); 
 	coll->SetSize(D3DXVECTOR3(0.5f, 1.0f, 0.5f));
 	coll->SetOffset(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-	// AddComponent<SphereCollision>()->Init(1.0f, D3DXVECTOR3(0.0f, 1.0f, 0.0f), false);
 	AddComponent<Shader>()->Init("Assets\\Shaders\\vertexLightingVS.cso", "Assets\\Shaders\\vertexLightingPS.cso");
 	AddComponent<Model>()->Init("Assets\\Models\\Bot.obj",true);
 	//m_Model = AddComponent<AnimationModel>();
@@ -44,60 +43,12 @@ void Player::Init()
 
 void Player::Update()
 {
-	D3DXVECTOR3 beforPos = m_transform->m_localPosition;
-	//bool move = false;
-	//if (!move) {
-	//	if (m_NextAnimationName != "Idle") {
-	//		m_AnimationName = m_NextAnimationName;
-	//		m_NextAnimationName = "Idle";
-	//		m_BlendRate = 0.0f;
-	//	}
-	//}
-
-	//m_Model->Update(m_AnimationName.c_str(), m_Time, m_NextAnimationName.c_str(), m_Time, m_BlendRate);
-	//m_Time++;
-	//if(m_BlendRate<1.0f)
-	//	m_BlendRate += 0.1f;
 
 	float groundHeight;
 	auto meshField = Manager::GetInstance()->GetScene()->GetGameObject<MeshField>();
 	groundHeight = meshField->GetHeight(m_transform->m_localPosition);
 
 	m_transform->m_localPosition.y = groundHeight;
-
-	//---------------------------------
-	// 仮
-	// --------------------------------
-	// プレイヤーと敵（正方形）の当たり判定
-	//m_IsHitEnemy = false;
-	//BoxCollision* pPCollision = GetComponent<BoxCollision>();
-	//auto pEnemies = Manager::GetInstance()->GetScene()->GetActiveGameObjects<Enemy>();
-	//for (auto pEnemy : pEnemies) {
-	//	BoxCollision* pECollision = pEnemy->GetComponent<BoxCollision>();
-	//	float l = 0.0f;
-	//	D3DXVECTOR3 dir{};
-	//	if (CollisionManager::GetInstance()->Collision_BoxToBox(pPCollision, pECollision,&l,&dir)) {
-	//		m_IsHitEnemy = true;
-	//	}
-	//	if (m_IsHitEnemy) {
-	//		m_transform->m_localPosition += dir * l;
-	//	}
-	//}
-
-	//m_IsHitWall = false;
-
-	// プレイヤーと壁の当たり判定
-	//auto pWalls = Manager::GetInstance()->GetScene()->GetGameObjects<Wall>();
-	//for (auto pWall : pWalls) {
-	//	float l = 0.0f;
-	//	D3DXVECTOR3 dir{};
-	//	if (CollisionManager::GetInstance()->Collision_BoxToQuad(pPCollision, pWall->GetComponent<QuadCollision>(), &l, &dir)) {
-	//		m_IsHitWall = true;
-	//	}
-	//	if (m_IsHitWall) {
-	//		m_transform->m_localPosition += dir * l;
-	//	}
-	//}
 
 	GameObject::Update();
 

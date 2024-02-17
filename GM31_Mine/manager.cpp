@@ -78,7 +78,7 @@ void Manager::Init()
 
 void Manager::Uninit()
 {
-	SaveEditScene();
+	// SaveEditScene();
 	m_scene->Uninit();
 	m_editor->Uninit();
 	delete m_editor;

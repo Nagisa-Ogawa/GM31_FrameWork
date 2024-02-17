@@ -23,6 +23,7 @@ protected:
 	std::string m_name{};				// オブジェクトの名前
 	int m_id = -1;		// オブジェクトのID
 	int m_registerID = 0;	// コンポーネントにセットするID
+	bool m_isGameObject = true;	// ゲームで使用されるオブジェクトかどうか（falseの例:当たり判定表示用オブジェクトなど
 
 public:
 	// Get系関数
@@ -30,25 +31,16 @@ public:
 	bool GetActive() { return m_active; }
 	std::string GetName() { return m_name; }
 	int GetID() { return m_id; }
+	bool GetIsGameObject() { return m_isGameObject; }
 	// Set系関数
 	void SetTransform(Transform* transform) { m_transform = transform; }
-	void SetDestroy() { m_destroy = true; }
+	void SetDestroy();
 	void SetActive(bool active) { m_active = active; }
 	void SetName(std::string name) { m_name = name; }
 	void SetID(int ID) { m_id = ID; }
+	void SetIsGameObject(bool flag) { m_isGameObject = flag; }
 
-	bool Destroy()
-	{
-		if (m_destroy)
-		{
-			Uninit();
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+	bool Destroy();
 
 	template <typename T>
 	T* AddComponent()
@@ -80,62 +72,22 @@ public:
 		return nullptr;
 	}
 
-	std::list<Component*> GetAllComponent()
-	{
-		std::list<Component*> list;
-		for (const auto& component : m_componentList) {
-			list.push_back(component.get());
-		}
-		return list;
-	}
+	std::list<Component*> GetAllComponent();
 
-	virtual void Init() 
-	{
-		for (const auto& component : m_componentList) {
-			component->Init();
-		}
-	}
+	virtual void Init();
 
 	/// <summary>
 	/// オブジェクトロード時に呼び出される関数
 	/// </summary>
-	virtual void Load()
-	{
-		m_transform = GetComponent<Transform>();
-		for (const auto& component : m_componentList) {
-			component->SetGameObject(this);
-			component->Load();
-		}
-	}
+	virtual void Load();
 
-	virtual void Uninit()
-	{
-		for (const auto& component : m_componentList) {
-			component->Uninit();
-		}
-		m_componentList.clear();
-	}
+	virtual void Uninit();
 
-	virtual void Update()
-	{
-		for (const auto& component : m_componentList) {
-			component->Update();
-		}
-	}
+	virtual void Update();
 
-	virtual void Draw()
-	{
-		for (const auto& component : m_componentList) {
-			component->Draw();
-		}
-	}
+	virtual void Draw();
 
-	void CheckDestroyedComponent()
-	{
-		// 破棄フラグがONになっているコンポーネントは削除
-		m_componentList.remove_if([](const auto& component)
-		{return component->Destroy();});
-	}
+	void CheckDestroyedComponent();
 
 	template <class Archive>
 	void save(Archive& archive) const

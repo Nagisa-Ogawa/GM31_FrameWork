@@ -69,4 +69,5 @@ ObjectTreeNode* ObjectTreeNode::FindNode(int id)
             return node;
         }
     }
+    return nullptr;
 }

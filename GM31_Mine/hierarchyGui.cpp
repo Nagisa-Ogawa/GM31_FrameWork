@@ -173,6 +173,12 @@ void HierarchyGui::ChangeParentNode(int nodeID, int parentID, int nextParentID)
 /// <param name="objectID">削除するノードのID</param>
 void HierarchyGui::DeleteObjectNode(int objectID)
 {
+    ObjectTreeNode* objectNode = m_sceneObjectTree->FindNode(objectID);
+    // 親の子供リストから自分を削除
+    if (objectNode->GetParent()) {
+        objectNode->GetParent()->DeleteChild(objectID);
+    }
+    objectNode->Delete(true);
 }
 
 
