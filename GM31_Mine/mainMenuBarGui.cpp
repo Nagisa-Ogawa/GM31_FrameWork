@@ -1,11 +1,10 @@
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "main.h"
-#include "MyImGuiManager.h"
 #include "renderer.h"
 #include "manager.h"
 #include "scene.h"
 #include "mainMenuBarGui.h"
-#include "SceneGui.h"
+#include "sceneGui.h"
 #include "inspectorGui.h"
 #include "cameraObject.h"
 #include "box.h"
@@ -65,7 +64,7 @@ void MainMenuBarGui::Update()
 					// 立方体オブジェクトを追加
 					Manager::GetInstance()->GetScene()->AddGameObject<Box>(1, "Box");
 				}
-				if (ImGui::MenuItem("Player")) {
+				if (ImGui::MenuItem("Humanoid")) {
 					// 球体オブジェクトを追加
 					Manager::GetInstance()->GetScene()->AddGameObject<Humanoid>(1, "Humanoid");
 				}

@@ -1,4 +1,4 @@
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "main.h"
 #include "manager.h"
 #include "scene.h"
@@ -12,11 +12,10 @@
 #include "sphereCollision.h"
 #include "sprite.h"
 #include "transform.h"
-#include "MyImGuiManager.h"
 #include "dispInspector.h"
 #include "inspectorGui.h"
-#include "SceneGui.h"
-#include "FileTreeNode.h"
+#include "sceneGui.h"
+#include "fileTreeNode.h"
 
 void InspectorGui::Init()
 {

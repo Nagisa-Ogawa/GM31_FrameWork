@@ -1,15 +1,15 @@
 
 #include "main.h"
 #include "renderer.h"
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "ImGui/imgui.h"
-#include "FileTreeNode.h"
+#include "fileTreeNode.h"
 #include "inspectorGui.h"
-#include "SceneGui.h"
+#include "sceneGui.h"
 #include "manager.h"
 #include "scene.h"
 #include "projectGui.h"
-#include "LuaManager.h"
+#include "luaManager.h"
 
 #define ICON_NUM (7)
 #define BUTTON_SIZE_FILE (70)

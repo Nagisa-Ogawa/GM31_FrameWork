@@ -1,4 +1,4 @@
-#include "ObjectTreeNode.h"
+#include "objectTreeNode.h"
 #include "gameObject.h"
 
 
@@ -11,7 +11,6 @@ ObjectTreeNode* ObjectTreeNode::Insert(GameObject* m_object)
 {
     ObjectTreeNode* child = new ObjectTreeNode();
     child->m_id = m_object->GetID();
-    child->m_name = m_object->GetName();
     child->m_parent = this;
     child->m_object = m_object;
     m_childList.push_back(child);

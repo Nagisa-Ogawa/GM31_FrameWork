@@ -1,4 +1,4 @@
-#include "FileTreeNode.h"
+#include "fileTreeNode.h"
 
 FileTreeNode* FileTreeNode::Insert(int id, FILENODE_TYPE fileType, std::string fileName)
 {

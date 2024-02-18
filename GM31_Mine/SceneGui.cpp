@@ -1,17 +1,17 @@
 #include <DirectXMath.h>
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "ImGui/ImGuizmo.h"
 #include "main.h"
 #include "manager.h"
 #include "scene.h"
 #include "renderer.h"
-#include "SceneGui.h"
+#include "sceneGui.h"
 #include "inspectorGui.h"
 #include "polygonCollision.h"
-#include "CollisionManager.h"
+#include "collisionManager.h"
 #include "editorCamera.h"
 #include "editorCameraObject.h"
-#include "Ray.h"
+#include "ray.h"
 
 
 void SceneGui::Init()

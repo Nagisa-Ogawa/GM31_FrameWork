@@ -3,7 +3,7 @@
 #include "manager.h"
 #include "scene.h"
 #include "boxCollision.h"
-#include "CollisionManager.h"
+#include "collisionManager.h"
 #include "boxCollisionFrame.h"
 #include "dispInspector.h"
 

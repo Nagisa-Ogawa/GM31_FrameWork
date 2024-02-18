@@ -1,11 +1,11 @@
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "main.h"
 #include "manager.h"
 #include "scene.h"
 #include "hierarchyGui.h"
-#include "SceneGui.h"
+#include "sceneGui.h"
 #include "inspectorGui.h"
-#include "ObjectTreeNode.h"
+#include "objectTreeNode.h"
 
 void HierarchyGui::Init()
 {
@@ -63,7 +63,7 @@ void HierarchyGui::ShowObjectNode(ObjectTreeNode* objectNode, int* selectionID)
     if (childList.size() > 0) {
         // 子供がいる時のツリーノード
         nodeFlags |= ImGuiTreeNodeFlags_DefaultOpen;
-        bool isNodeOpen = ImGui::TreeNodeEx((void*)(intptr_t)objectNode->GetID(), nodeFlags, objectNode->GetName().c_str(), objectNode->GetID());
+        bool isNodeOpen = ImGui::TreeNodeEx((void*)(intptr_t)objectNode->GetID(), nodeFlags, objectNode->GetTreeObject()->GetName().c_str(), objectNode->GetID());
         // ノードがクリックされたなら選択状態にする
         if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
             *selectionID = objectNode->GetID();
@@ -83,7 +83,7 @@ void HierarchyGui::ShowObjectNode(ObjectTreeNode* objectNode, int* selectionID)
     else {
         // 子供がいないなら三角形がついていないノードにする
         nodeFlags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-        ImGui::TreeNodeEx((void*)(intptr_t)objectNode->GetID(), nodeFlags, objectNode->GetName().c_str());
+        ImGui::TreeNodeEx((void*)(intptr_t)objectNode->GetID(), nodeFlags, objectNode->GetTreeObject()->GetName().c_str());
         if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
             *selectionID = objectNode->GetID();
             SetSelect(objectNode->GetTreeObject());
@@ -154,7 +154,6 @@ void HierarchyGui::InitObjectTree()
 {
     m_sceneObjectTree = new ObjectTreeNode();
     m_sceneObjectTree->SetID(-2);
-    m_sceneObjectTree->SetName(Manager::GetInstance()->GetScene()->GetName());
     // 親のいないオブジェクトを探す
     auto objectList = Manager::GetInstance()->GetScene()->GetMostParentObjects();
     // 親のいないオブジェクトを全てツリーノードに格納

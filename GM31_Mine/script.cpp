@@ -5,8 +5,8 @@
 #include "main.h"
 #include "manager.h"
 #include "gameObject.h"
-#include "LuaManager.h"
-#include "MyImGuiManager.h"
+#include "luaManager.h"
+#include "myImGuiManager.h"
 #include "script.h"
 #include "dispInspector.h"
 

@@ -1,4 +1,4 @@
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "consoleGui.h"
 
 void ConsoleGui::Init()

@@ -1,7 +1,7 @@
 #include "main.h"
 #include "manager.h"
 #include "scene.h"
-#include "CollisionManager.h"
+#include "collisionManager.h"
 #include "sphereCollision.h"
 #include "sphereCollisionFrame.h"
 #include "dispInspector.h"

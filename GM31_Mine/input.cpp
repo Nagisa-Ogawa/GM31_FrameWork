@@ -1,7 +1,7 @@
 
 #include "main.h"
 #include "input.h"
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 
 
 BYTE Input::m_OldKeyState[256];

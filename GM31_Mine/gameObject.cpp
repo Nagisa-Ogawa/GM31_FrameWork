@@ -1,5 +1,5 @@
 #include "gameObject.h"
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "hierarchyGui.h"
 
 void GameObject::SetDestroy()

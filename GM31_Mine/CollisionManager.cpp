@@ -4,12 +4,12 @@
 #include "manager.h"
 #include "renderer.h"
 #include "scene.h"
-#include "CollisionManager.h"
+#include "collisionManager.h"
 #include "boxCollision.h"
 #include "quadCollision.h"
 #include "sphereCollision.h"
 #include "polygonCollision.h"
-#include "Ray.h"
+#include "ray.h"
 
 CollisionManager* CollisionManager::m_Instance = NULL;
 

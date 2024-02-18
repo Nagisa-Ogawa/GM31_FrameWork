@@ -1,5 +1,5 @@
 #include "polygonCollision.h"
-#include "CollisionManager.h"
+#include "collisionManager.h"
 
 void PolygonCollision::Init()
 {

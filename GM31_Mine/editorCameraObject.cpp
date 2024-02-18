@@ -1,6 +1,6 @@
 #include "main.h"
 #include "manager.h"
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "renderer.h"
 #include "editorCamera.h"
 #include "editorCameraObject.h"

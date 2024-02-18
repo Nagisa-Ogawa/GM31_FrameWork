@@ -2,10 +2,10 @@
 #include <fstream>
 #include <iterator>
 #include <regex>
-#include "LuaManager.h"
+#include "luaManager.h"
 #include <luabind/operator.hpp>
 
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "manager.h"
 #include "scene.h"
 #include "input.h"

@@ -2,7 +2,7 @@
 #include "manager.h"
 #include "scene.h"
 #include "quadCollision.h"
-#include "CollisionManager.h"
+#include "collisionManager.h"
 #include "dispInspector.h"
 
 

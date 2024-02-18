@@ -5,9 +5,9 @@
 
 #include "main.h"
 #include "manager.h"
-#include "MyImGuiManager.h"
-#include "LuaManager.h"
-#include "CollisionManager.h"
+#include "myImGuiManager.h"
+#include "luaManager.h"
+#include "collisionManager.h"
 #include "renderer.h"
 #include "scene.h"
 #include "input.h"
@@ -79,7 +79,7 @@ void Manager::Init()
 
 void Manager::Uninit()
 {
-	// SaveEditScene();
+	SaveEditScene();
 	m_scene->Uninit();
 	m_editor->Uninit();
 	delete m_editor;

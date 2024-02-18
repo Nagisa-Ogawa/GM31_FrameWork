@@ -1,6 +1,6 @@
 #include "manager.h"
 #include "scene.h"
-#include "MyImGuiManager.h"
+#include "myImGuiManager.h"
 #include "hierarchyGui.h"
 #include "renderer.h"
 #include "gameObject.h"
