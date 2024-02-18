@@ -4,6 +4,11 @@
 #include "component.h"
 
 
+//-----------------------------------------------------
+// Transformコンポーネントクラス
+//------------------------------------------------------
+// WorldPosition,WorldRotation,WorldScaleは未使用です
+//------------------------------------------------------
 class Transform : public Component
 {
 private:
@@ -17,7 +22,7 @@ private:
 	void SetChild(Transform* child) { m_childList.push_back(child); }	// 子供を設定する関数
 	void DeleteChild(Transform* child) { m_childList.remove(child); }	// 子供を削除する関数
 public:
-
+	// 未使用
 	D3DXVECTOR3 m_worldPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_worldRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_worldScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -71,6 +76,7 @@ public:
 
 	void Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale);
 	void Load() override;
+	void LoadParent();
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;

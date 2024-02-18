@@ -247,10 +247,6 @@ void Model::Uninit()
 	delete[] m_subsetArray;
 }
 
-void Model::Update()
-{
-}
-
 void Model::Draw()
 {
 
@@ -305,8 +301,12 @@ void Model::ChangeModel(std::string fileName)
 	m_fileName = fileName;
 
 	// 現在のバッファを削除
-	m_vertexBuffer->Release();
-	m_indexBuffer->Release();
+	if (m_vertexBuffer) {
+		m_vertexBuffer->Release();
+	}
+	if (m_indexBuffer) {
+		m_indexBuffer->Release();
+	}
 
 	for (unsigned int i = 0; i < m_subsetNum; i++)
 	{

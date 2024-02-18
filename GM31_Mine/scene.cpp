@@ -1,14 +1,13 @@
+#include <algorithm>
 #include "main.h"
+#include "manager.h"
 #include "scene.h"
+#include "LuaManager.h"
 #include "MyImGuiManager.h"
 #include "hierarchyGui.h"
 #include "script.h"
-
 #include "renderer.h"
 #include "cameraObject.h"
-#include "player.h"
-#include "box.h"
-#include "meshField.h"
 #include "sky.h"
 
 
@@ -16,19 +15,8 @@ void Scene::Init()
 {
 	m_editor = std::make_unique<Editor>();
 	m_editor->Init();
-	// ---------------------
-	// デバッグ用
-	// ---------------------
-	AddGameObject<CameraObject>(0, "Camera");
+	AddGameObject<CameraObject>(0, "MainCamera");
 	AddGameObject<Sky>(1, "Sky");
-	auto player = AddGameObject<Player>(1, "Player");
-	auto box = AddGameObject<Box>(1, "box");
-	box->GetTransform()->m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 15.0f);
-	auto box1 = AddGameObject<Box>(1, "box1");
-	box1->GetTransform()->m_localPosition = D3DXVECTOR3(3.0f, 0.0f, 0.0f);
-	box1->GetTransform()->SetParent(box->GetTransform());
-	auto meshField = AddGameObject<MeshField>(1, "Filed");
-
 
 	// ヒエラルキーウィンドウのオブジェクト木構造を初期化
 	auto hierarchy = MyImGuiManager::GetInstance()->GetImGui<HierarchyGui>();
@@ -37,13 +25,20 @@ void Scene::Init()
 
 void Scene::Load()
 {
+	// シーンにあるオブジェクトのLoad関数を呼び出す
 	for (int i = 0; i < 3; i++) {
 		for (const auto& gameObject : m_sceneObjectList[i]){
 			gameObject->Load();
 		}
 	}
+	// ゲームオブジェクトが全てロードされたなら親オブジェクトをセット
+	for (int i = 0; i < 3; i++) {
+		for (const auto& gameObject : m_sceneObjectList[i]) {
+			gameObject->GetTransform()->LoadParent();
+		}
+	}
+	// エディタ用シーンのLoad関数を呼び出す
 	m_editor->Load();
-
 	// ヒエラルキーウィンドウのオブジェクト木構造を初期化
 	auto hierarchy = MyImGuiManager::GetInstance()->GetImGui<HierarchyGui>();
 	hierarchy->InitObjectTree();
@@ -59,6 +54,8 @@ void Scene::Uninit()
 		}
 		m_sceneObjectList[i].clear();
 	}
+	m_editor->Uninit();
+	LuaManager::GetInstance()->ClearScriptList();
 }
 
 void Scene::Update()
@@ -98,43 +95,50 @@ void Scene::Draw()
 	}
 }
 
-
 /// <summary>
-/// シーンに存在するオブジェクトの個数を取得する関数
+/// IDからゲームオブジェクトを取得する関数
 /// </summary>
-/// <returns>オブジェクトの個数</returns>
-size_t Scene::GetGameObjectCount()
+/// <param name="ID"></param>
+/// <returns></returns>
+GameObject* Scene::GetGameObjectWithID(int ID)
 {
-	size_t count = 0;
+	// IDが-1なら無効
+	if (ID == -1) return nullptr;
+	// オブジェクトのリストからIDが同じオブジェクトを探す
 	for (int i = 0; i < 3; i++) {
-		count += m_sceneObjectList[i].size();
-	}
-	return count;
-}
-
-
-/// <summary>
-/// アクティブなオブジェクトの個数を取得する関数
-/// </summary>
-/// <returns>オブジェクトの個数</returns>
-int Scene::GetActiveGameObjectCount()
-{
-	int count = 0;
-	for (int i = 0; i < 3; i++) {
-		auto it = m_sceneObjectList[i].begin();
-		// すべての要素を検索し終わるまでループ
-		while (true) {
-			it = std::find_if(it, m_sceneObjectList[i].end(), [](const auto& obj) {return obj->GetActive(); });
-			if (it == m_sceneObjectList[i].end()) {
-				break;
-			}
-			count++;
-			it++;
+		auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(),
+			[&ID](const auto& obj) {return obj->GetID() == ID; });
+		if (it != m_sceneObjectList[i].end()) {
+			// 一致したオブジェクトがあったなら返す
+			return (it->get());
 		}
 	}
-	return count;
+	// ないならnullを返す
+	return nullptr;
 }
 
+
+/// <summary>
+/// 名前からゲームオブジェクトを取得する関数
+/// </summary>
+/// <param name="name"></param>
+/// <returns></returns>
+GameObject* Scene::GetGameObjectWithName(std::string name)
+{
+	// 名前が空なら無効
+	if (name == "") return nullptr;
+	// オブジェクトのリストからIDが同じオブジェクトを探す
+	for (int i = 0; i < 3; i++) {
+		auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(),
+			[&name](const auto& obj) {return obj->GetName() == name; });
+		if (it != m_sceneObjectList[i].end()) {
+			// 一致したオブジェクトがあったなら返す
+			return it->get();
+		}
+	}
+	// ないならnullを返す
+	return nullptr;
+}
 
 /// <summary>
 /// すべてのオブジェクトをリストで取得する関数
@@ -152,7 +156,6 @@ std::list<GameObject*> Scene::GetAllGameObjects()
 	}
 	return objList;
 }
-
 
 /// <summary>
 /// 親がいない（一番親）オブジェクトをリストにして取得する関数
@@ -175,23 +178,13 @@ std::list<GameObject*> Scene::GetMostParentObjects()
 }
 
 
-/// <summary>
-/// シーンにあるオブジェクトの名前をリストで取得する関数
-/// </summary>
-/// <returns>オブジェクトの名前リスト</returns>
-std::list<std::string> Scene::GetObjectNameList()
+void Scene::CreateObjectNode(GameObject* object)
 {
-	std::list<std::string> objNameList;
-	for (int i = 0; i < 3; i++)
-	{
-		for (const auto& gameObject : m_sceneObjectList[i])
-		{
-			objNameList.push_back(gameObject->GetName());
-		}
+	if (Manager::GetInstance()->GetScene() == this) {
+		auto hierarchy = MyImGuiManager::GetInstance()->GetImGui<HierarchyGui>();
+		hierarchy->AddObjectNode(object);
 	}
-	return objNameList;
 }
-
 
 /// <summary>
 /// シーンの実行時にスクリプトのStart関数を呼び出す関数
@@ -204,6 +197,34 @@ void Scene::CallScriptStartFunc()
 		if (script == nullptr)	continue;
 		script->Start();
 	}
+}
+
+/// <summary>
+/// 同じ名前のオブジェクトがあるかどうか調べ、同じ名前があったなら新しい名前をつける関数
+/// </summary>
+/// <param name="name">オブジェクトの名前</param>
+void Scene::CheckSameName(std::string& name)
+{
+	auto objectList = GetAllGameObjects();
+	// 同じ名前のオブジェクトない名前になるまでループ
+	std::string newName = name;
+	int count = 0;
+	while (true) {
+		// 同じ名前のオブジェクトがあるか探す
+		auto it = std::find_if(objectList.begin(), objectList.end(), 
+			[&newName](GameObject* object) { return object->GetName() == newName; });
+		if (it != objectList.end()) {
+			count++;
+			// 同じ名前があったなら名前を変える
+			newName = name + "(" + std::to_string(count) + ")";
+		}
+		else {
+			// 同じ名前のオブジェクトはないので終了
+			name = newName;
+			break;
+		}
+	}
+
 }
 
 void Scene::CheckDestroyedObject()

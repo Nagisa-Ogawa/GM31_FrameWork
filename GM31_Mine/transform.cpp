@@ -16,17 +16,24 @@ void Transform::Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 sca
 
 void Transform::Load()
 {
+}
+
+/// <summary>
+/// 親オブジェクトをロードする処理
+/// </summary>
+void Transform::LoadParent()
+{
 	// 親IDが-1でないなら親にセット
 	if (m_parentID != -1)
-	{	
+	{
 		// 親IDから親オブジェクトを取得
-		auto parentObject = Manager::GetInstance()->GetScene()->GetGameObjectWithID<GameObject>(m_parentID);
+		auto parentObject = Manager::GetInstance()->GetScene()->GetGameObjectWithID(m_parentID);
 		auto parent = parentObject->GetTransform();
 		// 親として登録
 		m_parent = parent;
 		// 親側にも子供として登録
 		parent->SetChild(this);
-		
+
 	}
 	else {
 		m_parent = nullptr;

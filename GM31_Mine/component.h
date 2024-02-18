@@ -7,6 +7,9 @@
 #include "cereal/types/string.hpp"
 #include "cereal/types/polymorphic.hpp"
 
+//-----------------------------------------------------
+// コンポーネントクラス
+//------------------------------------------------------
 class GameObject;
 
 class Component

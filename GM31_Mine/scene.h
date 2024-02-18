@@ -13,6 +13,9 @@
 #include "editor.h"
 #include "gameObject.h"
 
+//-----------------------------------------------------
+// シーン用クラス
+//------------------------------------------------------
 class Scene
 {
 private:
@@ -27,19 +30,22 @@ public:
 	void Update();
 	void Draw();
 
-
+	// Get系関数
 	std::string GetName() { return m_name; }
 	Editor* GetEditor() { return m_editor.get(); }
-	size_t GetGameObjectCount();	// シーンに存在するオブジェクトの個数を取得する関数
-	int GetActiveGameObjectCount();	// アクティブなオブジェクトの個数を取得する関数
-	std::list<GameObject*> GetAllGameObjects();		// すべてのオブジェクトをリストで取得する関数
-	std::list<GameObject*> GetMostParentObjects();	// 親のいないオブジェクトをリストで取得する関数
-	std::list<std::string> GetObjectNameList();		// シーンにあるオブジェクトの名前をリストで取得する関数
-
+	// Set系関数
 	void SetName(std::string name) { m_name = name; }
 
-	void CallScriptStartFunc();		// シーンの実行時にアタッチされているスクリプトのStart関数を呼び出す関数
-	void CheckDestroyedObject();
+	// GetGameObject系関数
+	GameObject* GetGameObjectWithID(int ID);				// IDからゲームオブジェクトを取得する関数
+	GameObject* GetGameObjectWithName(std::string name);	// 名前からゲームオブジェクトを取得する関数
+	std::list<GameObject*> GetAllGameObjects();		// すべてのオブジェクトをリストで取得する関数
+	std::list<GameObject*> GetMostParentObjects();	// 親のいないオブジェクトをリストで取得する関数
+
+	void CreateObjectNode(GameObject* object);				// オブジェクトを作成した時にヒエラルキーウィンドウのノードを作成する関数
+	void CallScriptStartFunc();				// シーンの実行時にアタッチされているスクリプトのStart関数を呼び出す関数
+	void CheckSameName(std::string& name);	// 同じ名前のオブジェクトがあるかどうか調べ、同じ名前があったなら新しい名前をつける関数
+	void CheckDestroyedObject();			// シーンのオブジェクトが破棄されているかをチェックする関数
 
 	/// <summary>
 	/// オブジェクトをシーンに追加する関数
@@ -54,6 +60,8 @@ public:
 		std::unique_ptr<GameObject> gameObject = std::make_unique<T>();
 		// transformコンポーネントは必須なためここでAddComponent
 		gameObject->SetTransform(gameObject->AddComponent<Transform>());
+		// 名前が使用されていないかチェック
+		CheckSameName(name);
 		// オブジェクトの名前を設定
 		gameObject->SetName(name);
 		// IDを設定
@@ -63,8 +71,9 @@ public:
 		gameObject->SetIsGameObject(true);
 		gameObject->Init();
 		T* TObject = (T*)gameObject.get();
+		// 現在のシーンにオブジェクトを追加しているならヒエラルキーウィンドウにも追加
+		CreateObjectNode(gameObject.get());
 		m_sceneObjectList[layer].push_back(std::move(gameObject));
-
 		return TObject;
 	}
 
@@ -88,115 +97,6 @@ public:
 		}
 		return nullptr;
 	}
-
-	template <typename T>
-	T* GetGameObjectWithID(int ID)
-	{
-		// IDが-1なら無効
-		if (ID == -1) return nullptr;
-		// オブジェクトのリストからIDが同じオブジェクトを探す
-		for (int i = 0; i < 3; i++) {
-			auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(),
-				[&ID](const auto& obj) {return obj->GetID() == ID; });
-			if (it != m_sceneObjectList[i].end()) {
-				// 一致したオブジェクトがあったなら返す
-				return (T*)(it->get());
-			}
-		}
-		// ないならnullを返す
-		return nullptr;
-	}
-
-	template <typename T>
-	T* GetGameObjectWithName(std::string name) 
-	{
-		// 名前が空なら無効
-		if (name == "") return nullptr;
-		// オブジェクトのリストからIDが同じオブジェクトを探す
-		for (int i = 0; i < 3; i++) {
-			auto it = std::find_if(m_sceneObjectList[i].begin(), m_sceneObjectList[i].end(),
-				[&name](const auto& obj) {return obj->GetName() == name; });
-			if (it != m_sceneObjectList[i].end()) {
-				// 一致したオブジェクトがあったなら返す
-				return it->get();
-			}
-		}
-		// ないならnullを返す
-		return nullptr;
-	}
-
-
-	/// <summary>
-	/// アクティブな指定されたオブジェクトを取得する関数
-	/// </summary>
-	/// <typeparam name="T">取得するオブジェクトのクラス名</typeparam>
-	/// <returns>取得したオブジェクトのポインタ</returns>
-	template <typename T>
-	T* GetActiveGameObject()
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			for (const auto& object : m_sceneObjectList[i])
-			{
-				if (object->GetActive() == false) {
-					continue;
-				}
-				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
-				{
-					return (T*)object.get();
-				}
-			}
-		}
-		return nullptr;
-	}
-
-	/// <summary>
-	/// 複数のオブジェクトを取得する関数
-	/// </summary>
-	/// <typeparam name="T">取得するオブジェクトのクラス名</typeparam>
-	/// <returns>取得したオブジェクトのポインタ</returns>
-	template <typename T>
-	std::vector<T*> GetGameObjects()
-	{
-		std::vector<T*> objects;
-		for (int i = 0; i < 3; i++)
-		{
-			for (const auto& object : m_sceneObjectList[i])
-			{
-				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
-				{
-					objects.push_back((T*)object.get());
-				}
-			}
-		}
-		return objects;
-	}
-
-	/// <summary>
-	/// アクティブな複数のオブジェクトを取得する関数
-	/// </summary>
-	/// <typeparam name="T">取得するオブジェクトのクラス名</typeparam>
-	/// <returns>取得したオブジェクトのポインタ</returns>
-	template <typename T>
-	std::vector<T*> GetActiveGameObjects()
-	{
-		std::vector<T*> objects;
-		for (int i = 0; i < 3; i++)
-		{
-			for (const auto& object : m_sceneObjectList[i])
-			{
-				if (object->GetActive() == false) {
-					continue;
-				}
-				if (typeid(*object) == typeid(T))// 型を調べる(RTTI動的型情報)
-				{
-					objects.push_back((T*)object.get());
-				}
-			}
-		}
-		return objects;
-	}
-
 
 	template <class Archive>
 	void save(Archive& archive) const

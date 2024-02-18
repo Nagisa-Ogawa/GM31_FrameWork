@@ -9,20 +9,15 @@ void GameObject::SetDestroy()
 	for (auto child : m_transform->GetChildList()) {
 		child->GetGameObject()->SetDestroy();
 	}
+	// 親がいるなら子供リストから削除
+	if (m_transform->GetParent()) {
+		m_transform->SetParent(nullptr);
+	}
 }
 bool GameObject::Destroy()
 {
 	if (m_destroy)
 	{
-		// 子供も削除
-		//for (auto child : m_transform->GetChildList()) {
-		//	child->GetGameObject()->SetDestroy();
-		//	child->GetGameObject()->Destroy();
-		//}
-		// 親がいるなら子供リストから削除
-		if (m_transform->GetParent()) {
-			m_transform->SetParent(nullptr);
-		}
 		if (m_isGameObject) {
 			auto hierarchy = MyImGuiManager::GetInstance()->GetImGui<HierarchyGui>();
 			hierarchy->DeleteObjectNode(m_id);

@@ -72,6 +72,7 @@ void Manager::Init()
 		m_scene->SetName("SampleScene");
 		m_scene->Init();
 		m_editor = m_scene->GetEditor();
+		SaveEditScene();
 	}
 }
 
@@ -196,8 +197,10 @@ bool Manager::ChangeScene(std::string sceneName)
 		MyImGuiManager::GetInstance()->DebugLog("Faild!! Can't change scene. this scene name isn't used.");
 		return false;
 	}
-	// シーンを変える前にセーブ
-	Manager::GetInstance()->SaveEditScene();
+	// ゲーム中でないならシーンを変える前にセーブ
+	if (m_mode == ENGINE_MODE::EDIT) {
+		Manager::GetInstance()->SaveEditScene();
+	}
 	// シーンをロード
 	if (LoadScene(m_nextScene, sceneName)) {
 		return true;

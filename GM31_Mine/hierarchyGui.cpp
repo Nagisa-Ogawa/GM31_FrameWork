@@ -16,49 +16,6 @@ void HierarchyGui::Update()
     ImGui::Begin("Hierarchy");
     // シーンのオブジェクトを木構造で表示
     ShowObjectTree();
-    // ツリーノードUIの設定フラグ（矢印をクリックでノード展開、選択状態の大きさ）
-    //static ImGuiTreeNodeFlags baseFlags = ImGuiTreeNodeFlags_OpenOnArrow  | ImGuiTreeNodeFlags_SpanAvailWidth;
-    //static int selectionMask = (1 << 2);
-    //int nodeClicked = -1;
-    //// シーンにある全てのゲームオブジェクト
-    //auto gameobjectList = Manager::GetInstance()->GetScene()->GetAllGameObjects();
-    //int i = 0;
-    //// マウスで選択されたオブジェクト
-    //auto selectObj = MyImGuiManager::GetInstance()->GetImGui<InspectorGui>()->GetSelectedObject();
-    //for (auto gameObject : gameobjectList)
-    //{
-    //    // デフォルトの「シングルクリックで開く」のを無効にする
-    //    ImGuiTreeNodeFlags nodeFlags = baseFlags;
-    //    const bool isSelected = (selectionMask & (1 << i)) != 0;
-    //    if (isSelected)
-    //        nodeFlags |= ImGuiTreeNodeFlags_Selected;
-    //    // 子供がいる時のツリーノード
-    //        //bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Node %d", i);
-    //        //if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-    //        //    node_clicked = i;
-    //        //if (node_open)
-    //        //{
-    //        //    ImGui::BulletText("Blah blah\nBlah Blah");
-    //        //    ImGui::TreePop();
-    //        //}
-    //    // 子供がいないなら三角形がついていないノードにする
-    //    nodeFlags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-    //    ImGui::TreeNodeEx((void*)(intptr_t)i, nodeFlags, gameObject->GetName().c_str());
-    //    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-    //        nodeClicked = i;
-    //        SetSelect(gameObject);
-    //    }
-    //    // マウスで選択されたオブジェクトがあるなら選択扱いにする
-    //    if (selectObj && selectObj->GetID() == gameObject->GetID()) {
-    //        nodeClicked = i;
-    //    }
-    //    i++;
-    //}
-    //// 選ばれたノードを選択状態にする
-    //if (nodeClicked != -1)
-    //{
-    //    selectionMask = (1 << nodeClicked); 
-    //}
 	ImGui::End();
 }
 
@@ -141,6 +98,9 @@ void HierarchyGui::ShowObjectNode(ObjectTreeNode* objectNode, int* selectionID)
 /// <param name="object">追加するオブジェクト</param>
 void HierarchyGui::AddObjectNode(GameObject* object)
 {
+    if (m_sceneObjectTree) {
+        m_sceneObjectTree->Insert(object);
+    }
 }
 
 
@@ -173,12 +133,16 @@ void HierarchyGui::ChangeParentNode(int nodeID, int parentID, int nextParentID)
 /// <param name="objectID">削除するノードのID</param>
 void HierarchyGui::DeleteObjectNode(int objectID)
 {
+    // IDから削除するノードを検索
     ObjectTreeNode* objectNode = m_sceneObjectTree->FindNode(objectID);
-    // 親の子供リストから自分を削除
-    if (objectNode->GetParent()) {
-        objectNode->GetParent()->DeleteChild(objectID);
+    // ノードがあったなら子供ごと削除
+    if (objectNode) {
+        // 親の子供リストから自分を削除
+        if (objectNode->GetParent()) {
+            objectNode->GetParent()->DeleteChild(objectID);
+        }
+        objectNode->Delete(true);
     }
-    objectNode->Delete(true);
 }
 
 

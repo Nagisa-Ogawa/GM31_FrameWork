@@ -10,6 +10,10 @@ enum SHOW_MODE
 class GameObject;
 class FileTreeNode;
 
+
+//-----------------------------------------------------
+// インスペクターウィンドウ用GUIクラス
+//------------------------------------------------------
 class InspectorGui : public MyImGui
 {
 private:

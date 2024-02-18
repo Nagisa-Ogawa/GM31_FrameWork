@@ -3,22 +3,25 @@
 #include "SerializableClass.h"
 #include "component.h"
 
-
+//-----------------------------------------------------
+// カメラコンポーネントクラス
+//------------------------------------------------------
 class Camera :public Component
 {
 private:
+	// 未使用
 	D3DXVECTOR3 m_position{};
 	D3DXVECTOR3 m_rotation{};
 	D3DXVECTOR3 m_right{};
 	D3DXVECTOR3 m_up{};
 
-	D3DXMATRIX m_cameraMatrix{};
-	D3DXMATRIX m_viewMatrix{};
-	D3DXMATRIX m_projectionMatrix{};
+	D3DXMATRIX m_cameraMatrix{};	// カメラの行列
+	D3DXMATRIX m_viewMatrix{};		// ビュー行列
+	D3DXMATRIX m_projectionMatrix{};// プロジェクション行列
 public:
 
 
-	void Init(D3DXVECTOR3 position); 
+	void Init()  override;
 	void Load() override;
 	void Uninit() override;
 	void Update() override;
@@ -41,12 +44,8 @@ public:
 	template <class Archive>
 	void save(Archive& archive) const
 	{
-		Vector3 position = m_position;
-		Vector3 rotation = m_rotation;
 		archive(
-			cereal::base_class<Component>(this),
-			CEREAL_NVP(position),
-			CEREAL_NVP(rotation)
+			cereal::base_class<Component>(this)
 		);
 	}
 
@@ -55,12 +54,8 @@ public:
 	{
 		Vector3 position, rotation;
 		archive(
-			cereal::base_class<Component>(this),
-			position,
-			rotation
+			cereal::base_class<Component>(this)
 		);
-		m_position = D3DXVECTOR3(position.x, position.y, position.z);
-		m_rotation = D3DXVECTOR3(rotation.x, rotation.y, rotation.z);
 	}
 
 };

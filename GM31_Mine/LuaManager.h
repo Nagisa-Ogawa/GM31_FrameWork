@@ -7,6 +7,10 @@
 
 class Script;
 
+
+//-----------------------------------------------------
+// Luaスクリプト管理用クラス
+//------------------------------------------------------
 class LuaManager
 {
 private:
@@ -22,7 +26,6 @@ private:
 	LuaManager(const LuaManager& manager);	// コピーコンストラクタ
 	LuaManager& operator=(const LuaManager& manager);	// 代入演算子
 
-	void BindClass();	// Luaスクリプトで使うクラスや関数を登録する関数
 
 
 
@@ -46,6 +49,7 @@ public:
 	void DeleteScriptList(Script* script);
 	void ClearScriptList();
 
+	void BindClass();	// Luaスクリプトで使うクラスや関数を登録する関数
 	void CheckUpdateScript();		// スクリプトファイル（Luaファイル）が変更されているかをチェックする関数
 
 	bool CreateScriptFile(std::string fileName);

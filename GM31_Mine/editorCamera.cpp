@@ -8,27 +8,10 @@
 #include "player.h"
 
 
-void EditorCamera::Init(D3DXVECTOR3 position)
-{
-	m_position = position;
-
-	m_up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-}
-
-void EditorCamera::Uninit()
-{
-}
-
-void EditorCamera::Update()
-{
-
-}
-
 
 void EditorCamera::Draw()
 {
 	
-	// D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_target, &m_up);
 	// カメラの移動と回転行列をからカメラ行列を作成(拡大は使わない)
 	D3DXMATRIX rot, trans;
 	D3DXMatrixRotationYawPitchRoll(&rot, m_rotation.y, m_rotation.x, m_rotation.z);

@@ -155,7 +155,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="animationModel.cpp" />
     <ClCompile Include="box.cpp" />
     <ClCompile Include="boxCollision.cpp" />
     <ClCompile Include="boxCollisionFrame.cpp" />
@@ -168,7 +167,7 @@
     <ClCompile Include="editorCamera.cpp" />
     <ClCompile Include="editorCameraObject.cpp" />
     <ClCompile Include="engineDebugGui.cpp" />
-    <ClCompile Include="field.cpp" />
+    <ClCompile Include="fieldObject.cpp" />
     <ClCompile Include="fileDialog.cpp" />
     <ClCompile Include="gameGui.cpp" />
     <ClCompile Include="gameObject.cpp" />
@@ -190,9 +189,7 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="MyImGuiManager.cpp" />
     <ClCompile Include="ObjectTreeNode.cpp" />
-    <ClCompile Include="plane.cpp" />
     <ClCompile Include="player.cpp" />
-    <ClCompile Include="polygon2D.cpp" />
     <ClCompile Include="polygonCollision.cpp" />
     <ClCompile Include="projectGui.cpp" />
     <ClCompile Include="quadCollision.cpp" />
@@ -207,10 +204,8 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="transform.cpp" />
     <ClCompile Include="FileTreeNode.cpp" />
-    <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="animationModel.h" />
     <ClInclude Include="box.h" />
     <ClInclude Include="boxCollisionFrame.h" />
     <ClInclude Include="camera.h" />
@@ -224,7 +219,7 @@
     <ClInclude Include="editorCamera.h" />
     <ClInclude Include="editorCameraObject.h" />
     <ClInclude Include="engineDebugGui.h" />
-    <ClInclude Include="field.h" />
+    <ClInclude Include="fieldObject.h" />
     <ClInclude Include="fileDialog.h" />
     <ClInclude Include="gameGui.h" />
     <ClInclude Include="gameObject.h" />
@@ -252,9 +247,7 @@
     <ClInclude Include="MyImGui.h" />
     <ClInclude Include="MyImGuiManager.h" />
     <ClInclude Include="ObjectTreeNode.h" />
-    <ClInclude Include="plane.h" />
     <ClInclude Include="player.h" />
-    <ClInclude Include="polygon2D.h" />
     <ClInclude Include="polygonCollision.h" />
     <ClInclude Include="projectGui.h" />
     <ClInclude Include="quadCollision.h" />
@@ -271,7 +264,6 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="FileTreeNode.h" />
-    <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ImGui\imgui.natstepfilter" />

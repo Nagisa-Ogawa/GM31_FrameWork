@@ -7,7 +7,11 @@
 #include "mainMenuBarGui.h"
 #include "SceneGui.h"
 #include "inspectorGui.h"
+#include "cameraObject.h"
 #include "box.h"
+#include "player.h"
+#include "fieldObject.h"
+#include "sky.h"
 
 void MainMenuBarGui::Init()
 {
@@ -41,7 +45,7 @@ void MainMenuBarGui::Update()
 {
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
-			if (ImGui::MenuItem("Save")) {
+			if (ImGui::MenuItem("SaveScene")) {
 				// シーンをセーブ
 				Manager::GetInstance()->SaveEditScene();
 			}
@@ -49,13 +53,31 @@ void MainMenuBarGui::Update()
 		}
 		if (ImGui::BeginMenu("GameObject")) {
 			if (ImGui::BeginMenu("AddGameObject")) {
+				if (ImGui::MenuItem("Enpty")) {
+					// 立方体オブジェクトを追加
+					Manager::GetInstance()->GetScene()->AddGameObject<GameObject>(1, "GameObject");
+				}
+				if (ImGui::MenuItem("Camera")) {
+					// 立方体オブジェクトを追加
+					Manager::GetInstance()->GetScene()->AddGameObject<CameraObject>(0, "Camera");
+				}
 				if (ImGui::MenuItem("Box")) {
 					// 立方体オブジェクトを追加
-					Manager::GetInstance()->GetScene()->AddGameObject<Box>(1, "box01");
+					Manager::GetInstance()->GetScene()->AddGameObject<Box>(1, "Box");
 				}
-				if (ImGui::MenuItem("Spherer")) {
+				if (ImGui::MenuItem("Player")) {
 					// 球体オブジェクトを追加
+					Manager::GetInstance()->GetScene()->AddGameObject<Humanoid>(1, "Humanoid");
 				}
+				if (ImGui::MenuItem("Field")) {
+					// 球体オブジェクトを追加
+					Manager::GetInstance()->GetScene()->AddGameObject<FieldObject>(1, "Field");
+				}
+				if (ImGui::MenuItem("SkyDome")) {
+					// 球体オブジェクトを追加
+					Manager::GetInstance()->GetScene()->AddGameObject<Sky>(1, "Sky");
+				}
+
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenu();

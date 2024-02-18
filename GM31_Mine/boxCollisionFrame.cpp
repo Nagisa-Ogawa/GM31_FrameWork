@@ -18,6 +18,7 @@ void BoxCollisionFrame::Init(BoxCollision* collision)
 
 void BoxCollisionFrame::Draw()
 {
+	// ワールド変換行列を当たり判定のついているオブジェクトと同じ行列にする
 	GetTransform()->SetWorldMatrix(m_collision->GetWorldMatrix());
 	GameObject::Draw();
 }

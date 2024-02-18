@@ -60,22 +60,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="field.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="player.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="polygon2D.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="model.cpp">
       <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
     <ClCompile Include="sprite.cpp">
-      <Filter>ソース ファイル\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="plane.cpp">
       <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
     <ClCompile Include="shader.cpp">
@@ -111,20 +102,11 @@
     <ClCompile Include="quadCollision.cpp">
       <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
-    <ClCompile Include="wall.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="sky.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="animationModel.cpp">
-      <Filter>ソース ファイル\Component</Filter>
-    </ClCompile>
     <ClCompile Include="sphereCollision.cpp">
       <Filter>ソース ファイル\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="meshField.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>ImGui</Filter>
@@ -217,26 +199,23 @@
       <Filter>ソース ファイル\Other</Filter>
     </ClCompile>
     <ClCompile Include="gameObject.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="fieldObject.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="meshField.cpp">
+      <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="field.h">
-      <Filter>ヘッダー ファイル\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="player.h">
-      <Filter>ヘッダー ファイル\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="polygon2D.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="model.h">
       <Filter>ヘッダー ファイル\Component</Filter>
     </ClInclude>
     <ClInclude Include="sprite.h">
-      <Filter>ヘッダー ファイル\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="plane.h">
       <Filter>ヘッダー ファイル\Component</Filter>
     </ClInclude>
     <ClInclude Include="shader.h">
@@ -287,17 +266,11 @@
     <ClInclude Include="sky.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="animationModel.h">
-      <Filter>ヘッダー ファイル\Component</Filter>
-    </ClInclude>
     <ClInclude Include="sphereCollision.h">
       <Filter>ヘッダー ファイル\Component</Filter>
     </ClInclude>
     <ClInclude Include="Ray.h">
       <Filter>ヘッダー ファイル\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="meshField.h">
-      <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imconfig.h">
       <Filter>ImGui</Filter>
@@ -383,9 +356,6 @@
     <ClInclude Include="SerializableClass.h">
       <Filter>ヘッダー ファイル\Other</Filter>
     </ClInclude>
-    <ClInclude Include="wall.h">
-      <Filter>ヘッダー ファイル\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="polygonCollision.h">
       <Filter>ヘッダー ファイル\Component</Filter>
     </ClInclude>
@@ -406,6 +376,12 @@
     </ClInclude>
     <ClInclude Include="ObjectTreeNode.h">
       <Filter>ヘッダー ファイル\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="fieldObject.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="meshField.h">
+      <Filter>ヘッダー ファイル\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

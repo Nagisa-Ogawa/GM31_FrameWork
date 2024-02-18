@@ -15,6 +15,7 @@
 #include "sprite.h"
 #include "transform.h"
 #include "model.h"
+#include "meshField.h"
 
 //----------------------------------------------
 //
@@ -366,41 +367,87 @@ void DispComponent(Transform* transform)
 			}
 			if (isSetParent) {
 				// 新しい親を選ぶリストボックスを表示
-				if (DispCreateParent(transform)) {
+				if (DispCreateParentListBox(transform)) {
 					isSetParent = false;
 				}
 			}
 			ImGui::TreePop();
 		}
+		ImGui::TreePop();
+	}
+	ImGui::Separator();
+	ImGui::PopStyleVar();
+}
 
-		//if (ImGui::TreeNodeEx("World")) {
-		//	// WorldPosition変数の表示
-		//	if (ImGui::TreeNodeEx("WorldPosition", ImGuiTreeNodeFlags_DefaultOpen)) {
-		//		float pos[3] = { transform->m_worldPosition.x,transform->m_worldPosition.y ,transform->m_worldPosition.z };
-		//		if (ImGui::InputFloat3("", pos)) {
-		//			transform->m_worldPosition = D3DXVECTOR3(pos[0], pos[1], pos[2]);
-		//		}
-		//		ImGui::TreePop();
-		//	}
-		//	// WorldRotation変数の表示
-		//	if (ImGui::TreeNodeEx("WorldRotation", ImGuiTreeNodeFlags_DefaultOpen)) {
-		//		D3DXVECTOR3 rotVec = transform->GetWorldRotationAsDegree();
-		//		float rot[3] = { rotVec.x,rotVec.y ,rotVec.z };
-		//		if (ImGui::InputFloat3("", rot)) {
-		//			transform->SetWorldRotationFromDegree(D3DXVECTOR3(rot[0], rot[1], rot[2]));
-		//		}
-		//		ImGui::TreePop();
-		//	}
-		//	// WorldScale変数の表示
-		//	if (ImGui::TreeNodeEx("WorldScale", ImGuiTreeNodeFlags_DefaultOpen)) {
-		//		float scale[3] = { transform->m_worldScale.x,transform->m_worldScale.y ,transform->m_worldScale.z };
-		//		if (ImGui::InputFloat3("", scale)) {
-		//			transform->m_worldScale = D3DXVECTOR3(scale[0], scale[1], scale[2]);
-		//		}
-		//		ImGui::TreePop();
-		//	}
-		//	ImGui::TreePop();
-		//}
+void DispComponent(MeshField* meshField)
+{
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
+	ImGui::Separator();
+	ImGui::AlignTextToFramePadding();
+	std::string name = "MeshField##" + std::to_string(meshField->GetID());
+	bool treeopen = ImGui::TreeNodeEx(name.c_str(), ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
+	// コンポーネント削除ボタンを作成
+	ImGui::SameLine(ImGui::GetWindowWidth() - 40);
+	// ボタンの色を赤色にする
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.Colors[ImGuiCol_Button] = ImVec4(0.8f, 0.0f, 0.0f, 1.0f);
+	if (ImGui::Button("X", ImVec2(20, 20))) {
+		meshField->SetDestroy();
+		style = ImGuiStyle();
+		ImGui::PopStyleVar();
+		ImGui::TreePop();
+		return;
+	}
+	style.Colors[ImGuiCol_Button] = ImGuiStyle().Colors[ImGuiCol_Button];
+	if (ImGui::IsItemHovered()) ImGui::SetTooltip("Delete Component");
+	// コンポーネントの要素を表示
+	if (treeopen) {
+		// フィールドのテクスチャを表示＆変更
+		if (ImGui::TreeNodeEx("Texture",ImGuiTreeNodeFlags_DefaultOpen)) {
+			char str[256];
+			strcpy_s(str, meshField->GetTexturePath().c_str());
+			ImGui::PushItemWidth(-60);
+			ImGui::InputText("##textureName", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_ReadOnly);
+			ImGui::PopItemWidth();
+			// スクリプトファイル変更用ボタン
+			ImGui::SameLine(ImGui::GetWindowWidth() - 60);
+			if (ImGui::Button("Set")) {
+				std::string filePath;
+				if (OpneFileDialog(GetWindow(), "ファイルを選択してください", "Assets\\Textures", "ファイル(.png,.jpg)\0*.png;*.jpg\0", &filePath)) {
+					// スクリプトファイル変更
+					meshField->ChangeTexture(filePath);
+				}
+			}
+			ImGui::TreePop();
+		}
+		// フィールドのターゲットを表示＆変更
+		if (ImGui::TreeNodeEx("Target",ImGuiTreeNodeFlags_DefaultOpen)){
+			auto target = meshField->GetTarget();
+			char str[256];
+			// 親がいるなら親の名前を表示
+			if (target) {
+				strcpy_s(str, meshField->GetTarget()->GetName().c_str());
+			}
+			// いないなら「None」と表示
+			else {
+				strcpy_s(str, "None");
+			}
+			ImGui::PushItemWidth(-60);
+			ImGui::InputText("##TargetName", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_ReadOnly);
+			ImGui::PopItemWidth();
+			ImGui::SameLine(ImGui::GetWindowWidth() - 60);
+			static bool isSetTarget = false;	// 新しい親を選ぶリストボックスを表示しているかどうか
+			if (ImGui::Button("Set")) {
+				isSetTarget = !isSetTarget;
+			}
+			if (isSetTarget) {
+				// 新しい親を選ぶリストボックスを表示
+				if (DispSetFieldTargetListBox(meshField)) {
+					isSetTarget = false;
+				}
+			}
+			ImGui::TreePop();
+		}
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
@@ -412,7 +459,8 @@ void DispComponent(Transform* transform)
 /// 新しい親を選ぶリストボックスを表示する関数
 /// </summary>
 /// <param name="yourName">自分の名前</param>
-bool DispCreateParent(Transform* transform)
+/// <returns>リストボックスからアイテムを選んだかどうか</returns>
+bool DispCreateParentListBox(Transform* transform)
 {
 	// シーン上にあるオブジェクトのリストを取得
 	auto objectList = Manager::GetInstance()->GetScene()->GetAllGameObjects();
@@ -462,6 +510,62 @@ bool DispCreateParent(Transform* transform)
 		// 親を新しい親に変更
 		else {
 			transform->SetParent(selectObj->GetTransform());
+		}
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
+
+/// <summary>
+/// フィールドのターゲットを選ぶリストボックスを表示する関数
+/// </summary>
+/// <param name="meshField">ターゲットをセットするフィールド</param>
+/// <returns>リストボックスからアイテムを選んだかどうか</returns>
+bool DispSetFieldTargetListBox(MeshField* meshField)
+{
+	// シーン上にあるオブジェクトのリストを取得
+	auto objectList = Manager::GetInstance()->GetScene()->GetAllGameObjects();
+	// 自分と同じオブジェクトはリストから削除
+	int fieldObjectID = meshField->GetGameObject()->GetID();
+	objectList.remove_if([&fieldObjectID](GameObject* object) {return object->GetID() == fieldObjectID; });
+	int selectObjID = -1; // 選んだオブジェクトのID
+	GameObject* selectObj = nullptr;	// 選んだオブジェクト
+	// リストボックスを表示
+	if (ImGui::BeginListBox("##SetTarget"))
+	{
+		// 親にするオブジェクトを選択
+		for (auto object : objectList)
+		{
+			const bool isSelected = (selectObjID == object->GetID());
+			if (ImGui::Selectable(object->GetName().c_str(), isSelected)) {
+				selectObjID = object->GetID();
+				selectObj = object;
+			}
+		}
+		// 親を無しにするなら
+		const bool isNoneSelected = (selectObjID == -2);
+		if (ImGui::Selectable("None", isNoneSelected)) {
+			selectObjID = -2;
+			selectObj = nullptr;
+		}
+		ImGui::EndListBox();
+	}
+	// 選ばれたオブジェクトがあったなら
+	if (selectObjID != -1) {
+		// ターゲットを無しにする
+		if (selectObjID == -2) {
+			meshField->SetTargetID(-1);
+			meshField->SetTarget(nullptr);
+		}
+		// ターゲットをセット
+		else {
+			auto target = Manager::GetInstance()->GetScene()->GetGameObjectWithID(selectObjID);
+			meshField->SetTargetID(selectObjID);
+			meshField->SetTarget(target);
 		}
 		return true;
 	}

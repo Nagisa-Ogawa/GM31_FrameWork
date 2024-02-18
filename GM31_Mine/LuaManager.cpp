@@ -44,6 +44,11 @@ void LuaManager::BindClass()
 		[
 			luabind::class_<MyImGuiManager>("MyImGuiManager")
 				.def("DebugLog", &MyImGuiManager::DebugLog),
+			luabind::class_<Manager>("Manager")
+				.def("ChangeScene",&Manager::ChangeScene)
+				.def("GetScene",&Manager::GetScene),
+			luabind::class_<Scene>("Scene")
+				.def("GetGameObjectWithName", &Scene::GetGameObjectWithName),
 			luabind::class_<D3DVECTOR>("Vector")
 				.def_readwrite("x", &D3DVECTOR::x)
 				.def_readwrite("y", &D3DVECTOR::y)
@@ -67,6 +72,7 @@ void LuaManager::BindClass()
 			luabind::class_<GameObject>("GameObject")
 				.def("GetActive", &GameObject::GetActive)
 				.def("GetName", &GameObject::GetName)
+				.def("GetID",&GameObject::GetID)
 				.def("SetDestroy", &GameObject::SetDestroy)
 				.def("SetActive", &GameObject::SetActive)
 				.def("SetName", &GameObject::SetName)
@@ -78,20 +84,26 @@ void LuaManager::BindClass()
 					luabind::def("GetKeyTrigger", &Input::GetKeyTrigger)
 				]
 		];
-
 	// グローバル変数にdefine値を登録
 	luabind::object g = luabind::globals(m_L);
 	g["KEY_A"] = KEY_A;
 	g["KEY_D"] = KEY_D;
 	g["KEY_E"] = KEY_E;
+	g["KEY_F"] = KEY_F;
 	g["KEY_Q"] = KEY_Q;
 	g["KEY_W"] = KEY_W;
 	g["KEY_S"] = KEY_S;
+	g["KEY_RETURN"] = KEY_RETURN;
+	g["KEY_SHIFT"] = KEY_SHIFT;
+	g["KEY_SPACE"] = KEY_SPACE;
+	g["KEY_LEFT"] = KEY_LEFT;
+	g["KEY_UP"] = KEY_UP;
+	g["KEY_RIGHT"] = KEY_RIGHT;
+	g["KEY_DOWN"] = KEY_DOWN;
 
-
-	
 	// グローバル変数に各種インスタンスを登録
 	luabind::globals(m_L)["ImGuiManager"] = MyImGuiManager::GetInstance();
+	luabind::globals(m_L)["SceneManager"] = Manager::GetInstance();
 }
 
 

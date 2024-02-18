@@ -3,6 +3,10 @@
 #include "gameObject.h"
 #include "model.h"
 
+
+//-----------------------------------------------------
+// スカイドーム用オブジェクト
+//------------------------------------------------------
 class Sky :public GameObject
 {
 
@@ -10,7 +14,6 @@ private:
 
 public:
 	void Init() override;
-	void Update() override;
 
 	template <class Archive>
 	void save(Archive& archive) const

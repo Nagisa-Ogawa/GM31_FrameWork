@@ -37,6 +37,11 @@ struct MODEL
 };
 
 
+//-----------------------------------------------------
+// モデルコンポーネントクラス
+//------------------------------------------------------
+// .objファイルのみ読み込み可能（三角ポリゴンのみ）
+//------------------------------------------------------
 
 class Model : public Component
 {
@@ -60,7 +65,6 @@ public:
 	void Init(MODEL* pModel);
 	void Load() override;
 	void Uninit() override;
-	void Update() override;
 	void Draw() override;
 	void DispInspector() override;
 

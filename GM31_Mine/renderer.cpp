@@ -7,27 +7,27 @@
 
 RENDER_TARGET			Renderer::m_renderTarget = RENDER_TARGET::ENGINE;
 
-D3D_FEATURE_LEVEL       Renderer::m_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
+D3D_FEATURE_LEVEL       Renderer::m_featureLevel = D3D_FEATURE_LEVEL_11_0;
 
-ID3D11Device*           Renderer::m_Device{};
-ID3D11DeviceContext*    Renderer::m_DeviceContext{};
-IDXGISwapChain*         Renderer::m_SwapChain{};
-ID3D11RenderTargetView* Renderer::m_RenderTargetView{};
-ID3D11DepthStencilView* Renderer::m_DepthStencilView{};
+ID3D11Device*           Renderer::m_device{};
+ID3D11DeviceContext*    Renderer::m_deviceContext{};
+IDXGISwapChain*         Renderer::m_swapChain{};
+ID3D11RenderTargetView* Renderer::m_renderTargetView{};
+ID3D11DepthStencilView* Renderer::m_depthStencilView{};
 
-ID3D11Buffer*			Renderer::m_WorldBuffer{};
-ID3D11Buffer*			Renderer::m_ViewBuffer{};
-ID3D11Buffer*			Renderer::m_ProjectionBuffer{};
-ID3D11Buffer*			Renderer::m_MaterialBuffer{};
-ID3D11Buffer*			Renderer::m_LightBuffer{};
-
-
-ID3D11DepthStencilState* Renderer::m_DepthStateEnable{};
-ID3D11DepthStencilState* Renderer::m_DepthStateDisable{};
+ID3D11Buffer*			Renderer::m_worldBuffer{};
+ID3D11Buffer*			Renderer::m_viewBuffer{};
+ID3D11Buffer*			Renderer::m_projectionBuffer{};
+ID3D11Buffer*			Renderer::m_materialBuffer{};
+ID3D11Buffer*			Renderer::m_lightBuffer{};
 
 
-ID3D11BlendState*		Renderer::m_BlendState{};
-ID3D11BlendState*		Renderer::m_BlendStateATC{};
+ID3D11DepthStencilState* Renderer::m_depthStateEnable{};
+ID3D11DepthStencilState* Renderer::m_depthStateDisable{};
+
+
+ID3D11BlendState*		Renderer::m_blendState{};
+ID3D11BlendState*		Renderer::m_blendStateATC{};
 
 // エディタビュー用テクスチャ
 ID3D11Texture2D*			Renderer::m_editorViewTexture{};
@@ -41,8 +41,8 @@ ID3D11ShaderResourceView* Renderer::m_gameViewShaderresourceView{};
 ID3D11DepthStencilView* Renderer::m_gameViewDepthStencilView{};
 
 
-UINT Renderer::m_ResizeWidth{};
-UINT Renderer::m_ResizeHeight{};
+UINT Renderer::m_resizeWidth{};
+UINT Renderer::m_resizeHeight{};
 
 void Renderer::Init()
 {
@@ -73,10 +73,10 @@ void Renderer::Init()
 										0,
 										D3D11_SDK_VERSION,
 										&swapChainDesc,
-										&m_SwapChain,
-										&m_Device,
-										&m_FeatureLevel,
-										&m_DeviceContext );
+										&m_swapChain,
+										&m_device,
+										&m_featureLevel,
+										&m_deviceContext );
 
 
 
@@ -90,9 +90,9 @@ void Renderer::Init()
 	rasterizerDesc.MultisampleEnable = FALSE; 
 
 	ID3D11RasterizerState *rs;
-	m_Device->CreateRasterizerState( &rasterizerDesc, &rs );
+	m_device->CreateRasterizerState( &rasterizerDesc, &rs );
 
-	m_DeviceContext->RSSetState( rs );
+	m_deviceContext->RSSetState( rs );
 
 
 
@@ -110,13 +110,13 @@ void Renderer::Init()
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-	m_Device->CreateBlendState( &blendDesc, &m_BlendState );
+	m_device->CreateBlendState( &blendDesc, &m_blendState );
 
 	blendDesc.AlphaToCoverageEnable = TRUE;
-	m_Device->CreateBlendState( &blendDesc, &m_BlendStateATC );
+	m_device->CreateBlendState( &blendDesc, &m_blendStateATC );
 
 	float blendFactor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-	m_DeviceContext->OMSetBlendState(m_BlendState, blendFactor, 0xffffffff );
+	m_deviceContext->OMSetBlendState(m_blendState, blendFactor, 0xffffffff );
 
 
 
@@ -129,13 +129,13 @@ void Renderer::Init()
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 	depthStencilDesc.StencilEnable = FALSE;
 
-	m_Device->CreateDepthStencilState( &depthStencilDesc, &m_DepthStateEnable );//深度有効ステート
+	m_device->CreateDepthStencilState( &depthStencilDesc, &m_depthStateEnable );//深度有効ステート
 
 	//depthStencilDesc.DepthEnable = FALSE;
 	depthStencilDesc.DepthWriteMask	= D3D11_DEPTH_WRITE_MASK_ZERO;
-	m_Device->CreateDepthStencilState( &depthStencilDesc, &m_DepthStateDisable );//深度無効ステート
+	m_device->CreateDepthStencilState( &depthStencilDesc, &m_depthStateDisable );//深度無効ステート
 
-	m_DeviceContext->OMSetDepthStencilState( m_DepthStateEnable, NULL );
+	m_deviceContext->OMSetDepthStencilState( m_depthStateEnable, NULL );
 
 
 
@@ -150,9 +150,9 @@ void Renderer::Init()
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	ID3D11SamplerState* samplerState{};
-	m_Device->CreateSamplerState( &samplerDesc, &samplerState );
+	m_device->CreateSamplerState( &samplerDesc, &samplerState );
 
-	m_DeviceContext->PSSetSamplers( 0, 1, &samplerState );
+	m_deviceContext->PSSetSamplers( 0, 1, &samplerState );
 
 
 
@@ -165,28 +165,28 @@ void Renderer::Init()
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = sizeof(float);
 
-	m_Device->CreateBuffer( &bufferDesc, NULL, &m_WorldBuffer );
-	m_DeviceContext->VSSetConstantBuffers( 0, 1, &m_WorldBuffer);
+	m_device->CreateBuffer( &bufferDesc, NULL, &m_worldBuffer );
+	m_deviceContext->VSSetConstantBuffers( 0, 1, &m_worldBuffer);
 
-	m_Device->CreateBuffer( &bufferDesc, NULL, &m_ViewBuffer );
-	m_DeviceContext->VSSetConstantBuffers( 1, 1, &m_ViewBuffer );
+	m_device->CreateBuffer( &bufferDesc, NULL, &m_viewBuffer );
+	m_deviceContext->VSSetConstantBuffers( 1, 1, &m_viewBuffer );
 
-	m_Device->CreateBuffer( &bufferDesc, NULL, &m_ProjectionBuffer );
-	m_DeviceContext->VSSetConstantBuffers( 2, 1, &m_ProjectionBuffer );
+	m_device->CreateBuffer( &bufferDesc, NULL, &m_projectionBuffer );
+	m_deviceContext->VSSetConstantBuffers( 2, 1, &m_projectionBuffer );
 
 
 	bufferDesc.ByteWidth = sizeof(MATERIAL);
 
-	m_Device->CreateBuffer( &bufferDesc, NULL, &m_MaterialBuffer );
-	m_DeviceContext->VSSetConstantBuffers( 3, 1, &m_MaterialBuffer );
-	m_DeviceContext->PSSetConstantBuffers( 3, 1, &m_MaterialBuffer );
+	m_device->CreateBuffer( &bufferDesc, NULL, &m_materialBuffer );
+	m_deviceContext->VSSetConstantBuffers( 3, 1, &m_materialBuffer );
+	m_deviceContext->PSSetConstantBuffers( 3, 1, &m_materialBuffer );
 
 
 	bufferDesc.ByteWidth = sizeof(LIGHT);
 
-	m_Device->CreateBuffer( &bufferDesc, NULL, &m_LightBuffer );
-	m_DeviceContext->VSSetConstantBuffers( 4, 1, &m_LightBuffer );
-	m_DeviceContext->PSSetConstantBuffers( 4, 1, &m_LightBuffer );
+	m_device->CreateBuffer( &bufferDesc, NULL, &m_lightBuffer );
+	m_deviceContext->VSSetConstantBuffers( 4, 1, &m_lightBuffer );
+	m_deviceContext->PSSetConstantBuffers( 4, 1, &m_lightBuffer );
 
 
 
@@ -233,7 +233,7 @@ void Renderer::Init()
 	editorVTD.SampleDesc.Quality = 0;
 
 	// テクスチャの作成
-	m_Device->CreateTexture2D(&editorVTD, NULL, &m_editorViewTexture);
+	m_device->CreateTexture2D(&editorVTD, NULL, &m_editorViewTexture);
 
 
 	// レンダーターゲットの設定
@@ -242,7 +242,7 @@ void Renderer::Init()
 	editorRTVD.Texture2D.MipSlice = 0;
 
 	// レンダーターゲットの作成
-	m_Device->CreateRenderTargetView(m_editorViewTexture, &editorRTVD, &m_editorViewRenderTargetView);
+	m_device->CreateRenderTargetView(m_editorViewTexture, &editorRTVD, &m_editorViewRenderTargetView);
 	
 
 	// シェーダーリソースビューの設定
@@ -252,7 +252,7 @@ void Renderer::Init()
 	editorSRVD.Texture1D.MipLevels = 1;
 
 	// シェーダーリソースビューの作成
-	hr= m_Device->CreateShaderResourceView(m_editorViewTexture, &editorSRVD, &m_editorViewShaderresourceView);
+	hr= m_device->CreateShaderResourceView(m_editorViewTexture, &editorSRVD, &m_editorViewShaderresourceView);
 
 
 	// デプスステンシルバッファ作成
@@ -262,8 +262,8 @@ void Renderer::Init()
 	editorTD.Usage = D3D11_USAGE_DEFAULT;
 	editorTD.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
-	m_Device->CreateTexture2D(&editorTD, NULL, &m_editorViewTexture);
-	m_Device->CreateDepthStencilView(m_editorViewTexture, NULL, &m_editorViewDepthStencilView);
+	m_device->CreateTexture2D(&editorTD, NULL, &m_editorViewTexture);
+	m_device->CreateDepthStencilView(m_editorViewTexture, NULL, &m_editorViewDepthStencilView);
 
 
 
@@ -290,7 +290,7 @@ void Renderer::Init()
 	gameVTD.SampleDesc.Quality = 0;
 
 	// テクスチャの作成
-	m_Device->CreateTexture2D(&gameVTD, NULL, &m_gameViewTexture);
+	m_device->CreateTexture2D(&gameVTD, NULL, &m_gameViewTexture);
 
 
 	// レンダーターゲットの設定
@@ -299,7 +299,7 @@ void Renderer::Init()
 	gameRTVD.Texture2D.MipSlice = 0;
 
 	// レンダーターゲットの作成
-	m_Device->CreateRenderTargetView(m_gameViewTexture, &gameRTVD, &m_gameViewRenderTargetView);
+	m_device->CreateRenderTargetView(m_gameViewTexture, &gameRTVD, &m_gameViewRenderTargetView);
 
 
 	// シェーダーリソースビューの設定
@@ -309,7 +309,7 @@ void Renderer::Init()
 	gameSRVD.Texture1D.MipLevels = 1;
 
 	// シェーダーリソースビューの作成
-	hr = m_Device->CreateShaderResourceView(m_gameViewTexture, &gameSRVD, &m_gameViewShaderresourceView);
+	hr = m_device->CreateShaderResourceView(m_gameViewTexture, &gameSRVD, &m_gameViewShaderresourceView);
 
 
 	// デプスステンシルバッファ作成
@@ -319,8 +319,8 @@ void Renderer::Init()
 	gameTD.Usage = D3D11_USAGE_DEFAULT;
 	gameTD.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
-	m_Device->CreateTexture2D(&gameTD, NULL, &m_gameViewTexture);
-	m_Device->CreateDepthStencilView(m_gameViewTexture, NULL, &m_gameViewDepthStencilView);
+	m_device->CreateTexture2D(&gameTD, NULL, &m_gameViewTexture);
+	m_device->CreateDepthStencilView(m_gameViewTexture, NULL, &m_gameViewDepthStencilView);
 
 }
 
@@ -329,18 +329,18 @@ void Renderer::Init()
 void Renderer::Uninit()
 {
 
-	m_WorldBuffer->Release();
-	m_ViewBuffer->Release();
-	m_ProjectionBuffer->Release();
-	m_LightBuffer->Release();
-	m_MaterialBuffer->Release();
+	m_worldBuffer->Release();
+	m_viewBuffer->Release();
+	m_projectionBuffer->Release();
+	m_lightBuffer->Release();
+	m_materialBuffer->Release();
 
 
-	m_DeviceContext->ClearState();
-	m_RenderTargetView->Release();
-	m_SwapChain->Release();
-	m_DeviceContext->Release();
-	m_Device->Release();
+	m_deviceContext->ClearState();
+	m_renderTargetView->Release();
+	m_swapChain->Release();
+	m_deviceContext->Release();
+	m_device->Release();
 
 	m_editorViewTexture->Release();
 	m_editorViewRenderTargetView->Release();
@@ -360,10 +360,10 @@ void Renderer::Begin()
 {
 	m_renderTarget = RENDER_TARGET::ENGINE;
 	SetViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
-	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	m_DeviceContext->ClearRenderTargetView( m_RenderTargetView, clearColor );
-	m_DeviceContext->ClearDepthStencilView( m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	m_deviceContext->ClearRenderTargetView( m_renderTargetView, clearColor );
+	m_deviceContext->ClearDepthStencilView( m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void Renderer::EditorViewBegin()
@@ -371,10 +371,10 @@ void Renderer::EditorViewBegin()
 	m_renderTarget = RENDER_TARGET::EDITOR;
 	// ビューポートを変更
 	SetViewport(GAMESCREEN_WIDTH, GAMESCREEN_HEIGHT);
-	m_DeviceContext->OMSetRenderTargets(1, &m_editorViewRenderTargetView, m_editorViewDepthStencilView);
+	m_deviceContext->OMSetRenderTargets(1, &m_editorViewRenderTargetView, m_editorViewDepthStencilView);
 	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	m_DeviceContext->ClearRenderTargetView(m_editorViewRenderTargetView, clearColor);
-	m_DeviceContext->ClearDepthStencilView(m_editorViewDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	m_deviceContext->ClearRenderTargetView(m_editorViewRenderTargetView, clearColor);
+	m_deviceContext->ClearDepthStencilView(m_editorViewDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void Renderer::GameViewBegin()
@@ -382,10 +382,10 @@ void Renderer::GameViewBegin()
 	m_renderTarget = RENDER_TARGET::GAME;
 	// ビューポートを変更
 	SetViewport(GAMESCREEN_WIDTH, GAMESCREEN_HEIGHT);
-	m_DeviceContext->OMSetRenderTargets(1, &m_gameViewRenderTargetView, m_gameViewDepthStencilView);
+	m_deviceContext->OMSetRenderTargets(1, &m_gameViewRenderTargetView, m_gameViewDepthStencilView);
 	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	m_DeviceContext->ClearRenderTargetView(m_gameViewRenderTargetView, clearColor);
-	m_DeviceContext->ClearDepthStencilView(m_gameViewDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	m_deviceContext->ClearRenderTargetView(m_gameViewRenderTargetView, clearColor);
+	m_deviceContext->ClearDepthStencilView(m_gameViewDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 
@@ -393,15 +393,15 @@ void Renderer::GameViewBegin()
 
 void Renderer::End()
 {
-	m_SwapChain->Present( 1, 0 );
+	m_swapChain->Present( 1, 0 );
 }
 
 
 void Renderer::SetRenderTarget(UINT width, UINT height)
 {
 	ID3D11Texture2D* renderTarget{};
-	m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
-	m_Device->CreateRenderTargetView(renderTarget, NULL, &m_RenderTargetView);
+	m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
+	m_device->CreateRenderTargetView(renderTarget, NULL, &m_renderTargetView);
 	renderTarget->Release();
 
 	// デプスステンシルバッファ作成
@@ -418,49 +418,50 @@ void Renderer::SetRenderTarget(UINT width, UINT height)
 	textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	textureDesc.CPUAccessFlags = 0;
 	textureDesc.MiscFlags = 0;
-	m_Device->CreateTexture2D(&textureDesc, NULL, &depthStencile);
+	m_device->CreateTexture2D(&textureDesc, NULL, &depthStencile);
 
 	// デプスステンシルビュー作成
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc{};
 	depthStencilViewDesc.Format = textureDesc.Format;
 	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Flags = 0;
-	m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_DepthStencilView);
+	m_device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_depthStencilView);
 	depthStencile->Release();
 
-	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
 	SetViewport(width, height);
 }
 
 void Renderer::CleanRenderTarget()
 {
-	if (m_RenderTargetView) { m_RenderTargetView->Release(); m_RenderTargetView = nullptr; }
-	if (m_DepthStencilView) { m_DepthStencilView->Release(); m_DepthStencilView = nullptr; }
+	if (m_renderTargetView) { m_renderTargetView->Release(); m_renderTargetView = nullptr; }
+	if (m_depthStencilView) { m_depthStencilView->Release(); m_depthStencilView = nullptr; }
 }
 
 
-void Renderer::SetDepthEnable( bool Enable )
+void Renderer::SetDepthEnable( bool enable )
 {
-	if( Enable )
-		m_DeviceContext->OMSetDepthStencilState( m_DepthStateEnable, NULL );
+	if( enable )
+		m_deviceContext->OMSetDepthStencilState( m_depthStateEnable, NULL );
 	else
-		m_DeviceContext->OMSetDepthStencilState( m_DepthStateDisable, NULL );
+		m_deviceContext->OMSetDepthStencilState( m_depthStateDisable, NULL );
 
 }
 
 
 
-void Renderer::SetATCEnable( bool Enable )
+void Renderer::SetATCEnable( bool enable )
 {
 	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-	if (Enable)
-		m_DeviceContext->OMSetBlendState(m_BlendStateATC, blendFactor, 0xffffffff);
+	if (enable)
+		m_deviceContext->OMSetBlendState(m_blendStateATC, blendFactor, 0xffffffff);
 	else
-		m_DeviceContext->OMSetBlendState(m_BlendState, blendFactor, 0xffffffff);
+		m_deviceContext->OMSetBlendState(m_blendState, blendFactor, 0xffffffff);
 
 }
+
 
 void Renderer::SetWorldViewProjection2D()
 {
@@ -468,52 +469,52 @@ void Renderer::SetWorldViewProjection2D()
 	D3DXMatrixIdentity(&world);
 	D3DXMatrixTranspose(&world, &world);
 
-	m_DeviceContext->UpdateSubresource(m_WorldBuffer, 0, NULL, &world, 0, 0);
+	m_deviceContext->UpdateSubresource(m_worldBuffer, 0, NULL, &world, 0, 0);
 
 	D3DXMATRIX view;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixTranspose(&view, &view);
-	m_DeviceContext->UpdateSubresource(m_ViewBuffer, 0, NULL, &view, 0, 0);
+	m_deviceContext->UpdateSubresource(m_viewBuffer, 0, NULL, &view, 0, 0);
 
 	D3DXMATRIX projection;
 	D3DXMatrixOrthoOffCenterLH(&projection, 0.0f, GAMESCREEN_WIDTH, GAMESCREEN_HEIGHT, 0.0f, 0.0f, 1.0f);
 	D3DXMatrixTranspose(&projection, &projection);
-	m_DeviceContext->UpdateSubresource( m_ProjectionBuffer, 0, NULL, &projection, 0, 0 );
+	m_deviceContext->UpdateSubresource( m_projectionBuffer, 0, NULL, &projection, 0, 0 );
 
 }
 
 
-void Renderer::SetWorldMatrix( D3DXMATRIX* WorldMatrix )
+void Renderer::SetWorldMatrix( D3DXMATRIX* worldMatrix )
 {
 	D3DXMATRIX world;
-	D3DXMatrixTranspose(&world, WorldMatrix);
-	m_DeviceContext->UpdateSubresource(m_WorldBuffer, 0, NULL, &world, 0, 0);
+	D3DXMatrixTranspose(&world, worldMatrix);
+	m_deviceContext->UpdateSubresource(m_worldBuffer, 0, NULL, &world, 0, 0);
 }
 
-void Renderer::SetViewMatrix( D3DXMATRIX* ViewMatrix )
+void Renderer::SetViewMatrix( D3DXMATRIX* viewMatrix )
 {
 	D3DXMATRIX view;
-	D3DXMatrixTranspose(&view, ViewMatrix);
-	m_DeviceContext->UpdateSubresource(m_ViewBuffer, 0, NULL, &view, 0, 0);
+	D3DXMatrixTranspose(&view, viewMatrix);
+	m_deviceContext->UpdateSubresource(m_viewBuffer, 0, NULL, &view, 0, 0);
 }
 
-void Renderer::SetProjectionMatrix( D3DXMATRIX* ProjectionMatrix )
+void Renderer::SetProjectionMatrix( D3DXMATRIX* projectionMatrix )
 {
 	D3DXMATRIX projection;
-	D3DXMatrixTranspose(&projection, ProjectionMatrix);
-	m_DeviceContext->UpdateSubresource(m_ProjectionBuffer, 0, NULL, &projection, 0, 0);
+	D3DXMatrixTranspose(&projection, projectionMatrix);
+	m_deviceContext->UpdateSubresource(m_projectionBuffer, 0, NULL, &projection, 0, 0);
 }
 
 
 
-void Renderer::SetMaterial( MATERIAL Material )
+void Renderer::SetMaterial( MATERIAL material )
 {
-	m_DeviceContext->UpdateSubresource( m_MaterialBuffer, 0, NULL, &Material, 0, 0 );
+	m_deviceContext->UpdateSubresource( m_materialBuffer, 0, NULL, &material, 0, 0 );
 }
 
-void Renderer::SetLight( LIGHT Light )
+void Renderer::SetLight( LIGHT light )
 {
-	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &Light, 0, 0);
+	m_deviceContext->UpdateSubresource(m_lightBuffer, 0, NULL, &light, 0, 0);
 }
 
 void Renderer::SetViewport(UINT width, UINT height)
@@ -526,16 +527,16 @@ void Renderer::SetViewport(UINT width, UINT height)
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
-	m_DeviceContext->RSSetViewports(1, &viewport);
+	m_deviceContext->RSSetViewports(1, &viewport);
 }
 
-void Renderer::CreateVertexShader( ID3D11VertexShader** VertexShader, ID3D11InputLayout** VertexLayout, const char* FileName )
+void Renderer::CreateVertexShader( ID3D11VertexShader** vertexShader, ID3D11InputLayout** vertexLayout, const char* fileName )
 {
 
 	FILE* file;
 	long int fsize;
 
-	file = fopen(FileName, "rb");
+	file = fopen(fileName, "rb");
 	assert(file);
 
 	fsize = _filelength(_fileno(file));
@@ -543,7 +544,7 @@ void Renderer::CreateVertexShader( ID3D11VertexShader** VertexShader, ID3D11Inpu
 	fread(buffer, fsize, 1, file);
 	fclose(file);
 
-	m_Device->CreateVertexShader(buffer, fsize, NULL, VertexShader);
+	m_device->CreateVertexShader(buffer, fsize, NULL, vertexShader);
 
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -555,23 +556,23 @@ void Renderer::CreateVertexShader( ID3D11VertexShader** VertexShader, ID3D11Inpu
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
-	m_Device->CreateInputLayout(layout,
+	m_device->CreateInputLayout(layout,
 		numElements,
 		buffer,
 		fsize,
-		VertexLayout);
+		vertexLayout);
 
 	delete[] buffer;
 }
 
 
 
-void Renderer::CreatePixelShader( ID3D11PixelShader** PixelShader, const char* FileName )
+void Renderer::CreatePixelShader( ID3D11PixelShader** pixelShader, const char* fileName )
 {
 	FILE* file;
 	long int fsize;
 
-	file = fopen(FileName, "rb");
+	file = fopen(fileName, "rb");
 	assert(file);
 
 	fsize = _filelength(_fileno(file));
@@ -579,7 +580,7 @@ void Renderer::CreatePixelShader( ID3D11PixelShader** PixelShader, const char* F
 	fread(buffer, fsize, 1, file);
 	fclose(file);
 
-	m_Device->CreatePixelShader(buffer, fsize, NULL, PixelShader);
+	m_device->CreatePixelShader(buffer, fsize, NULL, pixelShader);
 
 	delete[] buffer;
 }

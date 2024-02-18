@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 
+// ゲームエンジンの状態
 enum ENGINE_MODE
 {
 	EDIT,
@@ -11,19 +12,23 @@ enum ENGINE_MODE
 	PAUSE,
 };
 
-class Scene;	// 前方宣言
+class Scene;
 class Editor;
 
+
+//-----------------------------------------------------
+// ゲームエンジン管理用クラス
+//------------------------------------------------------
 class Manager
 {
 private:
-	// シングルトン用インスタンス
-	static Manager* m_instance;
-	std::unique_ptr<Scene> m_scene = nullptr;
-	std::unique_ptr<Scene> m_nextScene = nullptr;
-	Editor* m_editor = nullptr;
+	
+	static Manager* m_instance;					// シングルトン用インスタンス
+	std::unique_ptr<Scene> m_scene = nullptr;		// 現在のシーン
+	std::unique_ptr<Scene> m_nextScene = nullptr;	// 次のシーン
+	Editor* m_editor = nullptr;						// 現在のシーンのエディタシーン
 
-	ENGINE_MODE m_mode;
+	ENGINE_MODE m_mode;		// エンジンの状態
 	Manager();		// コンストラクタ
 	Manager(const Manager& manager);	// コピーコンストラクタ
 	Manager& operator=(const Manager& manager);		// 代入演算子
@@ -60,12 +65,6 @@ public:
 	Scene* GetScene() { return m_scene.get(); }
 	Editor* GetEditor() { return m_editor; }
 	ENGINE_MODE GetMode() { return m_mode; }
-
-	template <typename T>
-	void SetScene()
-	{
-		m_nextScene = new T();
-	}
 
 	void SetEngineMode(ENGINE_MODE mode) 
 	{

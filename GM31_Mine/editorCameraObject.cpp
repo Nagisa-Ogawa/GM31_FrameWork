@@ -13,12 +13,12 @@ void EditorCameraObject::Init()
 {
 	m_transform->m_localPosition = D3DXVECTOR3(0.0f, 5.0f, -10.0f);
 	m_transform->m_localRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	AddComponent<EditorCamera>()->Init(m_transform->m_localPosition);
+	AddComponent<EditorCamera>();
 }
 
 void EditorCameraObject::Update()
 {
-	// カメラの操作
+	// エディタ用カメラの操作
 	EditorCamera* camera = GetComponent<EditorCamera>();
 	if (ImGui::IsMouseDown(ImGuiMouseButton_Right)&&
 		MyImGuiManager::GetInstance()->GetFocusWindow()==ImGui::FindWindowByName("Scene")) {
@@ -60,8 +60,6 @@ void EditorCameraObject::Update()
 	}
 
 	camera->SetPosition(m_transform->m_localPosition);
-	// マウスホイールでズームイン・アウト
-	// if(Input::GetKeyPress(vk_m))
 
 	if (m_isRButton) {
 		POINT nowMousePos = Input::GetClientMousePos();

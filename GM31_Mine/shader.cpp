@@ -51,8 +51,12 @@ void Shader::ChangeVertexShaer(std::string fileName)
 		return;
 	}
 	m_fileNameVS = fileName;
-	m_VertexLayout->Release();
-	m_VertexShader->Release();
+	if (m_VertexLayout) {
+		m_VertexLayout->Release();
+	}
+	if (m_VertexShader) {
+		m_VertexShader->Release();
+	}
 	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, fileName.c_str());
 }
 
@@ -63,6 +67,8 @@ void Shader::ChangePixelShaer(std::string fileName)
 		return;
 	}
 	m_fileNamePS = fileName;
-	m_PixelShader->Release();
+	if (m_PixelShader) {
+		m_PixelShader->Release();
+	}
 	Renderer::CreatePixelShader(&m_PixelShader, fileName.c_str());
 }

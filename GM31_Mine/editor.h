@@ -11,6 +11,10 @@
 
 #include "gameObject.h"
 
+
+//-----------------------------------------------------
+// エディタシーン用クラス
+//------------------------------------------------------
 class Editor {
 
 private:
@@ -19,13 +23,15 @@ private:
 	int m_registerID = 0;	// エディタオブジェクトにセットするID
 public:
 	void Init();
-	void Load();	// エディタを読み込んだ際に呼ばれる関数
+	void Load();
 	void Uninit();
 	void Update();
 	void Draw();
 
+	// Get系関数
 	std::string GetName() { return m_name; }
-	void CheckDestroyedObject();
+
+	void CheckDestroyedObject();	// エディタ用シーンのオブジェクトが破棄されているかをチェックする関数
 
 
 	/// <summary>
@@ -56,9 +62,9 @@ public:
 	}
 
 	/// <summary>
-	/// オブジェクトを取得する関数
+	/// エディタ用オブジェクトを取得する関数
 	/// </summary>
-	/// <typeparam name="T">取得するオブジェクト名</typeparam>
+	/// <typeparam name="T">取得するエディタ用オブジェクト型</typeparam>
 	/// <returns>取得したオブジェクトのポインタ</returns>
 	template <typename T>
 	T* GetEditorObject()
@@ -76,6 +82,12 @@ public:
 		return nullptr;
 	}
 
+	/// <summary>
+	/// IDでエディタ用オブジェクトを取得する関数
+	/// </summary>
+	/// <typeparam name="T">取得するエディタ用オブジェクト型</typeparam>
+	/// <param name="ID">取得するエディタ用オブジェクトのID</param>
+	/// <returns>取得したオブジェクトのポインタ</returns>
 	template <typename T>
 	T* GetEditorObjectWithID(int ID)
 	{
@@ -85,24 +97,6 @@ public:
 		for (int i = 0; i < 3; i++) {
 			auto it = std::find_if(m_editorObjectList[i].begin(), m_editorObjectList[i].end(),
 				[&ID](const auto& obj) {return obj->GetID() == ID; });
-			if (it != m_editorObjectList[i].end()) {
-				// 一致したオブジェクトがあったなら返す
-				return (T*)(it->get());
-			}
-		}
-		// ないならnullを返す
-		return nullptr;
-	}
-
-	template <typename T>
-	T* GetEditorObjectWithName(std::string name)
-	{
-		// 名前が空なら無効
-		if (name == "") return nullptr;
-		// オブジェクトのリストからIDが同じオブジェクトを探す
-		for (int i = 0; i < 3; i++) {
-			auto it = std::find_if(m_editorObjectList[i].begin(), m_editorObjectList[i].end(),
-				[&name](const auto& obj) {return obj->GetName() == name; });
 			if (it != m_editorObjectList[i].end()) {
 				// 一致したオブジェクトがあったなら返す
 				return (T*)(it->get());

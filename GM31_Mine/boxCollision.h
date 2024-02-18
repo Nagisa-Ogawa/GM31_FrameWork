@@ -2,7 +2,12 @@
 #include "SerializableClass.h"
 #include "component.h"
 
-
+//-----------------------------------------------------
+// ボックスコリジョンコンポーネントクラス
+//------------------------------------------------------
+// 機能は実装完了していますが、
+// 実際の当たり判定は未実装です。
+//------------------------------------------------------
 class BoxCollision :public Component
 {
 private:
@@ -15,7 +20,6 @@ private:
 	D3DXMATRIX m_worldMatrix{};
 
 public:
-	void Init(D3DXVECTOR3 size,D3DXVECTOR3 offset, bool isTrigger);
 	void Init() override;
 	void Load() override;
 	void Uninit() override;

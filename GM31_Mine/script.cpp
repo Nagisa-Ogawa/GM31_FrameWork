@@ -174,7 +174,7 @@ time_t Script::GetUpdateTime()
 {
 	struct _stat buf;
 	time_t updateTime;
-	std::string filepath = "Assets\\Scripts\\" + m_fileName;
+	std::string filepath = m_fileName;
 	// ƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾‚·‚é
 	int err = _stat(filepath.c_str(), &buf);
 	if (err == 0) {
