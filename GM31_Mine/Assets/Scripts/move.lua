@@ -1,10 +1,12 @@
 -- どのスクリプトにも必要な変数
 local TestA = {}
 local gameObject
+local count=0
 
 -- ゲームオブジェクトが作成されたときに一度だけ実行される関数
 function TestA.Start()
-    -- ImGuiManager:DebugLog("TestA : Start")
+    ImGuiManager:DebugLog(string.format("one : %d",count))
+    count=count+1
 end
 
 -- 毎フレーム呼ばれる更新関数
@@ -26,7 +28,7 @@ function TestA.Update()
     end
     if Input.GetKeyPress(KEY_RETURN) then
         -- ImGuiManager:DebugLog("push enter")
-        SceneManager:ChangeScene("stage1")
+        SceneManager:ChangeScene("stage")
     end
 
 end

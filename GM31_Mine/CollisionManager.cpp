@@ -11,6 +11,9 @@
 #include "polygonCollision.h"
 #include "ray.h"
 
+#define EPSILON (0.00001f)		// 誤差用定数
+
+
 CollisionManager* CollisionManager::m_Instance = NULL;
 
 CollisionManager::CollisionManager()
@@ -122,7 +125,6 @@ void CollisionManager::DeletePolygonCollision(PolygonCollision* coll)
 // out_L   : めり込んだOBBを戻す距離
 // out_Dir : めり込んだOBBを戻す方向
 //-------------------------------------
-
 bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b, float* out_L, D3DXVECTOR3* out_Dir)
 {
 	// 2オブジェクトの各軸を定義
@@ -133,8 +135,8 @@ bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b, floa
 	D3DXVECTOR3 bVecY = b->GetGameObject()->GetTransform()->GetUp() *      (b->GetSize().y /*/ 2.0f*/);
 	D3DXVECTOR3 bVecZ = b->GetGameObject()->GetTransform()->GetForward() * (b->GetSize().z /*/ 2.0f*/);
 	// 2オブジェクト間の距離
-	D3DXVECTOR3 distance = ((b->GetGameObject()->GetTransform()->m_worldPosition + b->GetOffset()) -
-									(a->GetGameObject()->GetTransform()->m_worldPosition + a->GetOffset()));
+	D3DXVECTOR3 distance = ((b->GetGameObject()->GetTransform()->m_localPosition + b->GetOffset()) -
+									(a->GetGameObject()->GetTransform()->m_localPosition + a->GetOffset()));
 
 	// オブジェクトAのX軸が分離軸の場合
 	D3DXVECTOR3 nAVecX;
@@ -276,7 +278,7 @@ bool CollisionManager::Collision_BoxToBox(BoxCollision* a, BoxCollision* b, floa
 
 	// すべてに当てはまらなかったら衝突している
 	// 当たった際の引き戻す方向と長さを取得
-	GetHitBoxSurface(a, b, out_L, out_Dir);
+	// GetHitBoxSurface(a, b, out_L, out_Dir);
 
 	return true;
 }
@@ -483,7 +485,6 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision * a, QuadCollision * b, 
 // out_L   : めり込んだOBBを戻す距離
 // out_Dir : めり込んだOBBを戻す方向
 //-------------------------------------
-
 bool CollisionManager::Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos, 
 		D3DXVECTOR2 bSize, D3DXVECTOR3 bVec[2], D3DXVECTOR3 bNormal, float* out_L, D3DXVECTOR3* out_Dir)
 {
@@ -558,7 +559,6 @@ bool CollisionManager::Collision_BoxToQuad(BoxCollision* a, D3DXVECTOR3 bPos,
 }
 
 
-#define PREVENT_ERROR 0.00001f		// 誤差用定数
 //------------------------------------------------------------------
 // レイと球体コリジョンの当たり判定
 //------------------------------------------------------------------
@@ -581,7 +581,7 @@ bool CollisionManager::Collision_RayToSphere(Ray* ray, SphereCollision* sphereCo
 
 	// 誤差
 	// aは単位ベクトルの内積のため誤差以外では必ず1になる
-	if (a - PREVENT_ERROR <= 0.0f) {
+	if (a - EPSILON <= 0.0f) {
 		return false;
 	}
 
@@ -714,7 +714,6 @@ bool CollisionManager::Collision_RayToBox(Ray* ray, BoxCollision* boxColl, float
 
 bool CollisionManager::Collision_RayToPolygon(Ray* ray, PolygonCollision* polyColl, float* out_T)
 {
-	const float EPSILON = 1e-6f;	// 計算誤差無視用変数
 	POLYGON_POSITION* polyPosArray = polyColl->GetPolygonArray();	// ポリゴンの頂点座標配列
 	// ポリゴンの数だけループ
 	for (int i = 0; i < polyColl->GetArrayCount(); i++) {

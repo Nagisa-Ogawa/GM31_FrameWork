@@ -103,7 +103,7 @@ void MyImGuiManager::Uninit()
 
 void MyImGuiManager::Update()
 {
-
+	// ウィンドウがリサイズされたかチェック
 	if (Renderer::GetResizeWidth() != 0 && Renderer::GetResizeHeight() != 0)
 	{
 		// レンダーターゲットをクリア

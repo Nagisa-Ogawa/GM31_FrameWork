@@ -58,9 +58,6 @@ void SceneGui::Update()
 		viewMatrix = camera->GetViewMatrix();
 		projectionMatrix = camera->GetProjectionMatrix();
 		// オブジェクトのローカル情報から行列を作成
-		D3DXVECTOR3 pos = m_selectedObject->GetTransform()->m_localPosition;
-		D3DXVECTOR3 rot = m_selectedObject->GetTransform()->GetLocalRotationAsDegree();
-		D3DXVECTOR3 scale = m_selectedObject->GetTransform()->m_localScale;
 		float worldTransArray[3];
 		float worldRotArray[3];
 		float worldScaleArray[3];
@@ -95,6 +92,10 @@ void SceneGui::Update()
 			m_selectedObject->GetTransform()->m_localPosition += pos;
 			m_selectedObject->GetTransform()->SetLocalRotationFromDegree(m_selectedObject->GetTransform()->GetLocalRotationAsDegree() + rot);
 			m_selectedObject->GetTransform()->m_localScale += scale;
+			char s[256];
+			sprintf(s, "RotArray : [ %f %f %f]\nworldRotArray : [ %f %f %f]\n rot : [%f %f %f]",
+				rotArray[0], rotArray[1], rotArray[2], worldRotArray[0], worldRotArray[1], worldRotArray[2], rot[0], rot[1], rot[2]);
+			MyImGuiManager::GetInstance()->DebugLog(s);
 		}
 	}
 

@@ -165,6 +165,10 @@ void Manager::CheckChangeScene()
 		m_editor = m_scene->GetEditor();
 		// シーンのロード処理を呼び出す
 		m_scene->Load();
+		if (m_mode == ENGINE_MODE::RUN) {
+			// スクリプトのStart関数を呼び出す
+			GetScene()->CallScriptStartFunc();
+		}
 		m_nextScene = nullptr;
 	}
 }

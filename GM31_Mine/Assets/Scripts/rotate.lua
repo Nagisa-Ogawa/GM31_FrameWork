@@ -1,10 +1,12 @@
 -- どのスクリプトにも必要な変数
 local player = {} -- クラスを表すテーブル
 local gameObject -- このスクリプトがコンポーネントされているオブジェクト
+local count=0
 
 -- ゲームオブジェクトが作成されたときに一度だけ実行される関数
 function player.Start()
-
+    ImGuiManager:DebugLog(string.format("two : %d",count))
+    count=count+1
 end
 
 -- 毎フレーム呼ばれる更新関数

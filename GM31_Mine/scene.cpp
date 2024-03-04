@@ -9,7 +9,8 @@
 #include "renderer.h"
 #include "cameraObject.h"
 #include "sky.h"
-
+#include "CollisionManager.h"
+#include "boxCollision.h"
 
 void Scene::Init()
 {
@@ -69,6 +70,20 @@ void Scene::Update()
 				gameObject->Update();
 		}
 	}
+	CollsionTest();
+}
+
+
+void Scene::CollsionTest() {
+	//auto player = GetGameObjectWithName("Humanoid");
+	//auto enemy = GetGameObjectWithName("Enemy");
+	//auto playerColl = player->GetComponent<BoxCollision>();
+	//auto enemyColl = enemy->GetComponent<BoxCollision>();
+	//float l = -1;
+	//D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//if (CollisionManager::GetInstance()->Collision_BoxToBox(playerColl, enemyColl, &l, &vec)) {
+	//	
+	//}
 }
 
 void Scene::Draw()

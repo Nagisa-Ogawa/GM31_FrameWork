@@ -408,7 +408,7 @@ void Renderer::SetRenderTarget(UINT width, UINT height)
 	ID3D11Texture2D* depthStencile{};
 	D3D11_TEXTURE2D_DESC textureDesc{};
 	textureDesc.Width = width;
-	textureDesc.Height = width;
+	textureDesc.Height = height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
 	textureDesc.Format = DXGI_FORMAT_D16_UNORM;
