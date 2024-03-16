@@ -12,7 +12,6 @@
 void EditorCameraObject::Init()
 {
 	m_transform->m_localPosition = D3DXVECTOR3(0.0f, 5.0f, -10.0f);
-	m_transform->m_localRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	AddComponent<EditorCamera>();
 }
 
@@ -82,9 +81,11 @@ void EditorCameraObject::Update()
 void EditorCameraObject::RotateCamera(D3DXVECTOR2 delta)
 {
 	EditorCamera* camera = GetComponent<EditorCamera>();
-	m_transform->m_localRotation.x += delta.y;
-	m_transform->m_localRotation.y += delta.x;
+	auto euler = m_transform->GetLocalEulerAngle();
+	euler.x += delta.y;
+	euler.y += delta.x;
+	m_transform->SetLocalEulerAngle(euler);
 	// ‰ñ“]—Ê‚ðƒJƒƒ‰‚Ö”½‰f
-	camera->SetRotation(m_transform->m_localRotation);
+	camera->SetRotation(m_transform->GetLocalEulerAngle());
 
 }

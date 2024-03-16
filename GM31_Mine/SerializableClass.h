@@ -79,3 +79,66 @@ public:
 	}
 };
 
+class Vector4
+{
+public:
+	float x;
+	float y;
+	float z;
+	float w;
+
+	Vector4() {
+		x = 0.0f;
+		y = 0.0f;
+		z = 0.0f;
+		w = 1.0f;
+	}
+
+	// DirectXのVector4型での引数付きコンストラクタ
+	Vector4(const D3DXVECTOR4& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		w = v.w;
+	}
+
+	// DirectXのQuaternion型での引数付きコンストラクタ
+	Vector4(const D3DXQUATERNION& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		w = v.w;
+	}
+
+	// DirectXのVector4型からの演算子オーバーロード
+	Vector4& operator=(const D3DXVECTOR4& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		w = v.w;
+		return *this;
+	}
+
+	// DirectXのQuaternion型からの演算子オーバーロード
+	Vector4& operator=(const D3DXQUATERNION& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		w = v.w;
+		return *this;
+	}
+
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(
+			CEREAL_NVP(x),
+			CEREAL_NVP(y),
+			CEREAL_NVP(z),
+			CEREAL_NVP(w)
+		);
+	}
+};
+
+

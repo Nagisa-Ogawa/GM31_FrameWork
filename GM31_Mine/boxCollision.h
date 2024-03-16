@@ -11,10 +11,15 @@
 class BoxCollision :public Component
 {
 private:
+	// ブロードフェーズ用AABB変数
+	D3DXVECTOR3 m_BFCenter{};
+	D3DXVECTOR3 m_BFHalf{};
+	// ナローフェーズ用OBB変数
+	class CollisionMesh* m_collisionMesh = nullptr;	// 当たり判定に使うメッシュデータ
 	D3DXVECTOR3 m_size{};
 	D3DXVECTOR3 m_offset{};
 	bool		m_isTrigger{};
-	class BoxCollisionFrame* m_collFrame {};	// エディタ上に表示するためのオブジェクト
+	class BoxCollisionFrame* m_collFrame = nullptr;	// エディタ上に表示するためのオブジェクト
 	int m_collID = -1;							// 表示用オブジェクトのID
 
 	D3DXMATRIX m_worldMatrix{};
@@ -27,9 +32,14 @@ public:
 	void Draw() override;
 	void DispInspector() override;
 
-	bool* GetIsTrigger() { return &m_isTrigger; }
+	D3DXVECTOR3 GetBFCenter() { return m_BFCenter; }
+	D3DXVECTOR3 GetBFHalf() { return m_BFHalf; }
 	D3DXVECTOR3 GetSize() { return m_size; }
 	D3DXVECTOR3 GetOffset() { return m_offset; }
+	bool* GetIsTrigger() { return &m_isTrigger; }
+
+	void SetBFCenter(D3DXVECTOR3 center) { m_BFCenter = center; }
+	void SetBFHalf(D3DXVECTOR3 half) { m_BFHalf = half; }
 	void SetSize(D3DXVECTOR3 size) { m_size = size; }
 	void SetOffset(D3DXVECTOR3 offset) { m_offset = offset; }
 	void SetIsTrigger(bool flag) { m_isTrigger = flag; }

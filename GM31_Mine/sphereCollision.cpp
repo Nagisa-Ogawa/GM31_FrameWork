@@ -54,11 +54,11 @@ D3DXMATRIX SphereCollision::GetWorldMatrix()
 {
 	// マトリクス設定
 	D3DXVECTOR3 m_Scale = D3DXVECTOR3(m_radius, m_radius, m_radius);
-	D3DXVECTOR3 m_Rot = m_transform->m_localRotation;
+	D3DXQUATERNION m_qua = m_transform->m_localQuaternion;
 	D3DXVECTOR3 m_Pos = m_transform->m_localPosition + m_offset;
 	D3DXMATRIX scale, rot, trans, world;
 	D3DXMatrixScaling(&scale, m_radius, m_radius, m_radius);
-	D3DXMatrixRotationYawPitchRoll(&rot, m_Rot.y, m_Rot.x, m_Rot.z);
+	D3DXMatrixRotationQuaternion(&rot, &m_qua);
 	D3DXMatrixTranslation(&trans, m_Pos.x, m_Pos.y, m_Pos.z);
 	world = scale * rot * trans;
 

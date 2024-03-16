@@ -163,6 +163,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraObject.cpp" />
     <ClCompile Include="collisionManager.cpp" />
+    <ClCompile Include="collisionMesh.cpp" />
     <ClCompile Include="consoleGui.cpp" />
     <ClCompile Include="dispInspector.cpp" />
     <ClCompile Include="editor.cpp" />
@@ -196,6 +197,7 @@
     <ClCompile Include="projectGui.cpp" />
     <ClCompile Include="quadCollision.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="rigidBody.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="sceneGui.cpp" />
     <ClCompile Include="script.cpp" />
@@ -213,7 +215,11 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraObject.h" />
     <ClInclude Include="boxCollision.h" />
+    <ClInclude Include="collisionConstraint.h" />
+    <ClInclude Include="collisionContact.h" />
     <ClInclude Include="collisionManager.h" />
+    <ClInclude Include="collisionMesh.h" />
+    <ClInclude Include="collisionPair.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="consoleGui.h" />
     <ClInclude Include="dispInspector.h" />
@@ -255,6 +261,7 @@
     <ClInclude Include="quadCollision.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="rigidBody.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sceneGui.h" />
     <ClInclude Include="script.h" />

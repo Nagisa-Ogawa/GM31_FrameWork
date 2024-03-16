@@ -328,10 +328,10 @@ void DispComponent(Transform* transform)
 			}
 			// LocalRotation•Ï”‚Ì•\Ž¦
 			if (ImGui::TreeNodeEx("Rotation",ImGuiTreeNodeFlags_DefaultOpen)) {
-				D3DXVECTOR3 rotVec = transform->GetLocalRotationAsDegree();
+				D3DXVECTOR3 rotVec = transform->GetLocalEulerAngleAsDegree();
 				float rot[3] = { rotVec.x,rotVec.y ,rotVec.z};
 				if (ImGui::InputFloat3("", rot)) {
-					transform->SetLocalRotationFromDegree(D3DXVECTOR3(rot[0], rot[1], rot[2]));
+					transform->SetLocalEulerAngleFromDegree(D3DXVECTOR3(rot[0], rot[1], rot[2]));
 				}
 				ImGui::TreePop();
 			}

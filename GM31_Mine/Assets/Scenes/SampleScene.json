@@ -25,13 +25,19 @@
                                                         "value0": {
                                                             "m_ID": 0
                                                         },
-                                                        "m_parentID": 3,
+                                                        "m_parentID": -1,
                                                         "worldPostion": {
                                                             "x": 0.0,
                                                             "y": 0.0,
                                                             "z": 0.0
                                                         },
-                                                        "worldRotation": {
+                                                        "worldQuaternion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0,
+                                                            "w": 1.0
+                                                        },
+                                                        "worldEulerAngle": {
                                                             "x": 0.0,
                                                             "y": 0.0,
                                                             "z": 0.0
@@ -43,11 +49,17 @@
                                                         },
                                                         "localPostion": {
                                                             "x": 0.0,
-                                                            "y": 3.203083038330078,
-                                                            "z": -3.714080810546875
+                                                            "y": 5.0,
+                                                            "z": -10.0
                                                         },
-                                                        "localRotation": {
-                                                            "x": 0.2418840080499649,
+                                                        "localQuaternion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0,
+                                                            "w": 1.0
+                                                        },
+                                                        "localEulerAngle": {
+                                                            "x": 0.0,
                                                             "y": 0.0,
                                                             "z": 0.0
                                                         },
@@ -105,7 +117,13 @@
                                                             "y": 0.0,
                                                             "z": 0.0
                                                         },
-                                                        "worldRotation": {
+                                                        "worldQuaternion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0,
+                                                            "w": 1.0
+                                                        },
+                                                        "worldEulerAngle": {
                                                             "x": 0.0,
                                                             "y": 0.0,
                                                             "z": 0.0
@@ -120,7 +138,13 @@
                                                             "y": 0.0,
                                                             "z": 0.0
                                                         },
-                                                        "localRotation": {
+                                                        "localQuaternion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0,
+                                                            "w": 1.0
+                                                        },
+                                                        "localEulerAngle": {
                                                             "x": 0.0,
                                                             "y": 0.0,
                                                             "z": 0.0
@@ -170,12 +194,12 @@
                         },
                         {
                             "polymorphic_id": 2147483655,
-                            "polymorphic_name": "FieldObject",
+                            "polymorphic_name": "Box",
                             "ptr_wrapper": {
                                 "valid": 1,
                                 "data": {
                                     "value0": {
-                                        "m_name": "Field",
+                                        "m_name": "Box",
                                         "m_id": 2,
                                         "m_componentList": [
                                             {
@@ -186,13 +210,19 @@
                                                         "value0": {
                                                             "m_ID": 0
                                                         },
-                                                        "m_parentID": -1,
+                                                        "m_parentID": 3,
                                                         "worldPostion": {
                                                             "x": 0.0,
                                                             "y": 0.0,
                                                             "z": 0.0
                                                         },
-                                                        "worldRotation": {
+                                                        "worldQuaternion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0,
+                                                            "w": 1.0
+                                                        },
+                                                        "worldEulerAngle": {
                                                             "x": 0.0,
                                                             "y": 0.0,
                                                             "z": 0.0
@@ -203,240 +233,25 @@
                                                             "z": 1.0
                                                         },
                                                         "localPostion": {
-                                                            "x": 0.0,
+                                                            "x": 2.4036998748779299,
+                                                            "y": 0.12879857420921327,
+                                                            "z": 6.884011745452881
+                                                        },
+                                                        "localQuaternion": {
+                                                            "x": -0.020458420738577844,
                                                             "y": 0.0,
-                                                            "z": 0.0
+                                                            "z": 0.0,
+                                                            "w": 0.9997907280921936
                                                         },
-                                                        "localRotation": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "localScale": {
-                                                            "x": 1.0,
-                                                            "y": 1.0,
-                                                            "z": 1.0
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 5,
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 1
-                                                        },
-                                                        "m_fileNameVS": "Assets\\Shaders\\vertexLightingVS.cso",
-                                                        "m_fileNamePS": "Assets\\Shaders\\vertexLightingPS.cso"
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 2147483656,
-                                                "polymorphic_name": "MeshField",
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 2
-                                                        },
-                                                        "m_targetID": 3,
-                                                        "m_texturePath": "Assets\\Textures\\floor01.jpg"
-                                                    }
-                                                }
-                                            }
-                                        ],
-                                        "m_active": true,
-                                        "m_destroy": false,
-                                        "m_registerID": 3
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "polymorphic_id": 2147483657,
-                            "polymorphic_name": "Humanoid",
-                            "ptr_wrapper": {
-                                "valid": 1,
-                                "data": {
-                                    "value0": {
-                                        "m_name": "Humanoid",
-                                        "m_id": 3,
-                                        "m_componentList": [
-                                            {
-                                                "polymorphic_id": 2,
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 0
-                                                        },
-                                                        "m_parentID": -1,
-                                                        "worldPostion": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "worldRotation": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "worldScale": {
-                                                            "x": 1.0,
-                                                            "y": 1.0,
-                                                            "z": 1.0
-                                                        },
-                                                        "localPostion": {
-                                                            "x": 1.4800891876220704,
-                                                            "y": 0.21007347106933595,
-                                                            "z": 6.763564109802246
-                                                        },
-                                                        "localRotation": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
+                                                        "localEulerAngle": {
+                                                            "x": -0.04091969504952431,
+                                                            "y": -0.0,
                                                             "z": 0.0
                                                         },
                                                         "localScale": {
-                                                            "x": 1.000000238418579,
-                                                            "y": 1.0000003576278687,
-                                                            "z": 1.0000004768371583
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 2147483658,
-                                                "polymorphic_name": "BoxCollision",
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 1
-                                                        },
-                                                        "size": {
-                                                            "x": 0.5,
-                                                            "y": 1.0,
-                                                            "z": 0.5
-                                                        },
-                                                        "offset": {
-                                                            "x": 0.0,
-                                                            "y": 1.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "m_isTrigger": false,
-                                                        "m_collID": 1
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 5,
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 2
-                                                        },
-                                                        "m_fileNameVS": "Assets\\Shaders\\vertexLightingVS.cso",
-                                                        "m_fileNamePS": "Assets\\Shaders\\vertexLightingPS.cso"
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 6,
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 3
-                                                        },
-                                                        "m_fileName": "Assets\\Models\\bot.obj"
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 2147483659,
-                                                "polymorphic_name": "PolygonCollision",
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 4
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "polymorphic_id": 2147483660,
-                                                "polymorphic_name": "Script",
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 5
-                                                        },
-                                                        "m_fileName": "Assets\\Scripts\\move.lua"
-                                                    }
-                                                }
-                                            }
-                                        ],
-                                        "m_active": true,
-                                        "m_destroy": false,
-                                        "m_registerID": 7
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "polymorphic_id": 2147483661,
-                            "polymorphic_name": "Box",
-                            "ptr_wrapper": {
-                                "valid": 1,
-                                "data": {
-                                    "value0": {
-                                        "m_name": "Enemy",
-                                        "m_id": 4,
-                                        "m_componentList": [
-                                            {
-                                                "polymorphic_id": 2,
-                                                "ptr_wrapper": {
-                                                    "valid": 1,
-                                                    "data": {
-                                                        "value0": {
-                                                            "m_ID": 0
-                                                        },
-                                                        "m_parentID": -1,
-                                                        "worldPostion": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "worldRotation": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "worldScale": {
-                                                            "x": 1.0,
-                                                            "y": 1.0,
-                                                            "z": 1.0
-                                                        },
-                                                        "localPostion": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 15.794757843017579
-                                                        },
-                                                        "localRotation": {
-                                                            "x": 0.0,
-                                                            "y": 0.0,
-                                                            "z": 0.0
-                                                        },
-                                                        "localScale": {
-                                                            "x": 1.0,
-                                                            "y": 1.0,
-                                                            "z": 1.0
+                                                            "x": 0.9999585151672363,
+                                                            "y": 0.9999915361404419,
+                                                            "z": 0.9999513626098633
                                                         }
                                                     }
                                                 }
@@ -467,7 +282,8 @@
                                                 }
                                             },
                                             {
-                                                "polymorphic_id": 11,
+                                                "polymorphic_id": 2147483656,
+                                                "polymorphic_name": "PolygonCollision",
                                                 "ptr_wrapper": {
                                                     "valid": 1,
                                                     "data": {
@@ -478,7 +294,8 @@
                                                 }
                                             },
                                             {
-                                                "polymorphic_id": 10,
+                                                "polymorphic_id": 2147483657,
+                                                "polymorphic_name": "BoxCollision",
                                                 "ptr_wrapper": {
                                                     "valid": 1,
                                                     "data": {
@@ -496,7 +313,7 @@
                                                             "z": 0.0
                                                         },
                                                         "m_isTrigger": false,
-                                                        "m_collID": 2
+                                                        "m_collID": 1
                                                     }
                                                 }
                                             }
@@ -504,6 +321,249 @@
                                         "m_active": true,
                                         "m_destroy": false,
                                         "m_registerID": 5
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "polymorphic_id": 2147483658,
+                            "polymorphic_name": "Humanoid",
+                            "ptr_wrapper": {
+                                "valid": 1,
+                                "data": {
+                                    "value0": {
+                                        "m_name": "Humanoid",
+                                        "m_id": 3,
+                                        "m_componentList": [
+                                            {
+                                                "polymorphic_id": 2,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 0
+                                                        },
+                                                        "m_parentID": -1,
+                                                        "worldPostion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldQuaternion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0,
+                                                            "w": 1.0
+                                                        },
+                                                        "worldEulerAngle": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        },
+                                                        "localPostion": {
+                                                            "x": 0.18417572975158692,
+                                                            "y": 0.21059966087341309,
+                                                            "z": 0.13169795274734498
+                                                        },
+                                                        "localQuaternion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0,
+                                                            "w": 1.0
+                                                        },
+                                                        "localEulerAngle": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "localScale": {
+                                                            "x": 0.9999897480010986,
+                                                            "y": 0.9999912977218628,
+                                                            "z": 0.9999986886978149
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 9,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 1
+                                                        },
+                                                        "size": {
+                                                            "x": 0.5,
+                                                            "y": 1.0,
+                                                            "z": 0.5
+                                                        },
+                                                        "offset": {
+                                                            "x": 0.0,
+                                                            "y": 1.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "m_isTrigger": false,
+                                                        "m_collID": 2
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 5,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 2
+                                                        },
+                                                        "m_fileNameVS": "Assets\\Shaders\\vertexLightingVS.cso",
+                                                        "m_fileNamePS": "Assets\\Shaders\\vertexLightingPS.cso"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 6,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 3
+                                                        },
+                                                        "m_fileName": "Assets\\Models\\Bot.obj"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 8,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 4
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 2147483659,
+                                                "polymorphic_name": "Script",
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 5
+                                                        },
+                                                        "m_fileName": "Assets\\Scripts\\move.lua"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "m_active": true,
+                                        "m_destroy": false,
+                                        "m_registerID": 6
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "polymorphic_id": 2147483660,
+                            "polymorphic_name": "FieldObject",
+                            "ptr_wrapper": {
+                                "valid": 1,
+                                "data": {
+                                    "value0": {
+                                        "m_name": "Field",
+                                        "m_id": 5,
+                                        "m_componentList": [
+                                            {
+                                                "polymorphic_id": 2,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 0
+                                                        },
+                                                        "m_parentID": -1,
+                                                        "worldPostion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldQuaternion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0,
+                                                            "w": 1.0
+                                                        },
+                                                        "worldEulerAngle": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "worldScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        },
+                                                        "localPostion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "localQuaternion": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0,
+                                                            "w": 1.0
+                                                        },
+                                                        "localEulerAngle": {
+                                                            "x": 0.0,
+                                                            "y": 0.0,
+                                                            "z": 0.0
+                                                        },
+                                                        "localScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0,
+                                                            "z": 1.0
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 5,
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 1
+                                                        },
+                                                        "m_fileNameVS": "Assets\\Shaders\\vertexLightingVS.cso",
+                                                        "m_fileNamePS": "Assets\\Shaders\\vertexLightingPS.cso"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "polymorphic_id": 2147483661,
+                                                "polymorphic_name": "MeshField",
+                                                "ptr_wrapper": {
+                                                    "valid": 1,
+                                                    "data": {
+                                                        "value0": {
+                                                            "m_ID": 2
+                                                        },
+                                                        "m_targetID": -1,
+                                                        "m_texturePath": "Assets\\Textures\\floor01.jpg"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "m_active": true,
+                                        "m_destroy": false,
+                                        "m_registerID": 3
                                     }
                                 }
                             }
@@ -542,7 +602,13 @@
                                                                         "y": 0.0,
                                                                         "z": 0.0
                                                                     },
-                                                                    "worldRotation": {
+                                                                    "worldQuaternion": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0,
+                                                                        "w": 1.0
+                                                                    },
+                                                                    "worldEulerAngle": {
                                                                         "x": 0.0,
                                                                         "y": 0.0,
                                                                         "z": 0.0
@@ -553,13 +619,19 @@
                                                                         "z": 1.0
                                                                     },
                                                                     "localPostion": {
-                                                                        "x": 3.125229835510254,
-                                                                        "y": 3.3270153999328615,
-                                                                        "z": 2.270958423614502
+                                                                        "x": 5.0047287940979,
+                                                                        "y": 4.8149261474609379,
+                                                                        "z": -5.345665454864502
                                                                     },
-                                                                    "localRotation": {
-                                                                        "x": 0.5099985003471375,
-                                                                        "y": -0.30000030994415285,
+                                                                    "localQuaternion": {
+                                                                        "x": 0.24490655958652497,
+                                                                        "y": -0.2524070739746094,
+                                                                        "z": 0.06620051711797714,
+                                                                        "w": 0.9337713718414307
+                                                                    },
+                                                                    "localEulerAngle": {
+                                                                        "x": 0.5129989981651306,
+                                                                        "y": -0.5280001759529114,
                                                                         "z": 0.0
                                                                     },
                                                                     "localScale": {
@@ -580,13 +652,13 @@
                                                                         "m_ID": 1
                                                                     },
                                                                     "postion": {
-                                                                        "x": 3.125229835510254,
-                                                                        "y": 3.3270153999328615,
-                                                                        "z": 2.270958423614502
+                                                                        "x": 5.0047287940979,
+                                                                        "y": 4.8149261474609379,
+                                                                        "z": -5.345665454864502
                                                                     },
                                                                     "rotation": {
-                                                                        "x": 0.5099985003471375,
-                                                                        "y": -0.30000030994415285,
+                                                                        "x": 0.5129989981651306,
+                                                                        "y": -0.5280001759529114,
                                                                         "z": 0.0
                                                                     }
                                                                 }
@@ -609,7 +681,7 @@
                                             "valid": 1,
                                             "data": {
                                                 "value0": {
-                                                    "m_name": "HumanoidBoxCollisionFrame",
+                                                    "m_name": "BoxBoxCollisionFrame",
                                                     "m_id": 1,
                                                     "m_componentList": [
                                                         {
@@ -626,7 +698,13 @@
                                                                         "y": 0.0,
                                                                         "z": 0.0
                                                                     },
-                                                                    "worldRotation": {
+                                                                    "worldQuaternion": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0,
+                                                                        "w": 1.0
+                                                                    },
+                                                                    "worldEulerAngle": {
                                                                         "x": 0.0,
                                                                         "y": 0.0,
                                                                         "z": 0.0
@@ -641,7 +719,13 @@
                                                                         "y": 0.0,
                                                                         "z": 0.0
                                                                     },
-                                                                    "localRotation": {
+                                                                    "localQuaternion": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0,
+                                                                        "w": 1.0
+                                                                    },
+                                                                    "localEulerAngle": {
                                                                         "x": 0.0,
                                                                         "y": 0.0,
                                                                         "z": 0.0
@@ -693,7 +777,7 @@
                                             "valid": 1,
                                             "data": {
                                                 "value0": {
-                                                    "m_name": "BoxBoxCollisionFrame",
+                                                    "m_name": "HumanoidBoxCollisionFrame",
                                                     "m_id": 2,
                                                     "m_componentList": [
                                                         {
@@ -710,7 +794,13 @@
                                                                         "y": 0.0,
                                                                         "z": 0.0
                                                                     },
-                                                                    "worldRotation": {
+                                                                    "worldQuaternion": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0,
+                                                                        "w": 1.0
+                                                                    },
+                                                                    "worldEulerAngle": {
                                                                         "x": 0.0,
                                                                         "y": 0.0,
                                                                         "z": 0.0
@@ -725,7 +815,13 @@
                                                                         "y": 0.0,
                                                                         "z": 0.0
                                                                     },
-                                                                    "localRotation": {
+                                                                    "localQuaternion": {
+                                                                        "x": 0.0,
+                                                                        "y": 0.0,
+                                                                        "z": 0.0,
+                                                                        "w": 1.0
+                                                                    },
+                                                                    "localEulerAngle": {
                                                                         "x": 0.0,
                                                                         "y": 0.0,
                                                                         "z": 0.0
@@ -774,11 +870,11 @@
                                 ],
                                 "value2": []
                             },
-                            "m_registerID": 6
+                            "m_registerID": 4
                         }
                     }
                 },
-                "m_registerID": 8
+                "m_registerID": 6
             }
         }
     }

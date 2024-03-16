@@ -50,21 +50,14 @@ void SceneGui::Update()
 		EditorCamera* camera;
 		D3DXMATRIX* viewMatrix;
 		D3DXMATRIX* projectionMatrix;
-		D3DXMATRIX objectMatrix;
-		D3DXMatrixIdentity(&objectMatrix);
+		D3DXMATRIX* objectMatrix;
 
 		// カメラのビュー行列とプロジェクション行列を取得
 		camera = Manager::GetInstance()->GetEditor()->GetEditorObject<EditorCameraObject>()->GetComponent<EditorCamera>();
 		viewMatrix = camera->GetViewMatrix();
 		projectionMatrix = camera->GetProjectionMatrix();
-		// オブジェクトのローカル情報から行列を作成
-		float worldTransArray[3];
-		float worldRotArray[3];
-		float worldScaleArray[3];
-
-		// オブジェクトのワールド変換行列から
-		D3DXMATRIX* worldObjMatrix = m_selectedObject->GetTransform()->GetWorldMatrix();
-		ImGuizmo::DecomposeMatrixToComponents(*worldObjMatrix->m, worldTransArray, worldRotArray, worldScaleArray);
+		// オブジェクトの行列を取得
+		objectMatrix = m_selectedObject->GetTransform()->GetLocalMatrix();
 
 		ImGuizmo::SetDrawlist();
 		ImGuiIO& io = ImGui::GetIO();
@@ -73,29 +66,23 @@ void SceneGui::Update()
 		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
 		// マニピュレーターを生成
-		ImGuizmo::Manipulate(*viewMatrix->m, *projectionMatrix->m, currentGuizmoOperation, currentGuizmoMode, *worldObjMatrix->m, NULL, NULL);
+		ImGuizmo::Manipulate(*viewMatrix->m, *projectionMatrix->m, currentGuizmoOperation, currentGuizmoMode, *objectMatrix->m, NULL, NULL);
 		// マニピュレーターが使用されていたなら
 		if (ImGuizmo::IsUsing()) {
 			float transArray[3];
 			float rotArray[3];
 			float scaleArray[3];
 			// マニピュレーターで変更されたtransform情報を取得
-			ImGuizmo::DecomposeMatrixToComponents(*worldObjMatrix->m, transArray, rotArray, scaleArray);
+			ImGuizmo::DecomposeMatrixToComponents(*objectMatrix->m, transArray, rotArray, scaleArray);
+
+			char s[256];
+			sprintf(s, "rot : [ %f %f %f]",rotArray[0],rotArray[1],rotArray[2]);
+			MyImGuiManager::GetInstance()->DebugLog(s);
 
 			// transformへ送信
-			D3DXVECTOR3 pos, rot, scale;
-			// マニピュレーターを操作する前との差を調べて実際に動かした値を算出
-			pos = D3DXVECTOR3(transArray[0] - worldTransArray[0], transArray[1] - worldTransArray[1], transArray[2] - worldTransArray[2]);
-			rot = D3DXVECTOR3(rotArray[0] - worldRotArray[0], rotArray[1] - worldRotArray[1], rotArray[2] - worldRotArray[2]);
-			scale = D3DXVECTOR3(scaleArray[0] - worldScaleArray[0], scaleArray[1] - worldScaleArray[1], scaleArray[2] - worldScaleArray[2]);
-			// オブジェクトのローカル情報に動かした値を足す
-			m_selectedObject->GetTransform()->m_localPosition += pos;
-			m_selectedObject->GetTransform()->SetLocalRotationFromDegree(m_selectedObject->GetTransform()->GetLocalRotationAsDegree() + rot);
-			m_selectedObject->GetTransform()->m_localScale += scale;
-			char s[256];
-			sprintf(s, "RotArray : [ %f %f %f]\nworldRotArray : [ %f %f %f]\n rot : [%f %f %f]",
-				rotArray[0], rotArray[1], rotArray[2], worldRotArray[0], worldRotArray[1], worldRotArray[2], rot[0], rot[1], rot[2]);
-			MyImGuiManager::GetInstance()->DebugLog(s);
+			m_selectedObject->GetTransform()->m_localPosition = D3DXVECTOR3(transArray[0], transArray[1], transArray[2]);
+			m_selectedObject->GetTransform()->SetLocalEulerAngleFromDegree(D3DXVECTOR3(rotArray[0], rotArray[1], rotArray[2]));
+			m_selectedObject->GetTransform()->m_localScale = D3DXVECTOR3(scaleArray[0], scaleArray[1], scaleArray[2]);
 		}
 	}
 

@@ -70,6 +70,12 @@
     <Filter Include="ヘッダー ファイル\TreeNode">
       <UniqueIdentifier>{b7e2d371-1fb8-43a4-b616-abe6e301fa95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Physics">
+      <UniqueIdentifier>{9a1e4ba3-e61f-4de4-aafd-2bb83ade5652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Physics">
+      <UniqueIdentifier>{ffa72446-0496-4792-92ca-aefccfd2540d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="player.cpp">
@@ -218,6 +224,12 @@
     </ClCompile>
     <ClCompile Include="myImGuiManager.cpp">
       <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="rigidBody.cpp">
+      <Filter>ソース ファイル\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="collisionMesh.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -394,6 +406,21 @@
     </ClInclude>
     <ClInclude Include="fileDialog.h">
       <Filter>ヘッダー ファイル\MyImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="rigidBody.h">
+      <Filter>ヘッダー ファイル\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="collisionPair.h">
+      <Filter>ヘッダー ファイル\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="collisionContact.h">
+      <Filter>ヘッダー ファイル\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="collisionConstraint.h">
+      <Filter>ヘッダー ファイル\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="collisionMesh.h">
+      <Filter>ヘッダー ファイル\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

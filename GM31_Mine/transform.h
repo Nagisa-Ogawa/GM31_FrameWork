@@ -16,19 +16,22 @@ private:
 	Transform* m_parent = nullptr;
 	int m_parentID = -1;
 
+	D3DXVECTOR3 m_worldEulerAngle = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 m_localEulerAngle = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXMATRIX m_worldMatrix{};
 	D3DXMATRIX m_localMatrix{};
 
 	void SetChild(Transform* child) { m_childList.push_back(child); }	// 子供を設定する関数
 	void DeleteChild(Transform* child) { m_childList.remove(child); }	// 子供を削除する関数
+	void UpdateQuaternion();		// オイラー角で回転を変更した際にクォータニオンを更新する関数
 public:
 	// 未使用
 	D3DXVECTOR3 m_worldPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 m_worldRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXQUATERNION m_worldQuaternion = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 	D3DXVECTOR3 m_worldScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	D3DXVECTOR3 m_localPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 m_localRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXQUATERNION m_localQuaternion = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 	D3DXVECTOR3 m_localScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 
@@ -36,7 +39,7 @@ public:
 	D3DXVECTOR3 GetRight()
 	{
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, m_localRotation.y, m_localRotation.x, m_localRotation.z);
+		D3DXMatrixRotationQuaternion(&rot, &m_localQuaternion);
 
 		D3DXVECTOR3 right;
 		right.x = rot._11;
@@ -50,7 +53,7 @@ public:
 	D3DXVECTOR3 GetUp()
 	{
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, m_localRotation.y, m_localRotation.x, m_localRotation.z);
+		D3DXMatrixRotationQuaternion(&rot, &m_localQuaternion);
 
 		D3DXVECTOR3 up;
 		up.x = rot._21;
@@ -64,7 +67,7 @@ public:
 	D3DXVECTOR3 GetForward()
 	{
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, m_localRotation.y, m_localRotation.x, m_localRotation.z);
+		D3DXMatrixRotationQuaternion(&rot, &m_localQuaternion);
 
 		D3DXVECTOR3 forward;
 		forward.x = rot._31;
@@ -81,9 +84,11 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	D3DXVECTOR3 GetWorldRotationAsDegree();				// 回転値を度値で取得する関数
-	D3DXVECTOR3 GetLocalRotationAsDegree();				
+	D3DXVECTOR3 GetWorldEulerAngleAsDegree();				// 回転値を度値で取得する関数
+	D3DXVECTOR3 GetLocalEulerAngleAsDegree();
+	D3DXVECTOR3 GetLocalEulerAngle();
 	D3DXMATRIX* GetWorldMatrix() { return &m_worldMatrix; }		// ワールド行列を取得する関数
+	D3DXMATRIX* GetLocalMatrix() { return &m_localMatrix; }
 	Transform* GetParent() { return m_parent; }		// 親オブジェクトのTransformを取得
 	std::list<Transform*> GetChildList() { return m_childList; }	// 子オブジェクトのリストを取得
 	// ワールド変換行列の各成分を抜き出す関数
@@ -91,9 +96,11 @@ public:
 	D3DXMATRIX GetWorldRotMatrix();
 	D3DXMATRIX GetWorldTransMatrix();
 
-	void SetWorldRotationFromDegree(D3DXVECTOR3 deg);	// 回転を度値からラジアン値に変換しセットする関数
-	void SetLocalRotationFromDegree(D3DXVECTOR3 deg);	// 回転を度値からラジアン値に変換しセットする関数
-	void SetWorldMatrix(D3DXMATRIX* matrix) { m_worldMatrix = *matrix; }	// ワールド行列をセットする関数
+	void SetWorldEulerAngleFromDegree(D3DXVECTOR3 deg);	// 回転を度値からラジアン値に変換しセットする関数
+	void SetLocalEulerAngleFromDegree(D3DXVECTOR3 deg);	// 回転を度値からラジアン値に変換しセットする関数
+	void SetLocalEulerAngle(D3DXVECTOR3 euler);
+	void SetWorldMatrix(D3DXMATRIX* matrix);		// ワールド行列をセットする関数
+	void SetLocalMatrix(D3DXMATRIX* matrix);
 	void SetParent(Transform* parent);		// 親を設定する関数
 
 	void MakeLocalMatrix();		// ローカル行列を作成する関数
@@ -104,20 +111,24 @@ public:
 	void save(Archive& archive) const
 	{
 		Vector3 worldPostion = m_worldPosition;
-		Vector3 worldRotation = m_worldRotation;
+		Vector4 worldQuaternion = m_worldQuaternion;
+		Vector3 worldEulerAngle = m_worldEulerAngle;
 		Vector3 worldScale = m_worldScale;
 		Vector3 localPostion = m_localPosition;
-		Vector3 localRotation = m_localRotation;
+		Vector4 localQuaternion = m_localQuaternion;
+		Vector3 localEulerAngle = m_localEulerAngle;
 		Vector3 localScale = m_localScale;
 
 		archive(
 			cereal::base_class<Component>(this),
 			CEREAL_NVP(m_parentID),
 			CEREAL_NVP(worldPostion),
-			CEREAL_NVP(worldRotation),
+			CEREAL_NVP(worldQuaternion),
+			CEREAL_NVP(worldEulerAngle),
 			CEREAL_NVP(worldScale),
 			CEREAL_NVP(localPostion),
-			CEREAL_NVP(localRotation),
+			CEREAL_NVP(localQuaternion),
+			CEREAL_NVP(localEulerAngle),
 			CEREAL_NVP(localScale)
 		);
 	}
@@ -125,23 +136,27 @@ public:
 	template <class Archive>
 	void load(Archive& archive)
 	{
-		Vector3 worldPostion, worldRotation, worldScale, localPosition, localRotation, localScale;
-
+		Vector3 worldPostion, worldEulerAngle, worldScale,  localPosition, localEulerAngle, localScale;
+		Vector4  worldQuaternion, localQuaternion;
 		archive(
 			cereal::base_class<Component>(this),
 			m_parentID,
 			worldPostion,
-			worldRotation,
+			worldQuaternion,
+			worldEulerAngle,
 			worldScale,
 			localPosition,
-			localRotation,
+			localQuaternion,
+			localEulerAngle,
 			localScale
 		);
 		m_worldPosition = D3DXVECTOR3(worldPostion.x, worldPostion.y, worldPostion.z);
-		m_worldRotation = D3DXVECTOR3(worldRotation.x, worldRotation.y, worldRotation.z);
+		m_worldQuaternion = D3DXQUATERNION(worldQuaternion.x, worldQuaternion.y, worldQuaternion.z, worldQuaternion.w);
+		m_worldEulerAngle = D3DXVECTOR3(worldEulerAngle.x, worldEulerAngle.y, worldEulerAngle.z);
 		m_worldScale = D3DXVECTOR3(worldScale.x, worldScale.y, worldScale.z);
 		m_localPosition = D3DXVECTOR3(localPosition.x, localPosition.y, localPosition.z);
-		m_localRotation = D3DXVECTOR3(localRotation.x, localRotation.y, localRotation.z);
+		m_localQuaternion = D3DXQUATERNION(localQuaternion.x, localQuaternion.y, localQuaternion.z, localQuaternion.w);
+		m_localEulerAngle = D3DXVECTOR3(localEulerAngle.x, localEulerAngle.y, localEulerAngle.z);
 		m_localScale = D3DXVECTOR3(localScale.x, localScale.y, localScale.z);
 	}
 

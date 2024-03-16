@@ -18,5 +18,5 @@ void SphereCollisionFrame::Init(float radius, D3DXVECTOR3 offset)
 void SphereCollisionFrame::Update()
 {
 	m_transform->m_localPosition = m_collTransform->m_localPosition + m_Offset;
-	m_transform->m_localRotation = m_collTransform->m_localRotation;
+	m_transform->m_localQuaternion = m_collTransform->m_localQuaternion;
 }

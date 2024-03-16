@@ -6,6 +6,7 @@
 #include "collisionManager.h"
 #include "boxCollisionFrame.h"
 #include "dispInspector.h"
+#include "collisionMesh.h"
 
 
 void BoxCollision::Init()
@@ -19,6 +20,10 @@ void BoxCollision::Init()
 	m_collID = m_collFrame->GetID();
 
 	CollisionManager::GetInstance()->AddBoxCollision(this);
+
+	m_collisionMesh = new CollisionMesh();
+	// 当たり判定用メッシュデータをファイルから読み込む
+	m_collisionMesh->CreateCollisionMesh("Assets\\Models\\CollisionData_Box.obj", m_size);
 }
 
 void BoxCollision::Load()
@@ -26,6 +31,11 @@ void BoxCollision::Load()
 	m_collFrame = Manager::GetInstance()->GetScene()->GetEditor()->GetEditorObjectWithID<BoxCollisionFrame>(m_collID);
 	m_collFrame->SetCollision(this);
 	CollisionManager::GetInstance()->AddBoxCollision(this);
+
+	m_collisionMesh = new CollisionMesh();
+	// 当たり判定用メッシュデータをファイルから読み込む
+	m_collisionMesh->CreateCollisionMesh("Assets\\Models\\CollisionData_Box.obj", m_size);
+
 }
 
 void BoxCollision::Uninit()
@@ -34,6 +44,9 @@ void BoxCollision::Uninit()
 	CollisionManager::GetInstance()->DeleteBoxCollision(this);
 	// 当たり判定表示用オブジェクトを削除
 	m_collFrame->SetDestroy();
+
+	m_collisionMesh->Uninit();
+	delete m_collisionMesh;
 }
 
 void BoxCollision::Update()

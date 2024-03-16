@@ -10,7 +10,6 @@
 void CameraObject::Init()
 {
 	m_transform->m_localPosition = D3DXVECTOR3(0.0f, 5.0f, -10.0f);
-	m_transform->m_localRotation = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	AddComponent<Camera>()->Init();
 }
 

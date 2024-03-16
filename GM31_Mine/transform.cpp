@@ -7,10 +7,16 @@
 
 
 
+void Transform::UpdateQuaternion()
+{
+	D3DXQuaternionRotationYawPitchRoll(&m_localQuaternion, m_localEulerAngle.y, m_localEulerAngle.x, m_localEulerAngle.z);
+}
+
 void Transform::Init(D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale)
 {
 	m_localPosition = position;
-	m_localRotation = rotation;
+	// m_localRotation = rotation;
+	m_localEulerAngle = rotation;
 	m_localScale = scale;
 }
 
@@ -64,7 +70,8 @@ void Transform::MakeLocalMatrix()
 	// マトリクス設定
 	D3DXMATRIX scale, rot, trans;
 	D3DXMatrixScaling(&scale, m_localScale.x, m_localScale.y, m_localScale.z);
-	D3DXMatrixRotationYawPitchRoll(&rot, m_localRotation.y, m_localRotation.x, m_localRotation.z);
+	// クォータニオンを回転行列へ
+	D3DXMatrixRotationQuaternion(&rot, &m_localQuaternion);
 	D3DXMatrixTranslation(&trans, m_localPosition.x, m_localPosition.y, m_localPosition.z);
 	m_localMatrix = scale * rot * trans;
 }
@@ -96,24 +103,29 @@ void Transform::SetParent(Transform* parent)
 }
 
 
-D3DXVECTOR3 Transform::GetWorldRotationAsDegree()
+D3DXVECTOR3 Transform::GetWorldEulerAngleAsDegree()
 {
 	D3DXVECTOR3 deg;
-	deg.x = m_worldRotation.x * (180.0f / D3DX_PI);
-	deg.y = m_worldRotation.y * (180.0f / D3DX_PI);
-	deg.z = m_worldRotation.z * (180.0f / D3DX_PI);
+	deg.x = m_worldEulerAngle.x * (180.0f / D3DX_PI);
+	deg.y = m_worldEulerAngle.y * (180.0f / D3DX_PI);
+	deg.z = m_worldEulerAngle.z * (180.0f / D3DX_PI);
 
 	return deg;
 }
 
-D3DXVECTOR3 Transform::GetLocalRotationAsDegree()
+D3DXVECTOR3 Transform::GetLocalEulerAngleAsDegree()
 {
 	D3DXVECTOR3 deg;
-	deg.x = m_localRotation.x * (180.0f / D3DX_PI);
-	deg.y = m_localRotation.y * (180.0f / D3DX_PI);
-	deg.z = m_localRotation.z * (180.0f / D3DX_PI);
+	deg.x = m_localEulerAngle.x * (180.0f / D3DX_PI);
+	deg.y = m_localEulerAngle.y * (180.0f / D3DX_PI);
+	deg.z = m_localEulerAngle.z * (180.0f / D3DX_PI);
 
 	return deg;
+}
+
+D3DXVECTOR3 Transform::GetLocalEulerAngle()
+{
+	return m_localEulerAngle;
 }
 
 D3DXMATRIX Transform::GetWorldScaleMatrix()
@@ -148,19 +160,40 @@ D3DXMATRIX Transform::GetWorldTransMatrix()
 /// 回転を度値からラジアン値に変換しセットする関数
 /// </summary>
 /// <param name="deg">セットする度値</param>
-void Transform::SetWorldRotationFromDegree(D3DXVECTOR3 deg)
+void Transform::SetWorldEulerAngleFromDegree(D3DXVECTOR3 deg)
 {
-	m_worldRotation.x = deg.x * (D3DX_PI / 180.0f);
-	m_worldRotation.y = deg.y * (D3DX_PI / 180.0f);
-	m_worldRotation.z = deg.z * (D3DX_PI / 180.0f);
+	m_worldEulerAngle.x = deg.x * (D3DX_PI / 180.0f);
+	m_worldEulerAngle.y = deg.y * (D3DX_PI / 180.0f);
+	m_worldEulerAngle.z = deg.z * (D3DX_PI / 180.0f);
 }
 
-void Transform::SetLocalRotationFromDegree(D3DXVECTOR3 deg)
+void Transform::SetLocalEulerAngleFromDegree(D3DXVECTOR3 deg)
 {
-	m_localRotation.x = deg.x * (D3DX_PI / 180.0f);
-	m_localRotation.y = deg.y * (D3DX_PI / 180.0f);
-	m_localRotation.z = deg.z * (D3DX_PI / 180.0f);
+	m_localEulerAngle.x = deg.x * (D3DX_PI / 180.0f);
+	m_localEulerAngle.y = deg.y * (D3DX_PI / 180.0f);
+	m_localEulerAngle.z = deg.z * (D3DX_PI / 180.0f);
+	// クォータニオンを更新
+	UpdateQuaternion();
 }
+
+
+void Transform::SetLocalEulerAngle(D3DXVECTOR3 euler)
+{
+	m_localEulerAngle = euler;
+	UpdateQuaternion();
+}
+
+void Transform::SetWorldMatrix(D3DXMATRIX* matrix)
+{
+	m_worldMatrix = *matrix;
+}
+
+void Transform::SetLocalMatrix(D3DXMATRIX* matrix)
+{
+	m_localMatrix = *matrix;
+}
+
+
 /// <summary>
 /// ローカル行列と親のワールド行列からワールド行列を作成する関数
 /// </summary>
