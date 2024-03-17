@@ -4,6 +4,7 @@
 #include "shader.h"
 #include "box.h"
 #include "boxCollision.h"
+#include "rigidBody.h"
 
 void Box::Init()
 {
@@ -13,4 +14,5 @@ void Box::Init()
 	AddComponent<Model>()->Init("Assets\\Models\\box.obj", true);
 	auto coll = AddComponent<BoxCollision>();
 	coll->SetOffset(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	AddComponent<RigidBody>();
 }

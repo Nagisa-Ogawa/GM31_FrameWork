@@ -12,12 +12,27 @@
 #include "CollisionManager.h"
 #include "boxCollision.h"
 
+#include "box.h"
+#include "rigidBody.h"
+
 void Scene::Init()
 {
 	m_editor = std::make_unique<Editor>();
 	m_editor->Init();
 	AddGameObject<CameraObject>(0, "MainCamera");
 	AddGameObject<Sky>(1, "Sky");
+
+	auto box1 = AddGameObject<Box>(1, "box1");
+	box1->GetTransform()->m_localPosition = D3DXVECTOR3(0.0f, 5.0f, 0.0f);
+
+	auto box2 = AddGameObject<Box>(1, "box2");
+	box2->GetTransform()->m_localPosition = D3DXVECTOR3(0.0f, 2.0f, 0.0f);
+
+	auto box3 = AddGameObject<Box>(1, "stage");
+	box3->GetTransform()->m_localPosition = D3DXVECTOR3(0.0f, -2.0f, 0.0f);
+	box3->GetTransform()->m_localScale = D3DXVECTOR3(10.0f, 1.0f, 10.0f);
+	box3->GetComponent<BoxCollision>()->SetSize(box3->GetTransform()->m_localScale);
+	box3->GetComponent<RigidBody>()->SetMotionType(MOTION_TYPE::STATIC);
 
 	// ヒエラルキーウィンドウのオブジェクト木構造を初期化
 	auto hierarchy = MyImGuiManager::GetInstance()->GetImGui<HierarchyGui>();

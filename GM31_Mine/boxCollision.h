@@ -45,6 +45,8 @@ public:
 	void SetIsTrigger(bool flag) { m_isTrigger = flag; }
 	D3DXMATRIX* GetWorldMatrix();
 
+	D3DXMATRIX CalcInertiaBox(float mass);	// ’¼•û‘Ì‚ÌŠµ«ƒeƒ“ƒ\ƒ‹‚ğZo‚·‚éŠÖ”
+
 	template <class Archive>
 	void save(Archive& archive) const
 	{

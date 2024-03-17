@@ -62,7 +62,7 @@ void Manager::Init()
 	MyImGuiManager::GetInstance()->Init(GetWindow());	// ImGui関係初期化
 	
 	// Sceneファイルの中を確認
-	if (CheckSceneFile()) {
+	if (!CheckSceneFile()) {
 		// Sceneのデータがあったなら読み込み処理
 		LoadEditScene();
 	}

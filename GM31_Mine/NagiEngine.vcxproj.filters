@@ -229,7 +229,10 @@
       <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
     <ClCompile Include="collisionMesh.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="physicsManager.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -421,6 +424,9 @@
     </ClInclude>
     <ClInclude Include="collisionMesh.h">
       <Filter>ヘッダー ファイル\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="physicsManager.h">
+      <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

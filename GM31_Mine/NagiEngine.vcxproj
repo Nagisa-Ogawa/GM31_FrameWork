@@ -192,6 +192,7 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="myImGuiManager.cpp" />
     <ClCompile Include="objectTreeNode.cpp" />
+    <ClCompile Include="physicsManager.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="polygonCollision.cpp" />
     <ClCompile Include="projectGui.cpp" />
@@ -255,6 +256,7 @@
     <ClInclude Include="myImGui.h" />
     <ClInclude Include="myImGuiManager.h" />
     <ClInclude Include="objectTreeNode.h" />
+    <ClInclude Include="physicsManager.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="polygonCollision.h" />
     <ClInclude Include="projectGui.h" />
