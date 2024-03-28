@@ -1,5 +1,4 @@
 #pragma once
-#include <d3dx9math.h>
 
 #define COLLISION_MESH_MAX_VERTICES	(34)	// 当たり判定用メッシュデータの最大頂点数
 #define COLLISION_MESH_MAX_EDGES	(96)	// 当たり判定用メッシュデータの最大辺数
@@ -53,11 +52,10 @@ public:
 	void Uninit();
 
 
-	// 凸メッシュを作成する関数
-	bool CreateCollisionMesh(const char* fileName,const D3DXVECTOR3& scale = D3DXVECTOR3(1.0f,1.0f,1.0f));
+	bool CreateCollisionMesh(const char* fileName,const D3DXVECTOR3& scale = D3DXVECTOR3(1.0f,1.0f,1.0f));		// 凸メッシュを作成する関数
+	void CreateMeshAABB(D3DXVECTOR3 offsetPosition,D3DXQUATERNION offsetOrientation, D3DXVECTOR3* m_center, D3DXVECTOR3* m_half);			// 凸メッシュを囲むAABBの情報を返す関数
+	void GetProjection(float& pmin, float& pmax,const D3DXVECTOR3& axis);		// 軸上に凸メッシュを投影し、最小値と最大値を返す関数
 
-	// 軸上に凸メッシュを投影し、最小値と最大値を返す関数
-	void GetProjection(float& pmin, float& pmax,const D3DXVECTOR3& axis);
 };
 
 

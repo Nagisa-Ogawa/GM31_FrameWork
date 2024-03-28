@@ -38,11 +38,15 @@ public:
 	D3DXVECTOR3 GetGravity() { return m_gravity; }
 	D3DXMATRIX	GetInertia() { return m_inertia; }
 	float		GetMass() { return m_mass; }
+	MOTION_TYPE GetMotionType() { return m_motionType; }
+	D3DXVECTOR3 GetVelocity() { return m_velocity; }
+	D3DXVECTOR3 GetAngularVelocity() { return m_angularVelocity; }
 	// Setånä÷êî
 	void SetInertia(D3DXMATRIX inertia) { m_inertia = inertia; }
 	void SetMass(float mass) { m_mass = mass; }
 	void SetMotionType(MOTION_TYPE type) { m_motionType = type; }
-
+	void SetVelocity(D3DXVECTOR3 vec) { m_velocity = vec; }
+	void SetAngularVelocity(D3DXVECTOR3 aVec) { m_angularVelocity = aVec; }
 
 	template <class Archive>
 	void save(Archive& archive) const

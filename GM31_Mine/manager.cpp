@@ -12,6 +12,7 @@
 #include "scene.h"
 #include "input.h"
 #include "editor.h"
+#include "physicsManager.h"
 
 
 
@@ -60,6 +61,7 @@ void Manager::Init()
 	Renderer::Init();		// 描画関係初期化
 	LuaManager::GetInstance()->Init();	// Lua関係初期化
 	MyImGuiManager::GetInstance()->Init(GetWindow());	// ImGui関係初期化
+	PhysicsManager::GetInstance()->Init();				// 物理シミュレーション関係初期化
 	
 	// Sceneファイルの中を確認
 	if (!CheckSceneFile()) {
@@ -83,6 +85,7 @@ void Manager::Uninit()
 	m_scene->Uninit();
 	m_editor->Uninit();
 	delete m_editor;
+	PhysicsManager::GetInstance()->Uninit();
 	LuaManager::GetInstance()->Uninit();
 	MyImGuiManager::GetInstance()->Uninit();
 	Renderer::Uninit();
@@ -105,7 +108,8 @@ void Manager::Update()
 		m_editor->Update();
 		Input::Update();
 		m_scene->Update();
-
+		// 物理シミュレーション
+		PhysicsManager::GetInstance()->PhysicsSimulate();
 		break;
 	case PAUSE:
 		// 一時停止中はエディタのみ更新処置を呼び出す
@@ -347,12 +351,15 @@ void Manager::PlayScene()
 	SetEngineMode(ENGINE_MODE::RUN);
 	// スクリプトのStart関数を呼び出す
 	GetScene()->CallScriptStartFunc();
+	// 物理シミュレーション用シーン作成
+	PhysicsManager::GetInstance()->CreatePhysicsScene();
 }
 
 void Manager::StopScene()
 {
 	// エディタウィンドウにフォーカスを設定
 	ImGui::SetWindowFocus("Scene");
+	PhysicsManager::GetInstance()->DestroyPhysicsScene();
 	// エディタで選択しているオブジェクトをクリア
 	MyImGuiManager::GetInstance()->ClearSelectObject();
 	// シーンをクリア

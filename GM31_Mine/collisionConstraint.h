@@ -7,6 +7,7 @@
 //------------------------------------------------------
 class CollisionConstraint
 {
+public:
 	D3DXVECTOR3 m_axis;		// S‘©²
 	float m_cnExpDenom;		// S‘©®‚Ì•ª•ê
 	float m_initCnImpulse;	// ‰ŠúS‘©—Í

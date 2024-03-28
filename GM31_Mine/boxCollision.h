@@ -2,6 +2,8 @@
 #include "SerializableClass.h"
 #include "component.h"
 
+class CollisionMesh;
+
 //-----------------------------------------------------
 // ボックスコリジョンコンポーネントクラス
 //------------------------------------------------------
@@ -15,7 +17,7 @@ private:
 	D3DXVECTOR3 m_BFCenter{};
 	D3DXVECTOR3 m_BFHalf{};
 	// ナローフェーズ用OBB変数
-	class CollisionMesh* m_collisionMesh = nullptr;	// 当たり判定に使うメッシュデータ
+	CollisionMesh* m_collisionMesh = nullptr;	// 当たり判定に使うメッシュデータ
 	D3DXVECTOR3 m_size{};
 	D3DXVECTOR3 m_offset{};
 	bool		m_isTrigger{};
@@ -34,6 +36,7 @@ public:
 
 	D3DXVECTOR3 GetBFCenter() { return m_BFCenter; }
 	D3DXVECTOR3 GetBFHalf() { return m_BFHalf; }
+	CollisionMesh* GetCollisionMesh() { return m_collisionMesh; }
 	D3DXVECTOR3 GetSize() { return m_size; }
 	D3DXVECTOR3 GetOffset() { return m_offset; }
 	bool* GetIsTrigger() { return &m_isTrigger; }

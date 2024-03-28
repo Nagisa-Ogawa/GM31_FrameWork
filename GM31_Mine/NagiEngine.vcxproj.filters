@@ -234,6 +234,12 @@
     <ClCompile Include="physicsManager.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="myMath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="collisionContact.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="player.h">
@@ -427,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="physicsManager.h">
       <Filter>ヘッダー ファイル\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="myMath.h">
+      <Filter>ヘッダー ファイル\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

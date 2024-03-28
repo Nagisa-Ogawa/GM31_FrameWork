@@ -3,9 +3,10 @@
 
 #include <stdio.h>
 #include <shlwapi.h>
+#include "myMath.h"
 #include "collisionMesh.h"
 
-#define EPSILON (1e-5f)
+
 
 void CollisionMesh::Uninit()
 {
@@ -246,6 +247,31 @@ bool CollisionMesh::CreateCollisionMesh(const char* fileName, const D3DXVECTOR3&
 	delete vertices;
 	delete indices;
     return true;
+}
+
+
+/// <summary>
+/// 凸メッシュを囲むAABBの情報を返す関数
+/// </summary>
+/// <param name="offsetPosition"></param>
+/// <param name="offsetOrientation"></param>
+/// <param name="m_center">AABBの中心座標</param>
+/// <param name="m_half">AABBのサイズ</param>
+void CollisionMesh::CreateMeshAABB(D3DXVECTOR3 offsetPosition, D3DXQUATERNION offsetOrientation, D3DXVECTOR3* m_center, D3DXVECTOR3* m_half)
+{
+	// AABBの中心座標とサイズを求める
+	D3DXVECTOR3 max = D3DXVECTOR3(-MAX_FLOAT, -MAX_FLOAT, -MAX_FLOAT);
+	D3DXVECTOR3 min = D3DXVECTOR3(MAX_FLOAT, MAX_FLOAT, MAX_FLOAT);
+
+	for (int i = 0; i < m_numVertices; i++) {
+		// xg = Q(xl,0)q^-1 + c
+		// 変換後の座標 = 姿勢クォータニオン×(変換前の座標,0)クォータニオン×姿勢の共役クォータニオン + オフセット座標
+		D3DXVECTOR3 vertex = RotateVecForQuat(offsetOrientation, m_vertices[i]) + offsetPosition;
+		D3DXVec3Maximize(&max, &max, &vertex);
+		D3DXVec3Minimize(&min, &min, &vertex);
+	}
+	*m_center = (max + min) * 0.5f;
+	*m_half = (max - min) * 0.5f;
 }
 
 void CollisionMesh::GetProjection(float& pmin, float& pmax, const D3DXVECTOR3& axis)

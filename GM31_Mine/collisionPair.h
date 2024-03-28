@@ -14,10 +14,11 @@ enum PAIR_TYPE
 //------------------------------------------------------
 class CollisionPair
 {
+public:
 	PAIR_TYPE m_pairType;
 	union
 	{
-		int m_key;	// 衝突ペアのキー
+		INT64 m_key;	// 衝突ペアのキー
 		struct {
 			// 衝突ペアのID 
 			int m_rigidBodyAID;

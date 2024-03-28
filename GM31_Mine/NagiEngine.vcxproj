@@ -162,6 +162,7 @@
     <ClCompile Include="boxCollisionFrame.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraObject.cpp" />
+    <ClCompile Include="collisionContact.cpp" />
     <ClCompile Include="collisionManager.cpp" />
     <ClCompile Include="collisionMesh.cpp" />
     <ClCompile Include="consoleGui.cpp" />
@@ -191,6 +192,7 @@
     <ClCompile Include="meshField.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="myImGuiManager.cpp" />
+    <ClCompile Include="myMath.cpp" />
     <ClCompile Include="objectTreeNode.cpp" />
     <ClCompile Include="physicsManager.cpp" />
     <ClCompile Include="player.cpp" />
@@ -255,6 +257,7 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="myImGui.h" />
     <ClInclude Include="myImGuiManager.h" />
+    <ClInclude Include="myMath.h" />
     <ClInclude Include="objectTreeNode.h" />
     <ClInclude Include="physicsManager.h" />
     <ClInclude Include="player.h" />
